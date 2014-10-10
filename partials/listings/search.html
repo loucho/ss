@@ -1,0 +1,64 @@
+<div class="page-header">
+    <h1>Find Listing Raw Data</h1>
+</div>
+<div class="row">
+    <div class="col-xs-3">
+        <label for="name-board">Board:</label>
+        <select id="name-board" ng-model="query.board" class="form-control"
+                ng-options="board.code as board.name for board in boards">
+        </select>
+    </div>
+    <div class="col-xs-4">
+        <label for="mls">MLS Number:</label>
+        <input id="mls" type="text" class="form-control" ng-model="query.mls"
+               placeholder="MLS Number">
+    </div>
+    <div class="col-xs-4">
+        <div class="checkbox">
+            <label>
+                <input id="include-raw" type="checkbox" ng-model="query.raw"> Include raw values
+            </label>
+        </div>
+    </div>
+    <div class="col-xs-1">
+        <label for="name-submit"></label>
+        <button id="name-submit" type="button" class="btn btn-primary" ng-click="submit()">Search
+        </button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <hr>
+    </div>
+</div>
+<div class="row" ng-switch on="response.listings.length">
+    <div ng-switch-when="0" ng-switch on="isLoading()">
+        <em ng-switch-default>Loading...</em>
+        <em ng-switch-when="0">No listings found with that MLS number, sorry =(</em>
+    </div>
+    <div ng-switch-default id="listings" class="container-fluid">
+        <p class="text-center">There were {{response.listings.length}} matches</p>
+
+        <div class="panel panel-info" ng-repeat="listing in response.listings">
+            <div class="panel-heading">Listing</div>
+            <table class="table">
+                <tr>
+                    <th>Atribute</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>Resource</td>
+                    <td>{{listing.resource}}</td>
+                </tr>
+                <tr>
+                    <td>Class</td>
+                    <td>{{listing.class}}</td>
+                </tr>
+                <tr ng-repeat="(key,value) in listing.listing">
+                    <td>{{key}}</td>
+                    <td>{{value}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
