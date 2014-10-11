@@ -1,0 +1,18 @@
+[
+    {
+        "code": 1,
+        "name": "Director(a)"
+    },
+    {
+        "code": 2,
+        "name": "Intendente"
+    },
+    {
+        "code": 3,
+        "name": "Maestro(a)"
+    },
+    {
+        "code": 4,
+        "name": "Secretario(a)"
+    }
+]

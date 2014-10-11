@@ -1,0 +1,34 @@
+[
+    {
+        "code": 1,
+        "name": "Juan",
+        "lastName": "Perez",
+        "secondLastName": "Perez",
+        "birthday": "1969-01-01",
+        "position": 1
+    },
+    {
+        "code": 2,
+        "name": "Irma",
+        "lastName": "Renteria",
+        "secondLastName": "Gonzalez",
+        "birthday": "1982-01-01",
+        "position": 1
+    },
+    {
+        "code": 3,
+        "name": "Ivan",
+        "lastName": "Dominguez",
+        "secondLastName": "Lopez",
+        "birthday": "1987-01-01",
+        "position": 2
+    },
+    {
+        "code": 4,
+        "name": "Antonio",
+        "lastName": "Suarez",
+        "secondLastName": "Moreno",
+        "birthday": "1974-01-01",
+        "position": 3
+    }
+]

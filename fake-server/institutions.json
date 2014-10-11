@@ -1,0 +1,17 @@
+[
+    {
+        "code": 1,
+        "name": "Universidad Patito Feo",
+        "code911": "UPF"
+    },
+    {
+        "code": 2,
+        "name": "Escuela de Mimos",
+        "code911": ""
+    },
+    {
+        "code": 3,
+        "name": "Instituto Tecnologico de Educacion Forzada",
+        "code911": "ITEF"
+    }
+]

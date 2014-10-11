@@ -1,0 +1,18 @@
+[
+    {
+        "code": 1,
+        "name": "Institucion"
+    },
+    {
+        "code": 2,
+        "name": "Organismo"
+    },
+    {
+        "code": 3,
+        "name": "Departamento interno"
+    },
+    {
+        "code": 4,
+        "name": "Otros"
+    }
+]

@@ -1,0 +1,14 @@
+[
+    {
+        "code": 1,
+        "name": "DFI"
+    },
+    {
+        "code": 2,
+        "name": "SDO"
+    },
+    {
+        "code": 3,
+        "name": "SFI"
+    }
+]
