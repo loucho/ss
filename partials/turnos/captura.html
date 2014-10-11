@@ -1,0 +1,132 @@
+<div class="page-header">
+    <h1>Captura de Turno</h1>
+</div>
+<form role="form">
+    <div class="form-group">
+        <label for="fecha-captura">Fecha de Captura:</label>
+        <input id="fecha-captura" type="text" class="form-control disabled" ng-model="today">
+    </div>
+    <div class="form-group">
+        <label for="fecha-recepcion">Fecha de Recepción:</label>
+        <input id="fecha-recepcion" type="date" class="form-control" ng-model="fechaRecepcion">
+    </div>
+    <div class="form-group">
+        <label for="prioridad">Prioridad:</label>
+        <select id="prioridad" ng-model="prioridad" class="form-control"
+                ng-options="priority.value as priority.name for priority in priorities">
+        </select>
+    </div>
+    <div class="checkbox">
+        <label for="tipo-tramite">Tipo de Tramite:</label>
+        <select id="tipo-tramite" ng-model="tipoTramite" class="form-control"
+                ng-options="type.code as type.name for type in processTypes">
+        </select>
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+</form>
+<div class="row">
+    <div class="col-xs-2">
+        <label>Show Demos</label>
+        <input type="checkbox" ng-model="query.showDemos">
+    </div>
+    <div class="col-xs-2">
+        <label>Show Disabled</label>
+        <input type="checkbox" ng-model="query.showDisabled">
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <hr>
+    </div>
+</div>
+<pagination max-size="maxSize" ng-model="currentPage" total-items="totalItems" items-per-page="query.itemsPerPage"
+            rotate="false" boundary-links="true" ng-change="pageChanged()"
+            ng-show="websites.total > query.itemsPerPage"></pagination>
+<div class="row" ng-switch on="websites.results.length">
+    <div ng-switch-when="0" ng-switch on="isLoading()">
+        <em ng-switch-default>Loading...</em>
+        <em ng-switch-when="0">No websites fit that criteria, sorry =(</em>
+    </div>
+    <div ng-switch-default id="websites" class="container-fluid">
+        <div class="row website" ng-class="{'bg-success':website.DEMO, 'bg-info': website.site_type_class}"
+             ng-repeat="website in websites.results">
+            <div class='identifier col-md-1'>
+                <p class='id text-center'>{{website.WEB_SITE_ID}} <em ng-if="website.DEMO">DEMO</em></p>
+
+            </div>
+            <div class="col-md-6">
+                <h3>
+                    <a href='http://{{website.WEB_SITE_URL}}/' class='searchable' target='_blank'>{{website.WEB_SITE_URL}}</a>
+                </h3>
+                <h4>
+                    <span class='engine-version' ng-if="website.ENGINE_VERSION">{{website.ENGINE_VERSION}}</span>
+                    <span class='type'>{{website.site_type}}</span>
+                    <span class='board'>{{website.board}}</span>
+                    <span class='template searchable'>{{website.SITE_TEMPLATE}}</span>
+                    <span class='template-header' ng-if="website.SITE_HEADER">H</span>
+                </h4>
+                <h5>
+                    <span class='searchable'>{{website.WEB_SITE_NAME}}</span>
+                </h5>
+                <h5>
+                    <span class='searchable'>WHMCS Hosting Id (may not be reliable): {{website.WHMCS_HOSTING_ID}}</span>
+                </h5>
+            </div>
+            <div class="users col-md-3">
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="users-dropdown"
+                            data-toggle="dropdown">
+                        Agents ({{website.agents.length}})
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="agent in website.agents">
+                            <span ng-class="{'bg-warning': agent.ADMIN}">
+                                <span>{{agent.NAME}} ({{agent.USER_REALTOR_ID}})</span>
+                                <a target='_blank'
+                                   href='/edit_realtor_form.php?realtor_id={{agent.USER_REALTOR_ID}}&web_site_id={{website.WEB_SITE_ID}}'>Edit</a>
+                                <a target='_blank'
+                                   href='/realtor_security_questions.php?realtor_id={{agent.USER_REALTOR_ID}}'>Verify</a>
+                                <a class="pointer" ng-click="login(website, agent)">Login</a>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class='tools col-md-2'>
+                <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="tools-dropdown"
+                            data-toggle="dropdown">
+                        Tools
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a target='_blank' href='/edit_web_site_form.php?web_site_id={{website.WEB_SITE_ID}}'>Edit
+                                Site</a>
+                        </li>
+                        <li>
+                            <a target='_blank' href='/add_realtor.php?web_site_id={{website.WEB_SITE_ID}}'>+ Agent</a>
+                        </li>
+                        <li>
+                            <a target='_blank' href='/edit_cms_headers.php?web_site_id={{website.WEB_SITE_ID}}'>CMS
+                                Headers</a>
+                        </li>
+                        <li>
+                            <a target='_blank' href='/edit_web_site_features.php?web_site_id={{website.WEB_SITE_ID}}'>Features</a>
+                        </li>
+                        <li>
+                            <a target='_blank' href='/edit_sitemap_options.php?web_site_id={{website.WEB_SITE_ID}}'>Sitemap</a>
+                        </li>
+                        <li>
+                            <a class="pointer" ng-click="clearCache(website.WEB_SITE_ID)">Clear Cache</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<pagination max-size="maxSize" ng-model="currentPage" total-items="totalItems" items-per-page="query.itemsPerPage"
+            rotate="false" boundary-links="true" ng-change="pageChanged()"
+            ng-show="websites.total > query.itemsPerPage"></pagination>

@@ -1,19 +1,18 @@
-var app = angular.module('app', ['ngRoute', 'ngAnimate', 'websiteControllers', 'redmanServices', 'jQueryDirectives',
-    'ui.bootstrap', 'angular-loading-bar', 'dialogs.main', 'dialogs.default-translations', 'config',
-    'realtorControllers', 'listingControllers']);
+var app = angular.module('app', ['ngRoute', 'ngAnimate', 'turnosControllers', 'SEPServices', 'jQueryDirectives',
+    'ui.bootstrap', 'angular-loading-bar', 'dialogs.main', 'dialogs.default-translations', 'config']);
 
 app.config(['$routeProvider', 'cfpLoadingBarProvider', function ($routeProvider, cfpLoadingBarProvider) {
     cfpLoadingBarProvider.includeSpinner = true;
-    $routeProvider.when('/websites/list', {
-        templateUrl: '/partials/websites/list.html',
-        controller: 'WebsiteListController'
-    }).when('/realtor/search', {
-        templateUrl: '/partials/realtors/search.html',
-        controller: 'RealtorController'
-    }).when('/listing/search', {
-        templateUrl: '/partials/listings/search.html',
-        controller: 'ListingController'
+    $routeProvider.when('/turnos/captura', {
+        templateUrl: '/partials/turnos/captura.html',
+        controller: 'CapturaTurnoController'
+    }).when('/turnos/atencion', {
+        templateUrl: '/partials/turnos/atencion.html',
+        controller: 'AtiendeTurnoController'
+    }).when('/turnos/correccion', {
+        templateUrl: '/partials/turnos/correccion.html',
+        controller: 'CorrigeTurnoController'
     }).otherwise({
-        redirectTo: '/websites/list'
+        redirectTo: '/turnos/captura'
     });
 }]);
