@@ -10,4 +10,17 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
         $scope.turn = "1216-14";
         $scope.senderTypes = SenderType.query();
         $scope.institutions = Institution.query();
+        $scope.positions = Position.query();
+        $scope.people = Person.query();
+        $scope.areas = Area.query();
+        $scope.files = [{"file": ""}];
+
+        $scope.addFile = function () {
+            $scope.files.push({"file": ""});
+        };
+
+        $scope.deleteFile = function (file) {
+            var i = $scope.files.indexOf(file);
+            $scope.files.splice(i, 1);
+        };
     }]);

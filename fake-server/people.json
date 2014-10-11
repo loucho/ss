@@ -4,6 +4,7 @@
         "name": "Juan",
         "lastName": "Perez",
         "secondLastName": "Perez",
+        "title": "Dr.",
         "birthday": "1969-01-01",
         "position": 1
     },
@@ -12,6 +13,7 @@
         "name": "Irma",
         "lastName": "Renteria",
         "secondLastName": "Gonzalez",
+        "title": "Dr.",
         "birthday": "1982-01-01",
         "position": 1
     },
@@ -20,6 +22,7 @@
         "name": "Ivan",
         "lastName": "Dominguez",
         "secondLastName": "Lopez",
+        "title": "Dr.",
         "birthday": "1987-01-01",
         "position": 2
     },
@@ -28,6 +31,7 @@
         "name": "Antonio",
         "lastName": "Suarez",
         "secondLastName": "Moreno",
+        "title": "Dr.",
         "birthday": "1974-01-01",
         "position": 3
     }
