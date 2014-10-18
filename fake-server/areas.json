@@ -10,5 +10,9 @@
     {
         "code": 3,
         "name": "SFI"
+    },
+    {
+        "code": 4,
+        "name": "SII"
     }
 ]
