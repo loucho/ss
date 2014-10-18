@@ -28,3 +28,6 @@ SEPServices.factory('Area', ['$resource', 'config', function ($resource, config)
     return $resource(config.apiUrl + '/areas.json', {}, {});
 }]);
 
+SEPServices.factory('Turn', ['$resource', 'config', function ($resource, config) {
+    return $resource(config.apiUrl + '/turns.json', {}, {});
+}]);

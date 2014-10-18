@@ -2,7 +2,7 @@
     <h1>Atención de Turno</h1>
 </div>
 <div class="table-responsive">
-    <table class="table table-compact table-stripped">
+    <table class="table table-condensed table-striped">
         <thead>
         <tr>
             <th>Turno DFI</th>
@@ -17,16 +17,18 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="item in items">
+        <tr ng-repeat="item in turns">
             <td>{{item.turnoDFI}}</td>
             <td>{{item.turnoDGESU}}</td>
-            <td>{{item.area}}</td>
+            <td>
+                <div ng-repeat="id in item.areas">{{getArea(id)}}</div>
+            </td>
             <td>{{item.asignado}}</td>
             <td>{{item.asunto}}</td>
-            <td>{{item.fechaCierre}}</td>
+            <td>{{item.fechaCierre | date : "dd-MM-yyyy"}}</td>
             <td>{{item.status}}</td>
             <td>{{item.archivoEntrada}}</td>
-            <td>{{item.fechaApertura}}</td>
+            <td>{{item.fechaApertura | date : "dd-MM-yyyy"}}</td>
         </tr>
         </tbody>
     </table>
