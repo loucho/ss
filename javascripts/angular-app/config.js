@@ -1,5 +1,6 @@
 var config = angular.module('config', []);
 
 config.constant('config', {
-    "apiUrl": "fake-server"
+    apiUrl: "http://localhost:8080/SIIFI",
+    fakeUrl: "fake-server"
 });

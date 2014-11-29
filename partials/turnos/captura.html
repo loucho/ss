@@ -59,9 +59,9 @@
     <div class="form-group">
         <label class="col-xs-1">Tipo de Remitente:</label>
         <label class="radio-inline" ng-repeat="senderType in senderTypes">
-            <input type="radio" name="remitente" ng-model="turno.tipoRemitente" id="remitente{{senderType.code}}"
-                   value="{{senderType.code}}">
-            {{senderType.name}}
+            <input type="radio" name="remitente" ng-model="turno.tipoRemitente" id="remitente{{senderType.id}}"
+                   value="{{senderType.id}}">
+            {{senderType.nombre}}
         </label>
     </div>
     <div class="form-group">
