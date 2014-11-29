@@ -13,7 +13,7 @@ loginController.controller('LoginController', ['$scope', '$rootScope', '$locatio
                 $location.path('/');
             })
             .error(function (data) {
-                $scope.error = data.Message;
+                $scope.error = data.mensaje;
                 $scope.dataLoading = false;
             });
     };
