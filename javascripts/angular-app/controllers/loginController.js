@@ -7,8 +7,8 @@ loginController.controller('LoginController', ['$scope', '$rootScope', '$locatio
     $scope.login = function () {
         $scope.dataLoading = true;
         AuthService.Login($scope.username, $scope.password)
-            .success(function (data) {
-                AuthService.SetCredentials($scope.username, $scope.password, data);
+            .success(function (data, status, headers) {
+                AuthService.SetCredentials(data, headers('authorization'));
                 $scope.setCurrentUser(data);
                 $location.path('/');
             })
