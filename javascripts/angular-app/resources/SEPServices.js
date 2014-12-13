@@ -24,7 +24,7 @@ SEPServices.factory('Position', ['$resource', 'config', function ($resource, con
     return $resource(config.apiUrl + '/cargo', {}, {});
 }]);
 
-SEPServices.factory('Person', ['$resource', 'config', function ($resource, config) {
+SEPServices.factory('IESPerson', ['$resource', 'config', function ($resource, config) {
     return $resource(config.apiUrl + '/directorio-instituciones', {}, {});
 }]);
 

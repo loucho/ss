@@ -1,8 +1,8 @@
 var turnosControllers = angular.module('turnosControllers', []);
 
 turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType',
-    'SenderType', 'Area', 'Institution', 'Position', 'Person', 'Organization', 'Turn',
-    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, Position, Person, Organization, Turn) {
+    'SenderType', 'Area', 'Institution', 'Position', 'IESPerson', 'Organization', 'Turn',
+    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, Position, IESPerson, Organization, Turn) {
         $scope.priorities = Priority.query();
         $scope.processTypes = ProcessType.query();
         $scope.today = new Date();
@@ -10,12 +10,17 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
         $scope.senderTypes = SenderType.query();
         $scope.institutions = Institution.query();
         $scope.positions = Position.query();
-        $scope.people = Person.query();
         $scope.organizations = Organization.query();
         $scope.areas = Area.query({idDependencia: [0, 1]});
         $scope.internalAreas = Area.query();
         $scope.files = [{"file": ""}];
         $scope.turno = {areas: [], remitente: {}};
+
+        $scope.updateInstitution = function () {
+            $scope.turno.remitente.idInstitucion = $scope.selectedInstitution.id;
+            $scope.people = IESPerson.query({idIES: $scope.turno.remitente.idInstitucion});
+            $scope.clearPerson();
+        };
 
         $scope.checkedArea = function (code) {
             return _.contains($scope.turno.areas, code);
@@ -39,11 +44,14 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
             $scope.files.splice(i, 1);
         };
 
-        $scope.getPosition = function (idPerson) {
-            var item = _.findWhere($scope.people, {
-                id: idPerson
-            });
-            return item.cargoIes.nombre;
+        $scope.clearPerson = function(){
+            $scope.turno.remitente.idPersona = null;
+            $scope.position = "";
+        };
+
+        $scope.setPerson = function () {
+            $scope.turno.remitente.idPersona = $scope.selectedPerson.id;
+            $scope.position = $scope.selectedPerson.cargoIes.nombre;
         };
 
         $scope.getCode911 = function (institutionCode) {
@@ -59,14 +67,14 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
     }]);
 
 turnosControllers.controller('AtiendeTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType',
-    'SenderType', 'Area', 'Institution', 'Position', 'Person', 'Turn',
-    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, Position, Person, Turn) {
+    'SenderType', 'Area', 'Institution', 'Position', 'IESPerson', 'Turn',
+    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, Position, IESPerson, Turn) {
         $scope.priorities = Priority.query();
         $scope.processTypes = ProcessType.query();
         $scope.senderTypes = SenderType.query();
         $scope.institutions = Institution.query();
         $scope.positions = Position.query();
-        $scope.people = Person.query();
+        $scope.people = IESPerson.query();
         $scope.areas = Area.query();
 
         $scope.turns = Turn.query();
