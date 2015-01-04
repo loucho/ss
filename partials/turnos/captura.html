@@ -97,7 +97,7 @@
         <div class="col-xs-7">
 
             <select id="nombre-institucion" ng-model="selectedPerson" class="form-control" ng-change="setPerson()"
-                    ng-options="person as (person.tituloAcademico + ' ' + person.nombre + ' ' + person.paterno + ' ' + person.materno) for person in people">
+                    ng-options="person as (person.tituloAcademico + ' ' + person.nombre + ' ' + person.paterno + ' ' + person.materno) for person in IESpeople">
             </select>
         </div>
     </div>
@@ -144,7 +144,7 @@
         <div class="col-xs-10">
 
             <select id="nombre-area" ng-model="turno.remitente.idEmpleado" class="form-control"
-                    ng-options="employee.id as (employee.tituloAcademico + ' ' + employee.nombre + ' ' + employee.paterno + ' ' + employee.materno) for employee in people">
+                    ng-options="employee.id as (employee.tituloAcademico + ' ' + employee.nombre + ' ' + employee.paterno + ' ' + employee.materno) for employee in employees">
             </select>
         </div>
     </div>

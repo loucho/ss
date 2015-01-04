@@ -2,7 +2,7 @@ var turnosControllers = angular.module('turnosControllers', []);
 
 turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType',
     'SenderType', 'Area', 'Institution', 'Position', 'IESPerson', 'Organization', 'Turn',
-    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, Position, IESPerson, Organization, Turn) {
+    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, Position, IESPerson, Organization, Turn, Employee) {
         $scope.priorities = Priority.query();
         $scope.processTypes = ProcessType.query();
         $scope.today = new Date();
@@ -18,7 +18,13 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
 
         $scope.updateInstitution = function () {
             $scope.turno.remitente.idInstitucion = $scope.selectedInstitution.id;
-            $scope.people = IESPerson.query({idIES: $scope.turno.remitente.idInstitucion});
+            $scope.IESpeople = IESPerson.query({idIES: $scope.turno.remitente.idInstitucion});
+            $scope.clearPerson();
+        };
+
+        $scope.updateArea = function () {
+            $scope.turno.remitente.idInstitucion = $scope.selectedInstitution.id;
+            $scope.IESpeople = IESPerson.query({idIES: $scope.turno.remitente.idInstitucion});
             $scope.clearPerson();
         };
 

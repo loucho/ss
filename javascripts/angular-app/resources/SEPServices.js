@@ -28,6 +28,10 @@ SEPServices.factory('IESPerson', ['$resource', 'config', function ($resource, co
     return $resource(config.apiUrl + '/directorio-instituciones', {}, {});
 }]);
 
+SEPServices.factory('Employee', ['$resource', 'config', function ($resource, config) {
+    return $resource(config.apiUrl + '/empleado', {}, {});
+}]);
+
 SEPServices.factory('Area', ['$resource', 'config', function ($resource, config) {
     return $resource(config.apiUrl + '/area-interna', {}, {});
 }]);
