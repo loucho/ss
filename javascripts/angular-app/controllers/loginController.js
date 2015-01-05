@@ -1,14 +1,14 @@
 var loginController = angular.module('loginController', []);
 
-loginController.controller('LoginController', ['$scope', '$rootScope', '$location', 'AuthService', function ($scope, $rootScope, $location, AuthService) {
+loginController.controller('LoginController', ['$scope', '$location', 'AuthenticationService', function ($scope, $location, AuthenticationService) {
     // reset login status
-    AuthService.ClearCredentials();
+    AuthenticationService.ClearCredentials();
 
     $scope.login = function () {
         $scope.dataLoading = true;
-        AuthService.Login($scope.username, $scope.password)
+        AuthenticationService.Login($scope.username, $scope.password)
             .success(function (data, status, headers) {
-                AuthService.SetCredentials(data, headers('authorization'));
+                AuthenticationService.SetCredentials(data, headers('authorization'));
                 $scope.setCurrentUser(data);
                 $location.path('/');
             })

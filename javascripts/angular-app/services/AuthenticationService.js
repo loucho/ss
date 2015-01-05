@@ -1,8 +1,8 @@
 'use strict';
 
-var authService = angular.module('AuthenticationService', []);
+var AuthenticationService = angular.module('AuthenticationService', []);
 
-authService.factory('AuthService', ['$http', '$cookieStore', '$rootScope', 'config',
+AuthenticationService.factory('AuthenticationService', ['$http', '$cookieStore', '$rootScope', 'config',
     function ($http, $cookieStore, $rootScope, config) {
         var service = {};
 

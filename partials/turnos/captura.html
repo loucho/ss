@@ -2,218 +2,219 @@
     <h1>Captura de Turno</h1>
 </div>
 <form role="form" class="form-horizontal">
-<div class="form-group">
-    <label for="fecha-captura" class="col-xs-1">Fecha de Captura:</label>
-
-    <div class="col-xs-2">
-        <p id="fecha-captura" class="form-control-static">{{today | date : "dd-MM-yyyy"}}</p>
-    </div>
-
-    <label for="fecha-recepcion" class="col-xs-1">Fecha de Recepción:</label>
-
-    <div class="col-xs-2">
-
-        <input id="fecha-recepcion" type="date" class="form-control" ng-model="turno.fechaRecepcion" required>
-    </div>
-    <label for="prioridad" class="col-xs-1">Prioridad:</label>
-
-    <div class="col-xs-2">
-        <select id="prioridad" ng-model="turno.prioridad" class="form-control" required
-                ng-options="priority.id as priority.nombre for priority in priorities">
-        </select>
-    </div>
-
-    <label for="tipo-tramite" class="col-xs-1">Tipo de Tramite:</label>
-
-    <div class="col-xs-2">
-        <select id="tipo-tramite" ng-model="turno.tipoTramite" class="form-control" required
-                ng-options="type.id as type.nombre for type in processTypes">
-        </select>
-    </div>
-</div>
-<div class="form-group">
-    <label for="turno-dfi" class="col-xs-1">Turno DFI:</label>
-
-    <div class="col-xs-2">
-        <p id="turno-dfi" class="form-control-static">{{turn}}</p>
-    </div>
-
-    <label for="turno-dgesu" class="col-xs-1">Turno DGESU:</label>
-
-    <div class="col-xs-2">
-
-        <input id="turno-dgesu" type="text" class="form-control" ng-model="turno.turnoDGESU" required/>
-    </div>
-    <label for="no-oficio" class="col-xs-1">No. de Oficio:</label>
-
-    <div class="col-xs-2">
-        <input id="no-oficio" type="text" class="form-control" ng-model="turno.numeroOficio" required/>
-    </div>
-
-    <label for="fecha-oficio" class="col-xs-1">Fecha de oficio:</label>
-
-    <div class="col-xs-2">
-        <input id="fecha-oficio" type="date" class="form-control" ng-model="turno.fechaOficio" required/>
-    </div>
-</div>
-<div class="form-group">
-    <label class="col-xs-1">Tipo de Remitente:</label>
-    <label class="radio-inline" ng-repeat="senderType in senderTypes">
-        <input type="radio" name="remitente" ng-model="turno.tipoRemitente" id="remitente{{senderType.id}}"
-               value="{{senderType.id}}">
-        {{senderType.nombre}}
-    </label>
-</div>
-<div ng-show="turno.tipoRemitente == 1">
     <div class="form-group">
-        <label for="institucion-institucion" class="col-xs-2">Institución:</label>
+        <label for="fecha-captura" class="col-xs-1">Fecha de Captura:</label>
 
-        <div class="col-xs-7">
-            <select id="institucion-institucion" ng-model="selectedInstitution" class="form-control"
-                    ng-change="updateInstitution()"
-                    ng-options="institution as institution.nombre for institution in institutions">
-            </select>
+        <div class="col-xs-2">
+            <p id="fecha-captura" class="form-control-static">{{today | date : "dd-MM-yyyy"}}</p>
         </div>
 
-        <label for="clave-911" class="col-xs-1">Clave 911:</label>
+        <label for="fecha-recepcion" class="col-xs-1">Fecha de Recepción:</label>
 
         <div class="col-xs-2">
 
-            <p id="clave-911" class="form-control-static" ng-if="turno.remitente.idInstitucion">
-                {{getCode911(turno.remitente.idInstitucion)}}</p>
+            <input id="fecha-recepcion" type="date" class="form-control" ng-model="turno.fechaRecepcion" required>
         </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-1">Remitente</label>
-        <label for="cargo-institucion" class="col-xs-1">Cargo:</label>
+        <label for="prioridad" class="col-xs-1">Prioridad:</label>
 
         <div class="col-xs-2">
-            <p id="cargo-institucion" class="form-control-static" ng-if="turno.remitente.idPersona">
-                {{position}}</p>
-        </div>
-
-        <label for="nombre-institucion" class="col-xs-1">Nombre:</label>
-
-        <div class="col-xs-7">
-
-            <select id="nombre-institucion" ng-model="selectedPerson" class="form-control" ng-change="setPerson()"
-                    ng-options="person as (person.tituloAcademico + ' ' + person.nombre + ' ' + person.paterno + ' ' + person.materno) for person in IESpeople">
+            <select id="prioridad" ng-model="turno.prioridad" class="form-control" required
+                    ng-options="priority.id as priority.nombre for priority in priorities">
             </select>
         </div>
-    </div>
-</div>
-<div ng-show="turno.tipoRemitente == 2">
-    <div class="form-group">
-        <label for="organismo" class="col-xs-2">Organismo:</label>
 
-        <div class="col-xs-10">
-            <select id="organismo" ng-model="turno.remitente.idOrganismo" class="form-control"
-                    ng-options="organization.id as organization.nombre for organization in organizations">
-            </select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-1">Remitente</label>
-        <label for="cargo-organismo" class="col-xs-1">Cargo:</label>
+        <label for="tipo-tramite" class="col-xs-1">Tipo de Tramite:</label>
 
         <div class="col-xs-2">
-            <input id="cargo-organismo" ng-model="turno.remitente.cargo" class="form-control"/>
-        </div>
-
-        <label for="nombre-organismo" class="col-xs-1">Nombre:</label>
-
-        <div class="col-xs-7">
-            <input id="nombre-organismo" ng-model="turno.remitente.nombre" class="form-control"/>
-        </div>
-    </div>
-</div>
-<div ng-show="turno.tipoRemitente == 3">
-    <div class="form-group">
-        <label for="area-interna" class="col-xs-2">Departamento:</label>
-
-        <div class="col-xs-10">
-            <select id="area-interna" ng-model="turno.remitente.idArea" class="form-control"
-                    ng-options="area.id as (area.nombre + ' (' + area.abreviatura + ')') for area in internalAreas">
+            <select id="tipo-tramite" ng-model="turno.tipoTramite" class="form-control" required
+                    ng-options="type.id as type.nombre for type in processTypes">
             </select>
         </div>
     </div>
     <div class="form-group">
-        <label class="col-xs-1">Remitente</label>
-        <label for="nombre-area" class="col-xs-1">Nombre:</label>
-
-        <div class="col-xs-10">
-
-            <select id="nombre-area" ng-model="turno.remitente.idEmpleado" class="form-control"
-                    ng-options="employee.id as (employee.tituloAcademico + ' ' + employee.nombre + ' ' + employee.paterno + ' ' + employee.materno) for employee in employees">
-            </select>
-        </div>
-    </div>
-</div>
-<div ng-show="turno.tipoRemitente == 4">
-    <div class="form-group">
-        <label for="institucion-otro" class="col-xs-2">Institución:</label>
-
-        <div class="col-xs-10">
-            <input id="institucion-otro" ng-model="turno.remitente.institucion" class="form-control"/>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-xs-1">Remitente</label>
-        <label for="cargo-otro" class="col-xs-1">Cargo:</label>
+        <label for="turno-dfi" class="col-xs-1">Turno DFI:</label>
 
         <div class="col-xs-2">
-            <input id="cargo-otro" ng-model="turno.remitente.cargo" class="form-control"/>
+            <p id="turno-dfi" class="form-control-static">{{turn}}</p>
         </div>
 
-        <label for="nombre-otro" class="col-xs-1">Nombre:</label>
+        <label for="turno-dgesu" class="col-xs-1">Turno DGESU:</label>
 
-        <div class="col-xs-7">
+        <div class="col-xs-2">
 
-            <input id="nombre-otro" ng-model="turno.remitente.nombre" class="form-control"/>
+            <input id="turno-dgesu" type="text" class="form-control" ng-model="turno.turnoDGESU" required/>
+        </div>
+        <label for="no-oficio" class="col-xs-1">No. de Oficio:</label>
+
+        <div class="col-xs-2">
+            <input id="no-oficio" type="text" class="form-control" ng-model="turno.numeroOficio" required/>
+        </div>
+
+        <label for="fecha-oficio" class="col-xs-1">Fecha de oficio:</label>
+
+        <div class="col-xs-2">
+            <input id="fecha-oficio" type="date" class="form-control" ng-model="turno.fechaOficio" required/>
         </div>
     </div>
-</div>
-<div class="form-group">
-    <label for="asunto" class="col-xs-2">Asunto:</label>
+    <div class="form-group">
+        <label class="col-xs-1">Tipo de Remitente:</label>
+        <label class="radio-inline" ng-repeat="senderType in senderTypes">
+            <input type="radio" name="remitente" ng-model="turno.tipoRemitente" id="remitente{{senderType.id}}"
+                   value="{{senderType.id}}">
+            {{senderType.nombre}}
+        </label>
+    </div>
+    <div ng-show="turno.tipoRemitente == 1">
+        <div class="form-group">
+            <label for="institucion-institucion" class="col-xs-2">Institución:</label>
 
-    <div class="col-xs-10">
-        <textarea id="asunto" class="form-control" rows="3" ng-model="turno.asunto"></textarea>
-    </div>
-</div>
-<div class="form-group">
-    <label for="observaciones" class="col-xs-2">Observaciones:</label>
+            <div class="col-xs-7">
+                <select id="institucion-institucion" ng-model="selectedInstitution" class="form-control"
+                        ng-change="updateInstitution()"
+                        ng-options="institution as institution.nombre for institution in institutions">
+                </select>
+            </div>
 
-    <div class="col-xs-10">
-        <textarea id="observaciones" class="form-control" rows="3" ng-model="turno.observaciones"></textarea>
-    </div>
-</div>
-<div class="form-group">
-    <label class="col-xs-1">Area que atiende:</label>
-    <label class="checkbox-inline" ng-repeat="area in areas">
-        <input type="checkbox" name="selectedAreas[]" ng-checked="checkedArea(area.id)"
-               ng-click="toggleArea(area.id)" value="{{area.id}}">
-        {{area.abreviatura}}
-    </label>
-</div>
-<div class="form-group">
-    <div class="col-xs-12">
-        <div class="row">
-            <label class="col-xs-2">Subir documentos</label>
-            <button type="button" class="btn btn-xs btn-primary" ng-click="addFile()">
-                <span class="glyphicon glyphicon-plus"> </span>
-            </button>
+            <label for="clave-911" class="col-xs-1">Clave 911:</label>
+
+            <div class="col-xs-2">
+
+                <p id="clave-911" class="form-control-static" ng-if="turno.remitente.idInstitucion">
+                    {{getCode911(turno.remitente.idInstitucion)}}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-1">Remitente</label>
+            <label for="cargo-institucion" class="col-xs-1">Cargo:</label>
+
+            <div class="col-xs-2">
+                <p id="cargo-institucion" class="form-control-static" ng-if="turno.remitente.idPersona">
+                    {{position}}</p>
+            </div>
+
+            <label for="nombre-institucion" class="col-xs-1">Nombre:</label>
+
+            <div class="col-xs-7">
+
+                <select id="nombre-institucion" ng-model="selectedPerson" class="form-control" ng-change="setPerson()"
+                        ng-options="person as (person.tituloAcademico + ' ' + person.nombre + ' ' + person.paterno + ' ' + person.materno) for person in IESpeople">
+                </select>
+            </div>
         </div>
     </div>
-    <div class="row" ng-repeat="file in files">
-        <div class="col-xs-offset-1 col-xs-4">
-            <input type="file" id="archivo{{$index}}">
+    <div ng-show="turno.tipoRemitente == 2">
+        <div class="form-group">
+            <label for="organismo" class="col-xs-2">Organismo:</label>
+
+            <div class="col-xs-10">
+                <select id="organismo" ng-model="turno.remitente.idOrganismo" class="form-control"
+                        ng-options="organization.id as organization.nombre for organization in organizations">
+                </select>
+            </div>
         </div>
-        <div class="col-xs-1">
-            <button class="btn btn-danger btn-xs" type="button" ng-click="deleteFile(file)">
-                <span class="glyphicon glyphicon-remove"> </span>
-            </button>
+        <div class="form-group">
+            <label class="col-xs-1">Remitente</label>
+            <label for="cargo-organismo" class="col-xs-1">Cargo:</label>
+
+            <div class="col-xs-2">
+                <input id="cargo-organismo" ng-model="turno.remitente.cargo" class="form-control"/>
+            </div>
+
+            <label for="nombre-organismo" class="col-xs-1">Nombre:</label>
+
+            <div class="col-xs-7">
+                <input id="nombre-organismo" ng-model="turno.remitente.nombre" class="form-control"/>
+            </div>
         </div>
     </div>
-</div>
-<button type="submit" class="btn btn-default" ng-click="save()">Registrar Turno</button>
+    <div ng-show="turno.tipoRemitente == 3">
+        <div class="form-group">
+            <label for="area-interna" class="col-xs-2">Departamento:</label>
+
+            <div class="col-xs-10">
+                <select id="area-interna" ng-model="selectedArea" class="form-control"
+                        ng-change="updateArea()"
+                        ng-options="area as (area.nombre + ' (' + area.abreviatura + ')') for area in internalAreas">
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-1">Remitente</label>
+            <label for="nombre-area" class="col-xs-1">Nombre:</label>
+
+            <div class="col-xs-10">
+
+                <select id="nombre-area" ng-model="selectedPerson" class="form-control" ng-change="setPerson()"
+                        ng-options="employee as (employee.tituloAcademico + ' ' + employee.nombre + ' ' + employee.paterno + ' ' + employee.materno) for employee in employees">
+                </select>
+            </div>
+        </div>
+    </div>
+    <div ng-show="turno.tipoRemitente == 4">
+        <div class="form-group">
+            <label for="institucion-otro" class="col-xs-2">Institución:</label>
+
+            <div class="col-xs-10">
+                <input id="institucion-otro" ng-model="turno.remitente.institucion" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-1">Remitente</label>
+            <label for="cargo-otro" class="col-xs-1">Cargo:</label>
+
+            <div class="col-xs-2">
+                <input id="cargo-otro" ng-model="turno.remitente.cargo" class="form-control"/>
+            </div>
+
+            <label for="nombre-otro" class="col-xs-1">Nombre:</label>
+
+            <div class="col-xs-7">
+
+                <input id="nombre-otro" ng-model="turno.remitente.nombre" class="form-control"/>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="asunto" class="col-xs-2">Asunto:</label>
+
+        <div class="col-xs-10">
+            <textarea id="asunto" class="form-control" rows="3" ng-model="turno.asunto"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="observaciones" class="col-xs-2">Observaciones:</label>
+
+        <div class="col-xs-10">
+            <textarea id="observaciones" class="form-control" rows="3" ng-model="turno.observaciones"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-1">Area que atiende:</label>
+        <label class="checkbox-inline" ng-repeat="area in areas">
+            <input type="checkbox" name="selectedAreas[]" ng-checked="checkedArea(area.id)"
+                   ng-click="toggleArea(area.id)" value="{{area.id}}">
+            {{area.abreviatura}}
+        </label>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-12">
+            <div class="row">
+                <label class="col-xs-2">Subir documentos</label>
+                <button type="button" class="btn btn-xs btn-primary" ng-click="addFile()">
+                    <span class="glyphicon glyphicon-plus"> </span>
+                </button>
+            </div>
+        </div>
+        <div class="row" ng-repeat="file in files">
+            <div class="col-xs-offset-1 col-xs-4">
+                <input type="file" id="archivo{{$index}}">
+            </div>
+            <div class="col-xs-1">
+                <button class="btn btn-danger btn-xs" type="button" ng-click="deleteFile(file)">
+                    <span class="glyphicon glyphicon-remove"> </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-default" ng-click="save()">Registrar Turno</button>
 </form>
