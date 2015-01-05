@@ -70,6 +70,13 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
 
         $scope.save = function () {
             console.log(JSON.stringify($scope.turno));
+            Turn.save({}, $scope.turno, function (data) {
+                console.log('Yay!!!');
+                console.log(data);
+            }, function (error) {
+                console.log("hubo un error");
+                console.log(error);
+            });
         };
     }]);
 

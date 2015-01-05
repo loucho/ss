@@ -15,15 +15,19 @@ appControllers.controller('ApplicationController', function ($scope, Authenticat
 
     $scope.$on('event:auth-loginRequired', function () {
         console.log('Auth Required');
-        var dlg = dialogs.create('partials/login/login.html', 'loginDialogController', {}, {
-            size: 'lg',
-            keyboard: false,
-            backdrop: 'static',
-            windowClass: 'loginModal'
-        });
-        dlg.result.then(function (user) {
-            $scope.setCurrentUser(user);
-        });
+        if (!$scope.loginModalOpen) {
+            $scope.loginModalOpen = true;
+            var dlg = dialogs.create('partials/login/login.html', 'loginDialogController', {}, {
+                size: 'lg',
+                keyboard: false,
+                backdrop: 'static',
+                windowClass: 'loginModal'
+            });
+            dlg.result.then(function (user) {
+                $scope.setCurrentUser(user);
+                $scope.loginModalOpen = false;
+            });
+        }
     });
     $scope.$on('event:auth-loginConfirmed', function () {
         console.log('Auth Confirmed');
@@ -40,7 +44,7 @@ appControllers.controller('loginDialogController', ['$scope', '$modalInstance', 
         AuthenticationService.Login($scope.username, $scope.password)
             .success(function (data, status, headers) {
                 AuthenticationService.SetCredentials(data, headers('authorization'));
-                authService.loginConfirmed(data, function(config){
+                authService.loginConfirmed(data, function (config) {
                     config.headers.Authorization = headers('authorization');
                     return config;
                 });

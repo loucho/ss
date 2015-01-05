@@ -16,7 +16,7 @@ app.config(['$routeProvider', 'cfpLoadingBarProvider', function ($routeProvider,
         access: {
             isPublic: false
         }
-    }).when('/turnos/correccion', {
+    }).when('/turnos/correccion/:idTurno', {
         templateUrl: 'partials/turnos/correccion.html',
         controller: 'CorrigeTurnoController',
         access: {

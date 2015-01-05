@@ -20,6 +20,7 @@
         <div class="col-xs-2">
             <select id="prioridad" ng-model="turno.prioridad" class="form-control" required
                     ng-options="priority.id as priority.nombre for priority in priorities">
+                <option value="">Seleccione uno</option>
             </select>
         </div>
 
@@ -28,6 +29,7 @@
         <div class="col-xs-2">
             <select id="tipo-tramite" ng-model="turno.tipoTramite" class="form-control" required
                     ng-options="type.id as type.nombre for type in processTypes">
+                <option value="">Seleccione uno</option>
             </select>
         </div>
     </div>
@@ -72,6 +74,7 @@
                 <select id="institucion-institucion" ng-model="selectedInstitution" class="form-control"
                         ng-change="updateInstitution()"
                         ng-options="institution as institution.nombre for institution in institutions">
+                    <option value="">Seleccione uno</option>
                 </select>
             </div>
 
@@ -98,6 +101,7 @@
 
                 <select id="nombre-institucion" ng-model="selectedPerson" class="form-control" ng-change="setPerson()"
                         ng-options="person as (person.tituloAcademico + ' ' + person.nombre + ' ' + person.paterno + ' ' + person.materno) for person in IESpeople">
+                    <option value="">Seleccione uno</option>
                 </select>
             </div>
         </div>
@@ -109,6 +113,7 @@
             <div class="col-xs-10">
                 <select id="organismo" ng-model="turno.remitente.idOrganismo" class="form-control"
                         ng-options="organization.id as organization.nombre for organization in organizations">
+                    <option value="">Seleccione uno</option>
                 </select>
             </div>
         </div>
@@ -135,6 +140,7 @@
                 <select id="area-interna" ng-model="selectedArea" class="form-control"
                         ng-change="updateArea()"
                         ng-options="area as (area.nombre + ' (' + area.abreviatura + ')') for area in internalAreas">
+                    <option value="">Seleccione uno</option>
                 </select>
             </div>
         </div>
@@ -146,6 +152,7 @@
 
                 <select id="nombre-area" ng-model="selectedPerson" class="form-control" ng-change="setPerson()"
                         ng-options="employee as (employee.tituloAcademico + ' ' + employee.nombre + ' ' + employee.paterno + ' ' + employee.materno) for employee in employees">
+                    <option value="">Seleccione uno</option>
                 </select>
             </div>
         </div>
