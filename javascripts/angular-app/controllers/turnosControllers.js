@@ -1,8 +1,8 @@
 var turnosControllers = angular.module('turnosControllers', []);
 
 turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType',
-    'SenderType', 'Area', 'Institution', 'Position', 'IESPerson', 'Organization', 'Turn', 'Employee',
-    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, Position, IESPerson, Organization, Turn, Employee) {
+    'SenderType', 'Area', 'Institution', 'Position', 'IESPerson', 'Organization', 'Turn', 'Employee', '$upload', 'config',
+    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, Position, IESPerson, Organization, Turn, Employee, $upload, config) {
         $scope.priorities = Priority.query();
         $scope.processTypes = ProcessType.query();
         $scope.today = new Date();
@@ -13,8 +13,7 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
         $scope.organizations = Organization.query();
         $scope.areas = Area.query({idDependencia: [0, 1]});
         $scope.internalAreas = Area.query();
-        $scope.files = [{"file": ""}];
-        $scope.turno = {areas: [], remitente: {}};
+        $scope.turno = {areas: [], remitente: {}, archivos: []};
 
         $scope.updateInstitution = function () {
             $scope.turno.remitente.idInstitucion = $scope.selectedInstitution.id;
@@ -69,15 +68,35 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
         };
 
         $scope.save = function () {
-            console.log(JSON.stringify($scope.turno));
-            Turn.save({}, $scope.turno, function (data) {
-                console.log('Yay!!!');
-                console.log(data);
-            }, function (error) {
-                console.log("hubo un error");
-                console.log(error);
-            });
+            console.log($scope.turno.archivos);
+            //Turn.save({}, $scope.turno, function (data) {
+            //    console.log('Yay!!!');
+            //    console.log(data);
+            //}, function (error) {
+            //    console.log("hubo un error");
+            //    console.log(error);
+            //});
         };
+
+        $scope.$watch('turno.archivos', function () {
+            for (var i = 0; i < $scope.turno.archivos.length; i++) {
+                var file = $scope.turno.archivos[i];
+                if (!file.uploaded) {
+                    $scope.upload = $upload.upload({
+                        url: config.apiUrl + "/archivo/upload",
+                        method: 'POST',
+                        file: file
+                    }).progress(function (evt) {
+                        console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :' + evt.config.file.name);
+                    }).success(function (data, status, headers, config) {
+                        config.file.tempName = data.nombreArchivoTemporal;
+                        config.file.uploaded = true;
+                    }).error(function (error) {
+                        console.log(error);
+                    });
+                }
+            }
+        });
     }]);
 
 turnosControllers.controller('AtiendeTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType',

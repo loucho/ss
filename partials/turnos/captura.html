@@ -203,25 +203,15 @@
             {{area.abreviatura}}
         </label>
     </div>
+    <div>
+        <ul>
+            <li ng-repeat="file in turno.archivos">
+                <span>{{file.name}}</span>
+            </li>
+        </ul>
+    </div>
     <div class="form-group">
-        <div class="col-xs-12">
-            <div class="row">
-                <label class="col-xs-2">Subir documentos</label>
-                <button type="button" class="btn btn-xs btn-primary" ng-click="addFile()">
-                    <span class="glyphicon glyphicon-plus"> </span>
-                </button>
-            </div>
-        </div>
-        <div class="row" ng-repeat="file in files">
-            <div class="col-xs-offset-1 col-xs-4">
-                <input type="file" id="archivo{{$index}}">
-            </div>
-            <div class="col-xs-1">
-                <button class="btn btn-danger btn-xs" type="button" ng-click="deleteFile(file)">
-                    <span class="glyphicon glyphicon-remove"> </span>
-                </button>
-            </div>
-        </div>
+        <button ng-file-select ng-model="turno.archivos" multiple="true">Adjuntar Archivos</button>
     </div>
     <button type="submit" class="btn btn-default" ng-click="save()">Registrar Turno</button>
 </form>

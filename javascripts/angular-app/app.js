@@ -1,5 +1,5 @@
 var app = angular.module('app', ['ngRoute', 'ngAnimate', 'turnosControllers', 'SEPServices', 'jQueryDirectives',
-    'ui.bootstrap', 'angular-loading-bar', 'dialogs.main', 'config', 'loginController',
+    'ui.bootstrap', 'angular-loading-bar', 'dialogs.main', 'config', 'loginController', 'angularFileUpload',
     'AuthenticationService', 'applicationController', 'ngCookies', 'http-auth-interceptor']);
 
 app.config(['$routeProvider', 'cfpLoadingBarProvider', function ($routeProvider, cfpLoadingBarProvider) {
