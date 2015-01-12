@@ -1,7 +1,7 @@
 <div class="page-header">
     <h1>Captura de Turno</h1>
 </div>
-<form role="form" class="form-horizontal">
+<form name="turnoForm" role="form" class="form-horizontal" novalidate>
     <div class="form-group">
         <label for="fecha-captura" class="col-xs-1">Fecha de Captura:</label>
 
@@ -203,15 +203,20 @@
             {{area.abreviatura}}
         </label>
     </div>
-    <div>
-        <ul>
-            <li ng-repeat="file in turno.archivos">
-                <span>{{file.name}}</span>
+    <div class="form-group">
+        <button ng-file-select ng-model="files" multiple="true" accept="{{fileMask}}" class="btn btn-success">
+            Adjuntar Archivos
+        </button>
+    </div>
+    <div class="row">
+        <ul class="list-group col-xs-5">
+            <li ng-repeat="file in turno.archivos" class="list-group-item">
+                <span>{{file.nombre}}</span>
+                <button type="button" class="close" aria-label="Close" ng-click="deleteFile(file)">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </li>
         </ul>
     </div>
-    <div class="form-group">
-        <button ng-file-select ng-model="turno.archivos" multiple="true">Adjuntar Archivos</button>
-    </div>
-    <button type="submit" class="btn btn-default" ng-click="save()">Registrar Turno</button>
+    <button type="submit" class="btn btn-default" ng-click="save(turnoForm)">Registrar Turno</button>
 </form>

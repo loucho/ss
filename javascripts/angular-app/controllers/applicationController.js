@@ -17,7 +17,7 @@ appControllers.controller('ApplicationController', function ($scope, Authenticat
         console.log('Auth Required');
         if (!$scope.loginModalOpen) {
             $scope.loginModalOpen = true;
-            var dlg = dialogs.create('partials/login/login.html', 'loginDialogController', {}, {
+            var dlg = dialogs.create('partials/dialogs/login.html', 'loginDialogController', {}, {
                 size: 'lg',
                 keyboard: false,
                 backdrop: 'static',

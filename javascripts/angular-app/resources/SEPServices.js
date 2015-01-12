@@ -37,5 +37,5 @@ SEPServices.factory('Area', ['$resource', 'config', function ($resource, config)
 }]);
 
 SEPServices.factory('Turn', ['$resource', 'config', function ($resource, config) {
-    return $resource(config.apiUrl + '/turno', {}, {});
+    return $resource(config.apiUrl + '/turno/:year/:seq', {}, {});
 }]);

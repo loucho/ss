@@ -1,6 +1,6 @@
-var app = angular.module('app', ['ngRoute', 'ngAnimate', 'turnosControllers', 'SEPServices', 'jQueryDirectives',
-    'ui.bootstrap', 'angular-loading-bar', 'dialogs.main', 'config', 'loginController', 'angularFileUpload',
-    'AuthenticationService', 'applicationController', 'ngCookies', 'http-auth-interceptor']);
+var app = angular.module('app', ['ngRoute', 'ngAnimate', 'turnosControllers', 'SEPServices', 'ui.bootstrap',
+    'angular-loading-bar', 'dialogs.main', 'config', 'loginController', 'angularFileUpload', 'AuthenticationService',
+    'applicationController', 'ngCookies', 'http-auth-interceptor', 'ngToast']);
 
 app.config(['$routeProvider', 'cfpLoadingBarProvider', function ($routeProvider, cfpLoadingBarProvider) {
     cfpLoadingBarProvider.includeSpinner = true;
@@ -10,13 +10,13 @@ app.config(['$routeProvider', 'cfpLoadingBarProvider', function ($routeProvider,
         access: {
             isPublic: false
         }
-    }).when('/turnos/atencion', {
-        templateUrl: 'partials/turnos/atencion.html',
-        controller: 'AtiendeTurnoController',
+    }).when('/turnos/busqueda', {
+        templateUrl: 'partials/turnos/busqueda.html',
+        controller: 'BuscaTurnoController',
         access: {
             isPublic: false
         }
-    }).when('/turnos/correccion/:idTurno', {
+    }).when('/turnos/correccion/:anio/:id', {
         templateUrl: 'partials/turnos/correccion.html',
         controller: 'CorrigeTurnoController',
         access: {

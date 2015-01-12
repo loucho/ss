@@ -1,18 +1,18 @@
 var turnosControllers = angular.module('turnosControllers', []);
 
-turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType',
-    'SenderType', 'Area', 'Institution', 'Position', 'IESPerson', 'Organization', 'Turn', 'Employee', '$upload', 'config',
-    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, Position, IESPerson, Organization, Turn, Employee, $upload, config) {
+turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType', 'SenderType', 'Area', 'Institution', 'Position', 'IESPerson', 'Organization', 'Turn', 'Employee', '$upload', 'config', 'ngToast',
+    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, Position, IESPerson, Organization, Turn, Employee, $upload, config, ngToast) {
         $scope.priorities = Priority.query();
         $scope.processTypes = ProcessType.query();
         $scope.today = new Date();
-        $scope.turn = "1216-14";
+        $scope.fileMask = config.fileMask;
         $scope.senderTypes = SenderType.query();
         $scope.institutions = Institution.query();
         $scope.positions = Position.query();
         $scope.organizations = Organization.query();
         $scope.areas = Area.query({idDependencia: [0, 1]});
         $scope.internalAreas = Area.query();
+        $scope.files = [];
         $scope.turno = {areas: [], remitente: {}, archivos: []};
 
         $scope.updateInstitution = function () {
@@ -40,13 +40,9 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
                 $scope.turno.areas.push(code);
         };
 
-        $scope.addFile = function () {
-            $scope.files.push({"file": ""});
-        };
-
         $scope.deleteFile = function (file) {
-            var i = $scope.files.indexOf(file);
-            $scope.files.splice(i, 1);
+            var i = $scope.turno.archivos.indexOf(file);
+            $scope.turno.archivos.splice(i, 1);
         };
 
         $scope.clearPerson = function () {
@@ -67,56 +63,137 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
             return institution.clave911;
         };
 
-        $scope.save = function () {
-            console.log($scope.turno.archivos);
-            //Turn.save({}, $scope.turno, function (data) {
-            //    console.log('Yay!!!');
-            //    console.log(data);
-            //}, function (error) {
-            //    console.log("hubo un error");
-            //    console.log(error);
-            //});
+        $scope.save = function (form) {
+            $scope.submitted = true;
+            if (!form.$valid) {
+                ngToast.create({content: 'Por favor ingrese los datos requeridos', 'class': 'danger'});
+                return false;
+            }
+            Turn.save({}, $scope.turno, function (data) {
+                ngToast.create({content: 'Turno guardado correctamente', 'class': 'success'});
+            }, function (error) {
+                ngToast.create({content: 'Ocurrio un error al guardar los datos =(', 'class': 'danger'});
+            });
         };
 
-        $scope.$watch('turno.archivos', function () {
-            for (var i = 0; i < $scope.turno.archivos.length; i++) {
-                var file = $scope.turno.archivos[i];
-                if (!file.uploaded) {
-                    $scope.upload = $upload.upload({
-                        url: config.apiUrl + "/archivo/upload",
-                        method: 'POST',
-                        file: file
-                    }).progress(function (evt) {
-                        console.log('progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '% file :' + evt.config.file.name);
-                    }).success(function (data, status, headers, config) {
-                        config.file.tempName = data.nombreArchivoTemporal;
-                        config.file.uploaded = true;
-                    }).error(function (error) {
-                        console.log(error);
+        $scope.$watch('files', function () {
+            for (var i = 0; i < $scope.files.length; i++) {
+                var file = $scope.files[i];
+                if (file.size > config.maxFileSize) {
+                    ngToast.create({
+                        content: 'Archivo demasiado grande: ' + file.name + " (" + file.size + " Kb)",
+                        'class': 'warning'
                     });
+                    continue;
                 }
+                if (_.find($scope.turno.archivos, function (item) {
+                        return item.nombre == file.name;
+                    })) {
+                    ngToast.create({content: 'Archivo ya existe: ' + file.name, 'class': 'warning'});
+                    continue;
+                }
+                $scope.upload = $upload.upload({
+                    url: config.apiUrl + "/archivo/upload",
+                    method: 'POST',
+                    file: file
+                }).success(function (data, status, headers, config) {
+                    var newFile = {
+                        nombre: config.file.name,
+                        nombreTemporal: data.nombreArchivoTemporal,
+                        tipo: config.file.type,
+                        size: config.file.size
+                    };
+                    $scope.turno.archivos.push(newFile);
+                }).error(function (error) {
+                    console.log(error);
+                });
             }
         });
     }]);
 
-turnosControllers.controller('AtiendeTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType',
-    'SenderType', 'Area', 'Institution', 'Position', 'IESPerson', 'Turn',
-    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, Position, IESPerson, Turn) {
+turnosControllers.controller('BuscaTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType', 'SenderType', 'Area', 'Institution', 'Position', 'IESPerson', 'Turn', 'ngToast',
+    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, Position, IESPerson, Turn, ngToast) {
         $scope.priorities = Priority.query();
         $scope.processTypes = ProcessType.query();
         $scope.senderTypes = SenderType.query();
         $scope.institutions = Institution.query();
         $scope.positions = Position.query();
-        $scope.people = IESPerson.query();
+        //$scope.people = IESPerson.query();
         $scope.areas = Area.query();
 
-        $scope.turns = Turn.query();
+        $scope.turns = Turn.query({anio: 2015});
 
         $scope.getArea = function (id) {
             var area = _.findWhere($scope.areas, {
                 code: id
             });
             return area.name;
-        }
+        };
 
+        $scope.reject = function (turno) {
+            var dlg = dialogs.create('partials/dialogs/rechazar.html', 'rechazarDialogController', turno, {
+                size: 'lg',
+                backdrop: 'static',
+                windowClass: 'loginModal'
+            });
+            dlg.result.then(function (nota) {
+                ngToast.create({content: nota});
+            }, function () {
+                ngToast.create({content: 'Cancelar Rechazo', 'class': 'danger'});
+            });
+        };
+
+        $scope.close = function (turno) {
+            var dlg = dialogs.create('partials/dialogs/cerrar.html', 'cerrarDialogController', turno, {
+                size: 'lg',
+                backdrop: 'static',
+                windowClass: 'loginModal'
+            });
+            dlg.result.then(function (nota) {
+                ngToast.create({content: nota});
+            }, function () {
+                ngToast.create({content: 'Cancelar Cierre', 'class': 'danger'});
+            });
+        };
+
+        $scope.view = function (turno) {
+            dialogs.create('partials/dialogs/ver.html', 'verDialogController', turno, {
+                size: 'lg',
+                backdrop: 'static',
+                windowClass: 'loginModal'
+            });
+        };
     }]);
+
+turnosControllers.controller('rechazarDialogController', ['$scope', '$modalInstance', 'data', function ($scope, $modalInstance, data) {
+    $scope.turn = data;
+
+    $scope.ok = function () {
+        $modalInstance.close($scope.nota);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('Canceled');
+    };
+}]);
+
+turnosControllers.controller('cerrarDialogController', ['$scope', '$modalInstance', 'data', function ($scope, $modalInstance, data) {
+    $scope.turn = data;
+
+    $scope.ok = function () {
+        $modalInstance.close($scope.nota);
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('Canceled');
+    };
+}]);
+
+turnosControllers.controller('verDialogController', ['$scope', '$modalInstance', 'data', 'Turn', function ($scope, $modalInstance, data, Turn) {
+    $scope.turn = Turn.get({year: data.anio, seq: data.id});
+
+    $scope.ok = function () {
+        $modalInstance.dismiss('Closed');
+    };
+
+}]);

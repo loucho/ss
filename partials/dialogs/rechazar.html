@@ -1,0 +1,11 @@
+<div class="modal-header dialog-header-error">
+    <h4 class="modal-title"><span class="glyphicon glyphicon-trash"></span> Rechazar Turno {{turn.anio}}-{{turn.id}}
+    </h4></div>
+<div class="modal-body">
+    <label class="control-label" for="nota">Observacion:</label>
+    <textarea class="form-control" id="nota" ng-model="nota" rows="5"></textarea>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" type="button" ng-click="cancel()">Cancelar</button>
+    <button class="btn btn-danger" type="button" ng-click="ok()">Rechazar</button>
+</div>
