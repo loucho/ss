@@ -1,8 +1,13 @@
 var appControllers = angular.module('applicationController', []);
 
-appControllers.controller('ApplicationController', function ($scope, AuthenticationService, $rootScope, authService, dialogs) {
+appControllers.controller('ApplicationController', function ($scope, AuthenticationService, $rootScope, authService, dialogs, datepickerPopupConfig) {
     $scope.currentUser = ($rootScope.globals && $rootScope.globals.currentUser) ? $rootScope.globals.currentUser : null;
     $scope.isAuthorized = AuthenticationService.isAuthorized;
+
+    datepickerPopupConfig.currentText = 'Hoy';
+    datepickerPopupConfig.clearText = 'Limpiar';
+    datepickerPopupConfig.closeText = 'Cerrar';
+    datepickerPopupConfig.datepickerPopup = 'dd/MM/yyyy';
 
     $scope.setCurrentUser = function (user) {
         $scope.currentUser = user;

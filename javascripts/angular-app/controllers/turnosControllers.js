@@ -15,6 +15,18 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
         $scope.files = [];
         $scope.turno = {areas: [], remitente: {}, archivos: []};
 
+        $scope.openReceptionDate = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.receptionDateOpen = true;
+        };
+
+        $scope.openDate = function($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.dateOpen = true;
+        };
+
         $scope.updateInstitution = function () {
             $scope.turno.remitente.idInstitucion = $scope.selectedInstitution.id;
             $scope.IESpeople = IESPerson.query({idIES: $scope.turno.remitente.idInstitucion});
@@ -69,6 +81,7 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
                 ngToast.create({content: 'Por favor ingrese los datos requeridos', 'class': 'danger'});
                 return false;
             }
+            console.log(JSON.stringify($scope.turno));
             Turn.save({}, $scope.turno, function (data) {
                 ngToast.create({content: 'Turno guardado correctamente', 'class': 'success'});
             }, function (error) {
