@@ -15,13 +15,13 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
         $scope.files = [];
         $scope.turno = {areas: [], remitente: {}, archivos: []};
 
-        $scope.openReceptionDate = function($event) {
+        $scope.openReceptionDate = function ($event) {
             $event.preventDefault();
             $event.stopPropagation();
             $scope.receptionDateOpen = true;
         };
 
-        $scope.openDate = function($event) {
+        $scope.openDate = function ($event) {
             $event.preventDefault();
             $event.stopPropagation();
             $scope.dateOpen = true;
@@ -78,14 +78,23 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
         $scope.save = function (form) {
             $scope.submitted = true;
             if (!form.$valid) {
-                ngToast.create({content: 'Por favor ingrese los datos requeridos', 'class': 'danger'});
+                ngToast.create({
+                    content: '<span class="glyphicon glyphicon-exclamation-sign"></span> Es necesario ingresar todos los datos requeridos',
+                    'class': 'danger'
+                });
                 return false;
             }
             console.log(JSON.stringify($scope.turno));
             Turn.save({}, $scope.turno, function (data) {
-                ngToast.create({content: 'Turno guardado correctamente', 'class': 'success'});
+                ngToast.create({
+                    content: '<span class="glyphicon glyphicon-ok"></span> Turno guardado correctamente',
+                    'class': 'success'
+                });
             }, function (error) {
-                ngToast.create({content: 'Ocurrio un error al guardar los datos =(', 'class': 'danger'});
+                ngToast.create({
+                    content: '<span class="glyphicon glyphicon-exclamation-sign"></span> Ocurrio un error al guardar los datos =(',
+                    'class': 'danger'
+                });
             });
         };
 
@@ -94,7 +103,7 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
                 var file = $scope.files[i];
                 if (file.size > config.maxFileSize) {
                     ngToast.create({
-                        content: 'Archivo demasiado grande: ' + file.name + " (" + file.size + " Kb)",
+                        content: '<span class="glyphicon glyphicon-warning-sign"></span> Archivo demasiado grande: ' + file.name + " (" + file.size + " Kb)",
                         'class': 'warning'
                     });
                     continue;
@@ -102,7 +111,10 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
                 if (_.find($scope.turno.archivos, function (item) {
                         return item.nombre == file.name;
                     })) {
-                    ngToast.create({content: 'Archivo ya existe: ' + file.name, 'class': 'warning'});
+                    ngToast.create({
+                        content: '<span class="glyphicon glyphicon-warning-sign"></span> Archivo ya existe: ' + file.name,
+                        'class': 'warning'
+                    });
                     continue;
                 }
                 $scope.upload = $upload.upload({
