@@ -21,13 +21,15 @@
             <td>{{item.anio}}-{{item.id}}</td>
             <td>{{item.turnoDGESU}}</td>
             <td>
-                <div ng-repeat="id in item.areas">{{getArea(id)}}</div>
+                <div ng-repeat="asignacion in item.asignacion">{{getArea(asignacion.idAreaOperativa)}}</div>
             </td>
-            <td>{{item.asignado}}</td>
+            <td>
+                <div ng-repeat="asignacion in item.asignacion">{{getEmployee(asignacion.idEmpleado)}}</div>
+            </td>
             <td>{{item.asunto}}</td>
-            <td>{{item.fechaLimite | date : "dd-MM-yyyy"}}</td>
+            <td>{{item.fechaLimite | date:"dd-MM-yyyy"}}</td>
             <td>{{item.estatus}}</td>
-            <td>{{item.fechaAlta | date : "dd-MM-yyyy"}}</td>
+            <td>{{item.fechaAlta | date:"dd-MM-yyyy"}}</td>
             <td>
                 <button class="btn btn-sm btn-primary" popover="Editar" popover-trigger="mouseenter" ng-disabled="false"
                         ng-click="">

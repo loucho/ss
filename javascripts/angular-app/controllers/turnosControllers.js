@@ -136,23 +136,32 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
         });
     }]);
 
-turnosControllers.controller('BuscaTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType', 'SenderType', 'Area', 'Institution', 'Position', 'IESPerson', 'Turn', 'ngToast',
-    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, Position, IESPerson, Turn, ngToast) {
+turnosControllers.controller('BuscaTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType', 'SenderType', 'Area', 'Institution', 'Position', 'Employee', 'Turn', 'ngToast',
+    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, Position, Employee, Turn, ngToast) {
         $scope.priorities = Priority.query();
         $scope.processTypes = ProcessType.query();
         $scope.senderTypes = SenderType.query();
         $scope.institutions = Institution.query();
         $scope.positions = Position.query();
-        //$scope.people = IESPerson.query();
+        $scope.employees = Employee.query();
         $scope.areas = Area.query();
 
         $scope.turns = Turn.query({anio: 2015});
 
         $scope.getArea = function (id) {
             var area = _.findWhere($scope.areas, {
-                code: id
+                id: id
             });
-            return area.name;
+            return area.abreviatura;
+        };
+
+        $scope.getEmployee = function (id) {
+            var employee = _.findWhere($scope.employees, {
+                id: id
+            });
+            if (employee)
+                return employee.nombre + " " + employee.paterno + " " + employee.materno;
+            return "";
         };
 
         $scope.reject = function (turno) {
