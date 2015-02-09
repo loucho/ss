@@ -1,0 +1,53 @@
+<div class="modal-header dialog-header-notify">
+    <h4 class="modal-title"><span class="glyphicon glyphicon-user"></span> Asignar Turno {{turn.anio}}-{{turn.id}}
+    </h4></div>
+<form name="form" role="form" novalidate>
+    <div class="modal-body">
+        <div class="form-group" ng-class="{'has-error': form.tipo.$invalid && submitted}">
+            <label>Asignar a:</label>
+            <label class="radio-inline">
+                <input type="radio" name="tipo" ng-model="type" value="1" required> Área
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="tipo" ng-model="type" value="2" required> Empleado
+            </label>
+
+            <p ng-show="form.tipo.$invalid && submitted" class="help-block"> Seleccione untipo de asignación </p>
+        </div>
+        <div class="form-group" ng-show="type == 1" ng-class="{'has-error': form.area.$invalid && submitted}">
+            <label class="control-label" for="area">Área:</label>
+            <select id="area" ng-model="idAreaOperativa" class="form-control" ng-required="type == 1" name="area"
+                    ng-options="area.id as (area.nombre + ' (' + area.abreviatura + ')') for area in areas">
+                <option value="">Seleccione uno</option>
+            </select>
+
+            <p ng-show="form.area.$invalid && submitted" class="help-block"> Campo requerido </p>
+        </div>
+        <div class="form-group" ng-show="type == 2" ng-class="{'has-error': form.empleado.$invalid && submitted}">
+            <label class="control-label" for="empleado">Empleado:</label>
+            <select id="empleado" ng-model="idEmpleado" class="form-control" ng-required="type == 2" name="empleado"
+                    ng-options="employee.id as (employee.tituloAcademico + ' ' + employee.nombre + ' ' + employee.paterno + ' ' + employee.materno) for employee in employees">
+                <option value="">Seleccione uno</option>
+            </select>
+
+            <p ng-show="form.empleado.$invalid && submitted" class="help-block"> Campo requerido </p>
+        </div>
+        <div class="form-group" ng-class="{'has-error': form.tiempo.$invalid && submitted}">
+            <label class="control-label" for="tiempo">Tiempo de Respuesta:</label>
+            <select id="tiempo" ng-model="idTiempo" class="form-control" required name="tiempo"
+                    ng-options="responseTime.id as responseTime.descripcion for responseTime in responseTimes">
+                <option value="">Seleccione uno</option>
+            </select>
+
+            <p ng-show="form.tiempo.$invalid && submitted" class="help-block"> Campo requerido </p>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="nota">Observacion:</label>
+            <textarea class="form-control" id="nota" ng-model="nota" rows="5"></textarea>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" type="button" ng-click="cancel()">Cancelar</button>
+        <button class="btn btn-success" type="submit" ng-click="ok(form)">Asignar</button>
+    </div>
+</form>

@@ -24,6 +24,10 @@ SEPServices.factory('Position', ['$resource', 'config', function ($resource, con
     return $resource(config.apiUrl + '/cargo', {}, {});
 }]);
 
+SEPServices.factory('ResponseTime', ['$resource', 'config', function ($resource, config) {
+    return $resource(config.apiUrl + '/tiempo-respuesta', {}, {});
+}]);
+
 SEPServices.factory('IESPerson', ['$resource', 'config', function ($resource, config) {
     return $resource(config.apiUrl + '/directorio-instituciones', {}, {});
 }]);
@@ -37,5 +41,18 @@ SEPServices.factory('Area', ['$resource', 'config', function ($resource, config)
 }]);
 
 SEPServices.factory('Turn', ['$resource', 'config', function ($resource, config) {
-    return $resource(config.apiUrl + '/turno/:year/:seq', {}, {});
+    return $resource(config.apiUrl + '/turno/:year/:seq/:action', {}, {
+        close: {
+            method: 'POST',
+            params: {action: 'cerrar'}
+        },
+        reject: {
+            method: 'POST',
+            params: {action: 'rechazar'}
+        },
+        assign: {
+            method: 'POST',
+            params: {action: 'asignar'}
+        }
+    });
 }]);

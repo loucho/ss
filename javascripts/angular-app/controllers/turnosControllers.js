@@ -84,7 +84,6 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
                 });
                 return false;
             }
-            console.log(JSON.stringify($scope.turno));
             Turn.save({}, $scope.turno, function (data) {
                 ngToast.create({
                     content: '<span class="glyphicon glyphicon-ok"></span> Turno guardado correctamente',
@@ -170,8 +169,8 @@ turnosControllers.controller('BuscaTurnoController', ['$scope', '$http', 'dialog
                 backdrop: 'static',
                 windowClass: 'loginModal'
             });
-            dlg.result.then(function (nota) {
-                ngToast.create({content: nota});
+            dlg.result.then(function (message) {
+                ngToast.create({content: message.mensaje, 'class': (message.status == 200) ? 'success' : 'danger'});
             }, function () {
                 ngToast.create({content: 'Cancelar Rechazo', 'class': 'danger'});
             });
@@ -183,10 +182,23 @@ turnosControllers.controller('BuscaTurnoController', ['$scope', '$http', 'dialog
                 backdrop: 'static',
                 windowClass: 'loginModal'
             });
-            dlg.result.then(function (nota) {
-                ngToast.create({content: nota});
+            dlg.result.then(function (message) {
+                ngToast.create({content: message.mensaje, 'class': (message.status == 200) ? 'success' : 'danger'});
             }, function () {
                 ngToast.create({content: 'Cancelar Cierre', 'class': 'danger'});
+            });
+        };
+
+        $scope.assign = function (turno) {
+            var dlg = dialogs.create('partials/dialogs/asignar.html', 'asignarDialogController', turno, {
+                size: 'lg',
+                backdrop: 'static',
+                windowClass: 'loginModal'
+            });
+            dlg.result.then(function (message) {
+                ngToast.create({content: message.mensaje, 'class': (message.status == 200) ? 'success' : 'danger'});
+            }, function () {
+                ngToast.create({content: 'Cancelar Asignación', 'class': 'danger'});
             });
         };
 
@@ -199,11 +211,18 @@ turnosControllers.controller('BuscaTurnoController', ['$scope', '$http', 'dialog
         };
     }]);
 
-turnosControllers.controller('rechazarDialogController', ['$scope', '$modalInstance', 'data', function ($scope, $modalInstance, data) {
+turnosControllers.controller('rechazarDialogController', ['$scope', '$modalInstance', 'data', 'Turn', function ($scope, $modalInstance, data, Turn) {
     $scope.turn = data;
 
     $scope.ok = function () {
-        $modalInstance.close($scope.nota);
+        var response = Turn.close({
+            anio: data.anio,
+            idTurno: data.id,
+            observaciones: $scope.nota
+        });
+        response.$promise.then(function (message) {
+            $modalInstance.close(message);
+        });
     };
 
     $scope.cancel = function () {
@@ -211,11 +230,18 @@ turnosControllers.controller('rechazarDialogController', ['$scope', '$modalInsta
     };
 }]);
 
-turnosControllers.controller('cerrarDialogController', ['$scope', '$modalInstance', 'data', function ($scope, $modalInstance, data) {
+turnosControllers.controller('cerrarDialogController', ['$scope', '$modalInstance', 'data', 'Turn', function ($scope, $modalInstance, data, Turn) {
     $scope.turn = data;
 
     $scope.ok = function () {
-        $modalInstance.close($scope.nota);
+        var response = Turn.reject({
+            anio: data.anio,
+            idTurno: data.id,
+            observaciones: $scope.nota
+        });
+        response.$promise.then(function (message) {
+            $modalInstance.close(message);
+        });
     };
 
     $scope.cancel = function () {
@@ -229,5 +255,37 @@ turnosControllers.controller('verDialogController', ['$scope', '$modalInstance',
     $scope.ok = function () {
         $modalInstance.dismiss('Closed');
     };
+}]);
 
+turnosControllers.controller('asignarDialogController', ['$scope', '$modalInstance', 'data', 'Turn', 'Area', 'Employee', 'ResponseTime', 'ngToast', function ($scope, $modalInstance, data, Turn, Area, Employee, ResponseTime, ngToast) {
+    $scope.turn = data;
+    $scope.areas = Area.query({idDependencia: [data.asignacion[0].idAreaOperativa]});
+    $scope.employees = Employee.query({idAreaOperativa: data.asignacion[0].idAreaOperativa});
+    $scope.responseTimes = ResponseTime.query();
+
+    $scope.ok = function (form) {
+        $scope.submitted = true;
+        if (!form.$valid) {
+            ngToast.create({
+                content: '<span class="glyphicon glyphicon-exclamation-sign"></span> Es necesario ingresar todos los datos requeridos',
+                'class': 'danger'
+            });
+            return false;
+        }
+        var response = Turn.assign({
+            anio: data.anio,
+            idTurno: data.id,
+            observaciones: $scope.nota,
+            idTiempoRespuesta: $scope.idTiempo,
+            idAreaOperativa: $scope.idAreaOperativa,
+            idEmpleado: $scope.idEmpleado
+        });
+        response.$promise.then(function (message) {
+            $modalInstance.close(message);
+        });
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('Canceled');
+    };
 }]);
