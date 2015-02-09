@@ -81,7 +81,7 @@
         </div>
     </div>
     <div class="form-group" ng-class="{'has-error': turnoForm.remitente.$invalid && submitted}">
-        <label class="col-xs-1">Tipo de Remitente:</label>
+        <label class="col-xs-2">Tipo de Remitente:</label>
         <label class="radio-inline" ng-repeat="senderType in senderTypes">
             <input type="radio" name="remitente" ng-model="turno.tipoRemitente" id="remitente{{senderType.id}}"
                    value="{{senderType.id}}" required>
@@ -245,28 +245,46 @@
             <textarea id="observaciones" class="form-control" rows="3" ng-model="turno.observaciones"></textarea>
         </div>
     </div>
-    <div class="form-group" ng-class="{'has-error': turnoForm.selectedAreas.$invalid && submitted}">
-        <label class="col-xs-1">Area que atiende:</label>
-        <label class="checkbox-inline" ng-repeat="area in areas">
-            <input type="checkbox" name="selectedAreas" ng-model="a[area.id]" ng-checked="checkedArea(area.id)"
-                   ng-required="!turno.areas.length" ng-click="toggleArea(area.id)" value="{{area.id}}">
+    <div class="form-group" ng-class="{'has-error': turnoForm.idArea.$invalid && submitted}">
+        <label class="col-xs-2">Area que atiende:</label>
+        <label class="radio-inline" ng-repeat="area in areas">
+            <input type="radio" name="idArea" ng-model="turno.idArea" id="idArea"
+                   value="{{area.id}}" required>
             {{area.abreviatura}}
         </label>
 
-        <p ng-show="turnoForm.selectedAreas.$invalid && submitted" class="help-block"> Seleccione al menos un área </p>
+        <p ng-show="turnoForm.idArea.$invalid && submitted" class="help-block"> Seleccione un área </p>
     </div>
-    <div class="form-group">
+    <div class="form-group" ng-class="{'has-error': turno.archivos.length == 0 && submitted}">
         <button ng-file-select ng-model="files" multiple="true" accept="{{fileMask}}" class="btn btn-success">
             Adjuntar Archivos
         </button>
+        <p ng-show="turno.archivos.length == 0 && submitted" class="help-block"> Debe agregar por lo menos un archivo </p>
     </div>
     <div class="row">
-        <ul class="list-group col-xs-6">
+        <ul class="list-group col-xs-12">
             <li ng-repeat="file in turno.archivos" class="list-group-item">
-                <span>{{file.nombre}}</span>
-                <button type="button" class="close" aria-label="Close" ng-click="deleteFile(file)">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <ng-form name="innerForm">
+                    <div class="row" ng-class="{'has-error': innerForm.file.$invalid && submitted}">
+                        <div class="col-xs-6">
+                            <span>{{file.nombre}}</span>
+                        </div>
+                        <div class="col-xs-5">
+                            <select class="form-control" ng-model="file.idTipoArchivo" required="required" name="file"
+                                    ng-options="fileType.id as fileType.descripcion for fileType in fileTypes">
+                                <option value="">Seleccione uno</option>
+                            </select>
+
+                            <p ng-show="innerForm.file.$invalid && submitted" class="help-block"> Seleccione un
+                                tipo </p>
+                        </div>
+                        <div class="col-xs-1">
+                            <button type="button" class="close" aria-label="Close" ng-click="deleteFile(file)">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                </ng-form>
             </li>
         </ul>
     </div>

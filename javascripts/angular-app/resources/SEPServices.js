@@ -28,6 +28,10 @@ SEPServices.factory('ResponseTime', ['$resource', 'config', function ($resource,
     return $resource(config.apiUrl + '/tiempo-respuesta', {}, {});
 }]);
 
+SEPServices.factory('FileType', ['$resource', 'config', function ($resource, config) {
+    return $resource(config.apiUrl + '/tipo-archivo', {}, {});
+}]);
+
 SEPServices.factory('IESPerson', ['$resource', 'config', function ($resource, config) {
     return $resource(config.apiUrl + '/directorio-instituciones', {}, {});
 }]);
