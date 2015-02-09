@@ -44,6 +44,10 @@ SEPServices.factory('Area', ['$resource', 'config', function ($resource, config)
     return $resource(config.apiUrl + '/area-interna/:id', {}, {});
 }]);
 
+SEPServices.factory('Status', ['$resource', 'config', function ($resource, config) {
+    return $resource(config.apiUrl + '/estatus/:id', {}, {});
+}]);
+
 SEPServices.factory('Turn', ['$resource', 'config', function ($resource, config) {
     return $resource(config.apiUrl + '/turno/:year/:seq/:action', {}, {
         close: {

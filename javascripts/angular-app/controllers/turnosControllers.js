@@ -123,32 +123,147 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
         });
     }]);
 
-turnosControllers.controller('BuscaTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType', 'SenderType', 'Area', 'Institution', 'Position', 'Employee', 'Turn', 'ngToast',
-    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, Position, Employee, Turn, ngToast) {
+turnosControllers.controller('CorrigeTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType', 'SenderType', 'Area', 'Institution', 'IESPerson', 'Organization', 'Turn', 'Employee', 'FileType', '$upload', 'config', 'ngToast', '$routeParams',
+    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, IESPerson, Organization, Turn, Employee, FileType, $upload, config, ngToast, $routeParams) {
+        console.log($routeParams);
         $scope.priorities = Priority.query();
         $scope.processTypes = ProcessType.query();
+        $scope.fileMask = config.fileMask;
         $scope.senderTypes = SenderType.query();
         $scope.institutions = Institution.query();
-        $scope.positions = Position.query();
-        $scope.employees = Employee.query();
-        $scope.areas = Area.query();
+        $scope.organizations = Organization.query();
+        $scope.areas = Area.query({idDependencia: [0, 1]});
+        $scope.internalAreas = Area.query();
+        $scope.files = [];
+        $scope.fileTypes = FileType.query({tipo: 1});
+        $scope.turno = Turn.get({year: $routeParams.anio, seq: $routeParams.id});
+
+
+        $scope.openReceptionDate = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.receptionDateOpen = true;
+        };
+
+        $scope.openDate = function ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.dateOpen = true;
+        };
+
+        $scope.updateInstitution = function () {
+            $scope.turno.remitente.idInstitucion = $scope.selectedInstitution.id;
+            $scope.IESpeople = IESPerson.query({idIES: $scope.turno.remitente.idInstitucion});
+            $scope.clearPerson();
+        };
+
+        $scope.updateArea = function () {
+            $scope.turno.remitente.idArea = $scope.selectedArea.id;
+            $scope.employees = Employee.query({idAreaOperativa: $scope.turno.remitente.idArea});
+            $scope.clearPerson();
+        };
+
+        $scope.deleteFile = function (file) {
+            var i = $scope.turno.archivos.indexOf(file);
+            $scope.turno.archivos.splice(i, 1);
+        };
+
+        $scope.clearPerson = function () {
+            $scope.turno.remitente.idPersona = null;
+            $scope.position = "";
+        };
+
+        $scope.setPerson = function () {
+            $scope.turno.remitente.idPersona = $scope.selectedPerson.id;
+            if ($scope.turno.tipoRemitente == 1)
+                $scope.position = $scope.selectedPerson.cargoIes.nombre;
+        };
+
+        $scope.getCode911 = function (institutionCode) {
+            var institution = _.findWhere($scope.institutions, {
+                id: institutionCode
+            });
+            return institution.clave911;
+        };
+
+        $scope.save = function (form) {
+            $scope.submitted = true;
+            if (!form.$valid || $scope.turno.archivos.length == 0) {
+                ngToast.create({
+                    content: '<span class="glyphicon glyphicon-exclamation-sign"></span> Es necesario ingresar todos los datos requeridos',
+                    'class': 'danger'
+                });
+                return false;
+            }
+            console.log(JSON.stringify($scope.turno));
+            Turn.save({}, $scope.turno, function (data) {
+                ngToast.create({
+                    content: '<span class="glyphicon glyphicon-ok"></span> Turno guardado correctamente',
+                    'class': 'success'
+                });
+            }, function (error) {
+                ngToast.create({
+                    content: '<span class="glyphicon glyphicon-exclamation-sign"></span> Ocurrio un error al guardar los datos =(',
+                    'class': 'danger'
+                });
+            });
+        };
+
+        $scope.$watch('files', function () {
+            for (var i = 0; i < $scope.files.length; i++) {
+                var file = $scope.files[i];
+                if (file.size > config.maxFileSize) {
+                    ngToast.create({
+                        content: '<span class="glyphicon glyphicon-warning-sign"></span> Archivo demasiado grande: ' + file.name + " (" + file.size + " Kb)",
+                        'class': 'warning'
+                    });
+                    continue;
+                }
+                if (_.find($scope.turno.archivos, function (item) {
+                        return item.nombre == file.name;
+                    })) {
+                    ngToast.create({
+                        content: '<span class="glyphicon glyphicon-warning-sign"></span> Archivo ya existe: ' + file.name,
+                        'class': 'warning'
+                    });
+                    continue;
+                }
+                $scope.upload = $upload.upload({
+                    url: config.apiUrl + "/archivo/upload",
+                    method: 'POST',
+                    file: file
+                }).success(function (data, status, headers, config) {
+                    var newFile = {
+                        nombre: config.file.name,
+                        nombreTemporal: data.nombreArchivoTemporal,
+                        tipo: config.file.type,
+                        size: config.file.size
+                    };
+                    $scope.turno.archivos.push(newFile);
+                }).error(function (error) {
+                    console.log(error);
+                });
+            }
+        });
+    }]);
+
+turnosControllers.controller('BuscaTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType', 'SenderType', 'Area', 'Institution', 'Position', 'Employee', 'Turn', 'Status', 'ngToast',
+    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, Position, Employee, Turn, Status, ngToast) {
+        //$scope.priorities = Priority.query();
+        //$scope.processTypes = ProcessType.query();
+        //$scope.senderTypes = SenderType.query();
+        //$scope.institutions = Institution.query();
+        //$scope.employees = Employee.query();
+        $scope.stati = Status.query();
+        //$scope.areas = Area.query();
 
         $scope.turns = Turn.query({anio: 2015});
 
-        $scope.getArea = function (id) {
-            var area = _.findWhere($scope.areas, {
+        $scope.getStatus = function (id) {
+            var area = _.findWhere($scope.stati, {
                 id: id
             });
-            return area.abreviatura;
-        };
-
-        $scope.getEmployee = function (id) {
-            var employee = _.findWhere($scope.employees, {
-                id: id
-            });
-            if (employee)
-                return employee.nombre + " " + employee.paterno + " " + employee.materno;
-            return "";
+            return area.descripcion;
         };
 
         $scope.reject = function (turno) {
@@ -262,8 +377,8 @@ turnosControllers.controller('verDialogController', ['$scope', '$modalInstance',
 
 turnosControllers.controller('asignarDialogController', ['$scope', '$modalInstance', 'data', 'Turn', 'Area', 'Employee', 'ResponseTime', 'ngToast', function ($scope, $modalInstance, data, Turn, Area, Employee, ResponseTime, ngToast) {
     $scope.turn = data;
-    $scope.areas = Area.query({idDependencia: [data.asignacion[0].idAreaOperativa]});
-    $scope.employees = Employee.query({idAreaOperativa: data.asignacion[0].idAreaOperativa});
+    $scope.areas = Area.query({idDependencia: [data.asignacion.areaOperativa.id]});
+    $scope.employees = Employee.query({idAreaOperativa: data.asignacion.areaOperativa.id});
     $scope.responseTimes = ResponseTime.query();
 
     $scope.ok = function (form) {
@@ -280,7 +395,7 @@ turnosControllers.controller('asignarDialogController', ['$scope', '$modalInstan
             idTurno: data.id,
             observaciones: $scope.nota,
             idTiempoRespuesta: $scope.idTiempo,
-            idAreaOperativa: ($scope.type == 1) ? $scope.idAreaOperativa : data.asignacion[0].idAreaOperativa,
+            idAreaOperativa: ($scope.type == 1) ? $scope.idAreaOperativa : data.asignacion.areaOperativa.id,
             idEmpleado: $scope.idEmpleado
         });
         response.$promise.then(function (message) {

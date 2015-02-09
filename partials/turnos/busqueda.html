@@ -9,8 +9,8 @@
             <th class="col-xs-1">Turno DGESU</th>
             <th class="col-xs-1">Área</th>
             <th class="col-xs-1">Asignado</th>
+            <th class="col-xs-1">Estatus</th>
             <th class="col-xs-2">Asunto</th>
-            <th class="col-xs-1">Fecha Compromiso de Cierre</th>
             <th class="col-xs-1">Cumplimiento</th>
             <th class="col-xs-1">Fecha Apertura</th>
             <th class="col-xs-4">Acciones</th>
@@ -20,27 +20,25 @@
         <tr ng-repeat="item in turns">
             <td>{{item.anio}}-{{item.id}}</td>
             <td>{{item.turnoDGESU}}</td>
-            <td>
-                <div ng-repeat="asignacion in item.asignacion">{{getArea(asignacion.idAreaOperativa)}}</div>
-            </td>
-            <td>
-                <div ng-repeat="asignacion in item.asignacion">{{getEmployee(asignacion.idEmpleado)}}</div>
-            </td>
+            <td>{{item.asignacion.areaOperativa.abreviatura}}</td>
+            <td>{{item.asignacion.empleado.tituloAcademico}} {{item.asignacion.empleado.nombre}}
+                {{item.asignacion.empleado.paterno}} {{item.asignacion.empleado.materno}}</td>
+            <td>{{getStatus(item.idEstatus)}}</td>
             <td>{{item.asunto}}</td>
-            <td>{{item.fechaLimite | date:"dd-MM-yyyy"}}</td>
             <td>{{item.estatus}}</td>
             <td>{{item.fechaAlta | date:"dd-MM-yyyy"}}</td>
             <td>
-                <button class="btn btn-sm btn-primary" popover="Editar" popover-trigger="mouseenter" ng-disabled="false"
-                        ng-click="">
+                <a href="#/turnos/correccion/{{item.anio}}/{{item.id}}" class="btn btn-sm btn-primary" popover="Editar"
+                   popover-trigger="mouseenter" ng-disabled="false" ng-click="">
                     <span class="glyphicon glyphicon-pencil"></span>
-                </button>
-                <button class="btn btn-sm btn-primary" popover="Asignar" popover-trigger="mouseenter" ng-disabled="false"
+                </a>
+                <button class="btn btn-sm btn-primary" popover="Asignar" popover-trigger="mouseenter"
+                        ng-disabled="false"
                         ng-click="assign(item)">
                     <span class="glyphicon glyphicon-user"></span>
                 </button>
-                <button class="btn btn-sm btn-success" popover="Atencíon" popover-trigger="mouseenter" ng-disabled="false"
-                        ng-click="">
+                <button class="btn btn-sm btn-success" popover="Atencíon" popover-trigger="mouseenter"
+                        ng-disabled="false" ng-click="">
                     <span class="glyphicon glyphicon-ok"></span>
                 </button>
                 <button class="btn btn-sm btn-success" popover="Cierre" popover-trigger="mouseenter" ng-disabled="false"
@@ -55,8 +53,8 @@
                         ng-click="">
                     <span class="glyphicon glyphicon-file"></span>
                 </button>
-                <button class="btn btn-sm btn-danger" popover="Rechazar" popover-trigger="mouseenter" ng-disabled="false"
-                        ng-click="reject(item)">
+                <button class="btn btn-sm btn-danger" popover="Rechazar" popover-trigger="mouseenter"
+                        ng-disabled="false" ng-click="reject(item)">
                     <span class="glyphicon glyphicon-remove"></span>
                 </button>
             </td>
