@@ -1,14 +1,13 @@
 var turnosControllers = angular.module('turnosControllers', []);
 
-turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType', 'SenderType', 'Area', 'Institution', 'Position', 'IESPerson', 'Organization', 'Turn', 'Employee', 'FileType', '$upload', 'config', 'ngToast',
-    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, Position, IESPerson, Organization, Turn, Employee, FileType, $upload, config, ngToast) {
+turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType', 'SenderType', 'Area', 'Institution', 'IESPerson', 'Organization', 'Turn', 'Employee', 'FileType', '$upload', 'config', 'ngToast',
+    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, IESPerson, Organization, Turn, Employee, FileType, $upload, config, ngToast) {
         $scope.priorities = Priority.query();
         $scope.processTypes = ProcessType.query();
         $scope.today = new Date();
         $scope.fileMask = config.fileMask;
         $scope.senderTypes = SenderType.query();
         $scope.institutions = Institution.query();
-        $scope.positions = Position.query();
         $scope.organizations = Organization.query();
         $scope.areas = Area.query({idDependencia: [0, 1]});
         $scope.internalAreas = Area.query();
@@ -238,8 +237,23 @@ turnosControllers.controller('cerrarDialogController', ['$scope', '$modalInstanc
     };
 }]);
 
-turnosControllers.controller('verDialogController', ['$scope', '$modalInstance', 'data', 'Turn', function ($scope, $modalInstance, data, Turn) {
+turnosControllers.controller('verDialogController', ['$scope', '$modalInstance', 'data', 'Area', 'Institution', 'IESPerson', 'Organization', 'Turn', 'Employee', function ($scope, $modalInstance, data, Area, Institution, IESPerson, Organization, Turn, Employee) {
     $scope.turn = Turn.get({year: data.anio, seq: data.id});
+
+    $scope.turn.$promise.then(function (data) {
+        console.log(data.remitente);
+        if (data.remitente.idTipoRemitente == 1) {
+            $scope.person = IESPerson.get({id: data.remitente.idPersona});
+            $scope.institution = Institution.get({id: data.remitente.idInstitucion});
+        }
+        if (data.remitente.idTipoRemitente == 2) {
+            $scope.organization = Organization.get({id: data.remitente.idOrganismo});
+        }
+        if (data.remitente.idTipoRemitente == 3) {
+            $scope.person = Employee.get({id: data.remitente.idPersona});
+            $scope.area = Area.get({id: data.remitente.idArea});
+        }
+    });
 
     $scope.ok = function () {
         $modalInstance.dismiss('Closed');

@@ -13,11 +13,11 @@ SEPServices.factory('SenderType', ['$resource', 'config', function ($resource, c
 }]);
 
 SEPServices.factory('Institution', ['$resource', 'config', function ($resource, config) {
-    return $resource(config.apiUrl + '/ies', {}, {});
+    return $resource(config.apiUrl + '/ies/:id', {}, {});
 }]);
 
 SEPServices.factory('Organization', ['$resource', 'config', function ($resource, config) {
-    return $resource(config.apiUrl + '/organismo', {}, {});
+    return $resource(config.apiUrl + '/organismo/:id', {}, {});
 }]);
 
 SEPServices.factory('Position', ['$resource', 'config', function ($resource, config) {
@@ -33,15 +33,15 @@ SEPServices.factory('FileType', ['$resource', 'config', function ($resource, con
 }]);
 
 SEPServices.factory('IESPerson', ['$resource', 'config', function ($resource, config) {
-    return $resource(config.apiUrl + '/directorio-instituciones', {}, {});
+    return $resource(config.apiUrl + '/directorio-instituciones/:id', {}, {});
 }]);
 
 SEPServices.factory('Employee', ['$resource', 'config', function ($resource, config) {
-    return $resource(config.apiUrl + '/empleado', {}, {});
+    return $resource(config.apiUrl + '/empleado/:id', {}, {});
 }]);
 
 SEPServices.factory('Area', ['$resource', 'config', function ($resource, config) {
-    return $resource(config.apiUrl + '/area-interna', {}, {});
+    return $resource(config.apiUrl + '/area-interna/:id', {}, {});
 }]);
 
 SEPServices.factory('Turn', ['$resource', 'config', function ($resource, config) {
