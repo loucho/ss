@@ -316,6 +316,7 @@ turnosControllers.controller('BuscaTurnoController', ['$scope', '$filter', '$htt
         $scope.stati = Status.query();
         $scope.areas = Area.query();
         $scope.today = new Date();
+        $scope.query = {};
 
         $scope.getStatus = function (id) {
             var area = _.findWhere($scope.stati, {
