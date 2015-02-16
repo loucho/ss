@@ -1,0 +1,32 @@
+<div class="modal-header dialog-header-confirm">
+    <h4 class="modal-title"><span class="glyphicon glyphicon-file"></span> Archivos del turno {{turn.anio}}-{{turn.id}}
+    </h4></div>
+<div class="modal-body">
+    <div class="table-responsive">
+        <table class="table table-responsive table-hover">
+            <thead>
+            <tr>
+                <th>Nombre de Archivo</th>
+                <th>Tipo</th>
+                <th>Descargar</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="file in files">
+                <td>{{file.nombre}}</td>
+                <td>{{getFileType(file.idTipoArchivo)}}</td>
+                <td>
+                    <a ng-href="{{baseUrl}}/archivo/{{file.id}}" target="_blank">
+                        <button class="btn btn-success">
+                            <span class="glyphicon glyphicon-download"></span>
+                        </button>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-success" type="button" ng-click="ok()">Cerrar</button>
+</div>

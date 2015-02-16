@@ -1,6 +1,169 @@
 <div class="page-header">
     <h1>Busqueda de Turnos</h1>
 </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-2">
+            <label for="anio">Año:</label>
+            <input id="anio" type="text" class="form-control" ng-model="query.anio" placeholder="Año" maxlength="4">
+        </div>
+        <div class="col-xs-1">
+            <label for="id">Turno:</label>
+            <input id="id" ng-model="query.id" class="form-control" type="text" placeholder="Id">
+        </div>
+        <div class="col-xs-5">
+            <label for="area-asignada">Área asignada:</label>
+            <select id="area-asignada" ng-model="query.idAreaAsignada" class="form-control"
+                    ng-options="area.id as area.nombre for area in areas">
+                <option value="">Todas</option>
+            </select>
+        </div>
+        <div class="col-xs-2">
+            <label for="board">Estatus:</label>
+            <select id="board" ng-model="query.estatus" class="form-control"
+                    ng-options="status.id as status.descripcion for status in stati">
+                <option value="">Todos</option>
+            </select>
+        </div>
+        <div class="col-xs-2">
+            <label for="dgesu">Turno DGESU:</label>
+            <input id="dgesu" ng-model="query.dgesu" class="form-control" type="text" placeholder="Turno DGESU"
+                   maxlength="12">
+        </div>
+    </div>
+    <br/>
+
+    <div class="row">
+        <div class="col-xs-2">
+            <label for="captura-desde">Capturado desde:</label>
+
+            <div class="input-group">
+                <input id="captura-desde" type="text" class="form-control" ng-model="capturaDesde"
+                       datepicker-popup is-open="capturaDesdeOpen" readonly name="captura-desde" max-date="today"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openDatePicker($event, 'capturaDesdeOpen')">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+              </span>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <label for="captura-hasta">Capturado hasta:</label>
+
+            <div class="input-group">
+                <input id="captura-hasta" type="text" class="form-control" ng-model="capturaHasta"
+                       datepicker-popup is-open="capturaHastaOpen" readonly name="captura-hasta" max-date="today"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openDatePicker($event, 'capturaHastaOpen')">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+              </span>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <label for="recepcion-desde">Recepción desde:</label>
+
+            <div class="input-group">
+                <input id="recepcion-desde" type="text" class="form-control" ng-model="recepcionDesde"
+                       datepicker-popup is-open="recepcionDesdeOpen" readonly name="recepcion-desde" max-date="today"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openDatePicker($event, 'recepcionDesdeOpen')">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+              </span>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <label for="recepcion-hasta">Recepción hasta:</label>
+
+            <div class="input-group">
+                <input id="recepcion-hasta" type="text" class="form-control" ng-model="recepcionHasta"
+                       datepicker-popup is-open="recepcionHastaOpen" readonly name="recepcion-hasta" max-date="today"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openDatePicker($event, 'recepcionHastaOpen')">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+              </span>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <label for="cierre-desde">Cierre desde:</label>
+
+            <div class="input-group">
+                <input id="cierre-desde" type="text" class="form-control" ng-model="cierreDesde"
+                       datepicker-popup is-open="cierreDesdeOpen" readonly name="cierre-desde" max-date="today"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openDatePicker($event, 'cierreDesdeOpen')">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+              </span>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <label for="cierre-hasta">Cierre hasta:</label>
+
+            <div class="input-group">
+                <input id="cierre-hasta" type="text" class="form-control" ng-model="cierreHasta"
+                       datepicker-popup is-open="cierreHastaOpen" readonly name="cierre-hasta" max-date="today"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="openDatePicker($event, 'cierreHastaOpen')">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+              </span>
+            </div>
+        </div>
+    </div>
+    <br/>
+
+    <div class="row">
+        <div class="col-xs-3">
+            <label for="usuario-asignado">Empleado asignado:</label>
+            <select id="usuario-asignado" ng-model="query.idEmpleado" class="form-control"
+                    ng-options="employee.id as (employee.nombre + ' ' + employee.paterno + ' ' + employee.materno) for employee in employees">
+                <option value="">Todos</option>
+            </select>
+        </div>
+        <div class="col-xs-3">
+            <label for="tipo-remitente">Tipo de remitente:</label>
+            <select id="tipo-remitente" ng-model="query.tipoRemitente" class="form-control"
+                    ng-options="senderType.id as senderType.nombre for senderType in senderTypes">
+                <option value="">Todos</option>
+            </select>
+        </div>
+        <div class="col-xs-5" ng-if="query.tipoRemitente && query.tipoRemitente == 1">
+            <label for="institucion">Institución:</label>
+            <select id="institucion" ng-model="query.idInstitucion" class="form-control"
+                    ng-options="institution.id as institution.nombre for institution in institutions">
+                <option value="">Todas</option>
+            </select>
+        </div>
+        <div class="col-xs-5" ng-if="query.tipoRemitente && query.tipoRemitente == 3">
+            <label for="area-interna">Area Interna:</label>
+            <select id="area-interna" ng-model="query.idArea" class="form-control"
+                    ng-options="area.id as area.nombre for area in areas">
+                <option value="">Todas</option>
+            </select>
+        </div>
+        <div class="col-xs-5" ng-if="query.tipoRemitente && query.tipoRemitente == 2">
+            <label for="organizacion">Organismo:</label>
+            <select id="organizacion" ng-model="query.idOrganismo" class="form-control"
+                    ng-options="organization.id as organization.nombre for organization in organizations">
+                <option value="">Todos</option>
+            </select>
+        </div>
+        <div class="col-xs-1">
+            <label for="submit"> </label>
+            <button class="btn btn-primary" id="submit" ng-click="search()">Buscar
+                <span class="glyphicon glyphicon-search"></span>
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <hr>
+        </div>
+    </div>
+</div>
 <div class="table-responsive">
     <table class="table table-condensed table-striped table-hover">
         <thead>
@@ -22,7 +185,8 @@
             <td>{{item.turnoDGESU}}</td>
             <td>{{item.asignacion.areaOperativa.abreviatura}}</td>
             <td>{{item.asignacion.empleado.tituloAcademico}} {{item.asignacion.empleado.nombre}}
-                {{item.asignacion.empleado.paterno}} {{item.asignacion.empleado.materno}}</td>
+                {{item.asignacion.empleado.paterno}} {{item.asignacion.empleado.materno}}
+            </td>
             <td>{{getStatus(item.idEstatus)}}</td>
             <td>{{item.asunto}}</td>
             <td>{{item.estatus}}</td>
@@ -50,7 +214,7 @@
                     <span class="glyphicon glyphicon-search"></span>
                 </button>
                 <button class="btn btn-sm btn-info" popover="Archivos" popover-trigger="mouseenter" ng-disabled="false"
-                        ng-click="">
+                        ng-click="files(item)">
                     <span class="glyphicon glyphicon-file"></span>
                 </button>
                 <button class="btn btn-sm btn-danger" popover="Rechazar" popover-trigger="mouseenter"

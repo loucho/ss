@@ -61,6 +61,14 @@ SEPServices.factory('Turn', ['$resource', 'config', function ($resource, config)
         assign: {
             method: 'POST',
             params: {action: 'asignar'}
+        },
+        update: {
+            method: 'PUT'
+        },
+        files: {
+            method: 'GET',
+            isArray: true,
+            params: {action: 'archivos'}
         }
     });
 }]);

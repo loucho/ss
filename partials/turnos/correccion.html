@@ -1,12 +1,12 @@
 <div class="page-header">
-    <h1>Editar Turno {{turno.anio}}-{{turno.idTurno}}</h1>
+    <h1>Editar Turno {{turno.anio}}-{{turno.id}}</h1>
 </div>
 <form name="turnoForm" role="form" class="form-horizontal" novalidate>
     <div class="form-group">
         <label for="fecha-captura" class="col-xs-1">Fecha de Captura:</label>
 
         <div class="col-xs-2">
-            <p id="fecha-captura" class="form-control-static">{{today | date:"dd-MM-yyyy"}}</p>
+            <p id="fecha-captura" class="form-control-static">{{turno.fechaAlta | date:"dd-MM-yyyy"}}</p>
         </div>
         <label for="fecha-recepcion" class="col-xs-1">Fecha de Recepción:</label>
 
@@ -91,7 +91,7 @@
 
             <div class="col-xs-7" ng-class="{'has-error': turnoForm.selectedInstitution.$invalid && submitted}">
                 <select id="institucion-institucion" ng-model="selectedInstitution" name="selectedInstitution"
-                        ng-change="updateInstitution()" ng-required="turno.tipoRemitente == 1" class="form-control"
+                        ng-change="updateInstitution(true)" ng-required="turno.tipoRemitente == 1" class="form-control"
                         ng-options="institution as institution.nombre for institution in institutions">
                     <option value="">Seleccione uno</option>
                 </select>
@@ -168,7 +168,7 @@
             <label for="area-interna" class="col-xs-2">Departamento:</label>
 
             <div class="col-xs-10" ng-class="{'has-error': turnoForm.selectedArea.$invalid && submitted}">
-                <select id="area-interna" ng-model="selectedArea" class="form-control" ng-change="updateArea()"
+                <select id="area-interna" ng-model="selectedArea" class="form-control" ng-change="updateArea(true)"
                         ng-required="turno.tipoRemitente == 3" name="selectedArea"
                         ng-options="area as (area.nombre + ' (' + area.abreviatura + ')') for area in internalAreas">
                     <option value="">Seleccione uno</option>
@@ -233,28 +233,32 @@
             <p ng-show="turnoForm.asunto.$invalid && submitted" class="help-block"> Campo requerido </p>
         </div>
     </div>
-    <div class="form-group">
-        <label for="observaciones" class="col-xs-2">Observaciones:</label>
-
-        <div class="col-xs-10">
-            <textarea id="observaciones" class="form-control" rows="3" ng-model="turno.observaciones"></textarea>
+    <div class="form-group" ng-if="turno.observaciones.length > 0">
+        <div class="col-xs-12">
+            <table class="table table-condensed">
+                <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Observación</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="comment in turno.observaciones">
+                    <td>{{comment.fechaAlta | date:"dd-MM-yyyy HH:mm"}}</td>
+                    <td>{{comment.usuario.nombre}}</td>
+                    <td>{{comment.observacion}}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-    </div>
-    <div class="form-group" ng-class="{'has-error': turnoForm.idArea.$invalid && submitted}">
-        <label class="col-xs-2">Area que atiende:</label>
-        <label class="radio-inline" ng-repeat="area in areas">
-            <input type="radio" name="idArea" ng-model="turno.idArea" id="idArea"
-                   value="{{area.id}}" required>
-            {{area.abreviatura}}
-        </label>
-
-        <p ng-show="turnoForm.idArea.$invalid && submitted" class="help-block"> Seleccione un área </p>
     </div>
     <div class="form-group" ng-class="{'has-error': turno.archivos.length == 0 && submitted}">
         <button ng-file-select ng-model="files" multiple="true" accept="{{fileMask}}" class="btn btn-success">
             Adjuntar Archivos
         </button>
-        <p ng-show="turno.archivos.length == 0 && submitted" class="help-block"> Debe agregar por lo menos un archivo </p>
+        <p ng-show="turno.archivos.length == 0 && submitted" class="help-block"> Debe agregar por lo menos un
+            archivo </p>
     </div>
     <div class="row">
         <ul class="list-group col-xs-12">
