@@ -317,6 +317,14 @@ turnosControllers.controller('BuscaTurnoController', ['$scope', '$filter', '$htt
         $scope.areas = Area.query();
         $scope.today = new Date();
         $scope.query = {};
+        $scope.maxSize = 5;
+        $scope.itemsPerPage = 10;
+        $scope.currentPage = 1;
+        var options = {};
+
+        $scope.pageChanged = function () {
+            refreshContent(null, $scope.currentPage);
+        };
 
         $scope.getStatus = function (id) {
             var area = _.findWhere($scope.stati, {
@@ -332,8 +340,19 @@ turnosControllers.controller('BuscaTurnoController', ['$scope', '$filter', '$htt
             $scope.query.recepcionHasta = $filter('date')($scope.recepcionHasta, 'yyyy-MM-dd');
             $scope.query.cierreDesde = $filter('date')($scope.cierreDesde, 'yyyy-MM-dd');
             $scope.query.cierreHasta = $filter('date')($scope.cierreHasta, 'yyyy-MM-dd');
-            $scope.turns = Turn.query($scope.query);
+            refreshContent($scope.query, 1);
         };
+
+        function refreshContent(query, page) {
+            if (query) {
+                options = query;
+            }
+            options.limit = $scope.itemsPerPage;
+            options.offset = (page - 1) * $scope.itemsPerPage;
+            $scope.turns = Turn.query(options, function (data, headers) {
+                $scope.totalItems = headers('Total');
+            });
+        }
 
         $scope.openDatePicker = function ($event, variable) {
             $event.preventDefault();
