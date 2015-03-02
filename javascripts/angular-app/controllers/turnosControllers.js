@@ -345,7 +345,24 @@ turnosControllers.controller('BuscaTurnoController', ['$scope', '$filter', '$htt
 
         function refreshContent(query, page) {
             if (query) {
-                options = query;
+                options = {
+                    capturaDesde: query.capturaDesde ? query.capturaDesde : undefined,
+                    capturaHasta: query.capturaHasta ? query.capturaHasta : undefined,
+                    recepcionDesde: query.recepcionDesde ? query.recepcionDesde : undefined,
+                    recepcionHasta: query.recepcionHasta ? query.recepcionHasta : undefined,
+                    cierreDesde: query.cierreDesde ? query.cierreDesde : undefined,
+                    cierreHasta: query.cierreHasta ? query.cierreHasta : undefined,
+                    anio: query.anio ? query.anio : undefined,
+                    id: query.id ? query.id : undefined,
+                    idAreaAsignada: query.idAreaAsignada ? query.idAreaAsignada : undefined,
+                    estatus: query.estatus ? query.estatus : undefined,
+                    dgesu: query.dgesu ? query.dgesu : undefined,
+                    idEmpleado: query.idEmpleado ? query.idEmpleado : undefined,
+                    tipoRemitente: query.tipoRemitente ? query.tipoRemitente : undefined,
+                    idInstitucion: query.idInstitucion ? query.idInstitucion : undefined,
+                    idArea: query.idArea ? query.idArea : undefined,
+                    idOrganismo: query.idOrganismo ? query.idOrganismo : undefined
+                };
             }
             options.limit = $scope.itemsPerPage;
             options.offset = (page - 1) * $scope.itemsPerPage;
