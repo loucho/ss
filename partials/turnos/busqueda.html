@@ -197,8 +197,7 @@
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
                 <button class="btn btn-sm btn-primary" popover="Asignar" popover-trigger="mouseenter"
-                        ng-disabled="false"
-                        ng-click="assign(item)">
+                        ng-disabled="false" ng-click="assign(item)">
                     <span class="glyphicon glyphicon-user"></span>
                 </button>
                 <button class="btn btn-sm btn-success" popover="Atencíon" popover-trigger="mouseenter"
@@ -227,4 +226,5 @@
     </table>
 </div>
 <pagination max-size="maxSize" ng-model="currentPage" total-items="totalItems" items-per-page="itemsPerPage"
-            rotate="false" boundary-links="true" ng-change="pageChanged()" ng-show="totalItems > itemsPerPage"></pagination>
+            rotate="false" boundary-links="true" ng-change="pageChanged()"
+            ng-show="totalItems > itemsPerPage"></pagination>
