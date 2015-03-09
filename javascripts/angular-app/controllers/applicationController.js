@@ -39,11 +39,11 @@ appControllers.controller('ApplicationController', function ($scope, Authenticat
             });
         }
     });
+
     $scope.$on('event:auth-loginConfirmed', function () {
         console.log('Auth Confirmed');
     });
 });
-
 
 appControllers.controller('loginDialogController', ['$scope', '$modalInstance', 'AuthenticationService', 'authService', function ($scope, $modalInstance, AuthenticationService, authService) {
     // reset login status

@@ -69,6 +69,19 @@ SEPServices.factory('Turn', ['$resource', 'config', function ($resource, config)
             method: 'GET',
             isArray: true,
             params: {action: 'archivos'}
+        },
+        comments: {
+            method: 'GET',
+            isArray: true,
+            params: {action: 'observaciones'}
+        },
+        work: {
+            method: 'POST',
+            params: {action: 'atender'}
+        },
+        acknowledge: {
+            method: 'POST',
+            params: {action: 'enterar'}
         }
     });
 }]);

@@ -1,0 +1,113 @@
+<div class="modal-header dialog-header-confirm">
+    <h4 class="modal-title">
+        <span class="glyphicon glyphicon-user"></span> Atender Turno {{turn.anio}}-{{turn.id}}
+    </h4>
+</div>
+<div class="modal-body">
+    <form name="form" role="form" novalidate class="form-horizontal">
+        <div class="form-group">
+            <label for="empleado" class="control-label col-xs-2">Asignado a:</label>
+
+            <div class="col-xs-3">
+                <p class="form-control-static" id="empleado">
+                    {{turn.asignacion.empleado.tituloAcademico}}
+                    {{turn.asignacion.empleado.nombre}} {{turn.asignacion.empleado.paterno}}
+                    {{turn.asignacion.empleado.materno}}</p>
+            </div>
+            <label class="col-xs-3 control-label" for="fecha-atencion">Fecha de Atención:</label>
+
+            <div ng-class="{'has-error': form.fechaAtencion.$invalid && submitted}" class="col-xs-4">
+                <div class="input-group">
+                    <input id="fecha-atencion" name="fechaAtencion" type="text" class="form-control" datepicker-popup
+                           required readonly ng-model="fechaAtencion" is-open="dateOpen" max-date="today"/>
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="openDate($event)">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                      </span>
+                </div>
+                <p ng-show="form.fechaAtencion.$invalid && submitted" class="help-block"> Campo requerido </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-2 control-label" for="asunto">Asunto:</label>
+
+            <div class="col-xs-10">
+                <p class="form-control-static" id="asunto">{{turn.asunto}}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-2" for="tema">Tema:</label>
+
+            <div class="col-xs-10" ng-class="{'has-error': form.tema.$invalid && submitted}">
+                <textarea class="form-control" name="tema" id="tema" ng-model="tema" rows="5" required></textarea>
+
+                <p ng-show="form.tema.$invalid && submitted" class="help-block"> Campo requerido </p>
+            </div>
+        </div>
+        <div class="form-group" ng-show="turn.comments.length > 0">
+            <div class="col-xs-12">
+                <table class="table table-condensed">
+                    <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Usuario</th>
+                        <th>Observación</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="comment in turn.comments">
+                        <td>{{comment.fechaAlta | date:"dd-MM-yyyy HH:mm"}}</td>
+                        <td>{{comment.usuario.nombre}}</td>
+                        <td>{{comment.observacion}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-2" for="nota">Observacion:</label>
+
+            <div class="col-xs-10">
+                <textarea class="form-control" id="nota" ng-model="nota" rows="5"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-2" for="folio">Folio de atención:</label>
+
+            <div class="col-xs-2" ng-class="{'has-error': form.folio.$invalid && submitted}">
+                <input type="text" class="form-control" id="folio" ng-model="folio" name="folio" required/>
+
+                <p ng-show="form.folio.$invalid && submitted" class="help-block"> Campo requerido </p>
+            </div>
+            <label class="control-label col-xs-1">Archivo: </label>
+
+            <div class="col-xs-2" ng-class="{'has-error': !file && submitted}" ng-show="!file">
+                <button ng-file-select ng-model="files" multiple="false" accept="{{fileMask}}" class="btn btn-success">
+                    Subir Oficio de Atención
+                </button>
+                <p ng-show="!file && submitted" class="help-block"> Debe agregar por lo menos un archivo </p>
+            </div>
+            <div class="col-xs-3" ng-if="file">
+                <span>{{file.nombre}}</span>
+            </div>
+            <div class="col-xs-3" ng-if="file" ng-class="{'has-error': form.file.$invalid && submitted}">
+                <select class="form-control" ng-model="file.idTipoArchivo" required name="file"
+                        ng-options="fileType.id as fileType.descripcion for fileType in fileTypes">
+                    <option value="">Seleccione uno</option>
+                </select>
+
+                <p ng-show="form.file.$invalid && submitted" class="help-block"> Seleccione un tipo </p>
+            </div>
+            <div class="col-xs-1" ng-if="file">
+                <button type="button" class="close" aria-label="Close" ng-click="deleteFile()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-default" type="button" ng-click="cancel()">Cancelar</button>
+    <button class="btn btn-success" type="submit" ng-click="ok(form)">Atender</button>
+</div>

@@ -15,7 +15,7 @@
                 <input id="fecha-recepcion" name="fechaRecepcion" type="text" class="form-control" datepicker-popup
                        required readonly ng-model="turno.fechaRecepcion" is-open="receptionDateOpen" max-date="today"/>
               <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="openReceptionDate($event)">
+                <button type="button" class="btn btn-default" ng-click="openDatePicker($event, 'receptionDateOpen')">
                     <i class="glyphicon glyphicon-calendar"></i>
                 </button>
               </span>
@@ -67,7 +67,7 @@
                 <input id="fecha-oficio" type="text" class="form-control" ng-model="turno.fechaOficio" datepicker-popup
                        is-open="dateOpen" required readonly name="fechaOficio" max-date="today"/>
               <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="openDate($event)">
+                <button type="button" class="btn btn-default" ng-click="openDatePicker($event, 'dateOpen')">
                     <i class="glyphicon glyphicon-calendar"></i>
                 </button>
               </span>

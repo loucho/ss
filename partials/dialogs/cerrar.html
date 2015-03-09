@@ -2,10 +2,45 @@
     <h4 class="modal-title"><span class="glyphicon glyphicon-check"></span> Cerrar Turno {{turn.anio}}-{{turn.id}}
     </h4></div>
 <div class="modal-body">
-    <label class="control-label" for="nota">Observacion:</label>
-    <textarea class="form-control" id="nota" ng-model="nota" rows="5"></textarea>
+    <form name="form" role="form" novalidate class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-xs-2">Archivo: </label>
+
+            <div class="col-xs-2" ng-class="{'has-error': !file && submitted}" ng-show="!file">
+                <button ng-file-select ng-model="files" multiple="false" accept="{{fileMask}}" class="btn btn-success">
+                    Subir Guia
+                </button>
+                <p ng-show="!file && submitted" class="help-block"> Debe agregar un archivo </p>
+            </div>
+            <div class="col-xs-5" ng-if="file">
+                <span>{{file.nombre}}</span>
+            </div>
+            <div class="col-xs-3" ng-if="file" ng-class="{'has-error': form.file.$invalid && submitted}">
+                <select class="form-control" ng-model="file.idTipoArchivo" required name="file"
+                        ng-options="fileType.id as fileType.descripcion for fileType in fileTypes">
+                    <option value="">Seleccione uno</option>
+                </select>
+
+                <p ng-show="form.file.$invalid && submitted" class="help-block"> Seleccione un tipo </p>
+            </div>
+            <div class="col-xs-1" ng-if="file">
+                <button type="button" class="close" aria-label="Close" ng-click="deleteFile()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-2" for="nota">Observacion:</label>
+
+            <div class="col-xs-10" ng-class="{'has-error': form.nota.$invalid && submitted}">
+                <textarea class="form-control" id="nota" ng-model="nota" rows="5" name="nota" required></textarea>
+
+                <p ng-show="form.nota.$invalid && submitted" class="help-block"> Campo requerido </p>
+            </div>
+        </div>
+    </form>
 </div>
 <div class="modal-footer">
     <button class="btn btn-default" type="button" ng-click="cancel()">Cancelar</button>
-    <button class="btn btn-success" type="button" ng-click="ok()">Cerrar</button>
+    <button class="btn btn-success" type="button" ng-click="ok(form)">Cerrar</button>
 </div>
