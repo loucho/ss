@@ -233,7 +233,7 @@
             <p ng-show="turnoForm.asunto.$invalid && submitted" class="help-block"> Campo requerido </p>
         </div>
     </div>
-    <div class="form-group" ng-if="turno.observaciones.length > 0">
+    <div class="form-group" ng-if="observaciones.length > 0">
         <div class="col-xs-12">
             <table class="table table-condensed">
                 <thead>
@@ -244,7 +244,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="comment in turno.observaciones">
+                <tr ng-repeat="comment in observaciones">
                     <td>{{comment.fechaAlta | date:"dd-MM-yyyy HH:mm"}}</td>
                     <td>{{comment.usuario.nombre}}</td>
                     <td>{{comment.observacion}}</td>

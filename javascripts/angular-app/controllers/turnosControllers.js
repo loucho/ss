@@ -117,8 +117,8 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
         });
     }]);
 
-turnosControllers.controller('CorrigeTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType', 'SenderType', 'Area', 'Institution', 'IESPerson', 'Organization', 'Turn', 'Employee', 'FileType', '$upload', 'config', 'ngToast', '$routeParams',
-    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, IESPerson, Organization, Turn, Employee, FileType, $upload, config, ngToast, $routeParams) {
+turnosControllers.controller('CorrigeTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType', 'SenderType', 'Area', 'Institution', 'IESPerson', 'Organization', 'Turn', 'Employee', 'FileType', '$upload', 'config', 'ngToast', '$routeParams', '$q',
+    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, IESPerson, Organization, Turn, Employee, FileType, $upload, config, ngToast, $routeParams, $q) {
         $scope.priorities = Priority.query();
         $scope.processTypes = ProcessType.query();
         $scope.fileMask = config.fileMask;
@@ -129,50 +129,61 @@ turnosControllers.controller('CorrigeTurnoController', ['$scope', '$http', 'dial
         $scope.internalAreas = Area.query();
         $scope.files = [];
         $scope.fileTypes = FileType.query({tipo: 1});
-        var original = Turn.get({year: $routeParams.anio, seq: $routeParams.id});
 
-        original.$promise.then(function () {
-            $scope.turno = {
-                anio: original.anio,
-                id: original.id,
-                fechaAlta: original.fechaAlta,
-                fechaRecepcion: original.fechaRecepcion,
-                prioridad: original.prioridad.id,
-                archivos: original.archivos ? original.archivos : [],
-                tipoTramite: original.tipoTramite.id,
-                turnoDGESU: original.turnoDGESU,
-                numeroOficio: original.numeroOficio,
-                fechaOficio: original.fechaOficio,
-                tipoRemitente: original.remitente.idTipoRemitente,
-                asunto: original.asunto,
-                observaciones: original.observaciones,
-                remitente: {
-                    idInstitucion: original.remitente.idInstitucion ? original.remitente.idInstitucion : undefined,
-                    idPersona: original.remitente.idPersona ? original.remitente.idPersona : undefined,
-                    idOrganismo: original.remitente.idOrganismo ? original.remitente.idOrganismo : undefined,
-                    cargo: original.remitente.cargo ? original.remitente.cargo : undefined,
-                    nombre: original.remitente.nombre ? original.remitente.nombre : undefined,
-                    idArea: original.remitente.idArea ? original.remitente.idArea : undefined,
-                    institucion: original.remitente.institucion ? original.remitente.institucion : undefined
+        $q.all([
+            $scope.priorities.$promise,
+            $scope.processTypes.$promise,
+            $scope.senderTypes.$promise,
+            $scope.institutions.$promise,
+            $scope.organizations.$promise,
+            $scope.areas.$promise,
+            $scope.internalAreas.$promise,
+            $scope.fileTypes.$promise
+        ]).then(function () {
+            var original = Turn.get({year: $routeParams.anio, seq: $routeParams.id});
+            original.$promise.then(function () {
+                $scope.observaciones = original.observaciones;
+                $scope.turno = {
+                    anio: original.anio,
+                    id: original.id,
+                    fechaAlta: original.fechaAlta,
+                    fechaRecepcion: original.fechaRecepcion,
+                    prioridad: original.prioridad.id,
+                    archivos: original.archivos ? original.archivos : [],
+                    tipoTramite: original.tipoTramite.id,
+                    turnoDGESU: original.turnoDGESU,
+                    numeroOficio: original.numeroOficio,
+                    fechaOficio: original.fechaOficio,
+                    tipoRemitente: original.remitente.idTipoRemitente,
+                    asunto: original.asunto,
+                    remitente: {
+                        idInstitucion: original.remitente.idInstitucion ? original.remitente.idInstitucion : undefined,
+                        idPersona: original.remitente.idPersona ? original.remitente.idPersona : undefined,
+                        idOrganismo: original.remitente.idOrganismo ? original.remitente.idOrganismo : undefined,
+                        cargo: original.remitente.cargo ? original.remitente.cargo : undefined,
+                        nombre: original.remitente.nombre ? original.remitente.nombre : undefined,
+                        idArea: original.remitente.idArea ? original.remitente.idArea : undefined,
+                        institucion: original.remitente.institucion ? original.remitente.institucion : undefined
+                    }
+                };
+                if (original.remitente.idOrganismo) {
+                    $scope.selectedOrganization = _.find($scope.organizations, function (item) {
+                        return item.id == original.remitente.idOrganismo;
+                    });
                 }
-            };
-            if (original.remitente.idOrganismo) {
-                $scope.selectedOrganization = _.find($scope.organizations, function (item) {
-                    return item.id == original.remitente.idOrganismo;
-                });
-            }
-            if (original.remitente.idInstitucion) {
-                $scope.selectedInstitution = _.find($scope.institutions, function (item) {
-                    return item.id == original.remitente.idInstitucion;
-                });
-                $scope.updateInstitution();
-            }
-            if (original.remitente.idArea) {
-                $scope.selectedArea = _.find($scope.internalAreas, function (item) {
-                    return item.id == original.remitente.idArea;
-                });
-                $scope.updateArea();
-            }
+                if (original.remitente.idInstitucion) {
+                    $scope.selectedInstitution = _.find($scope.institutions, function (item) {
+                        return item.id == original.remitente.idInstitucion;
+                    });
+                    $scope.updateInstitution();
+                }
+                if (original.remitente.idArea) {
+                    $scope.selectedArea = _.find($scope.internalAreas, function (item) {
+                        return item.id == original.remitente.idArea;
+                    });
+                    $scope.updateArea();
+                }
+            });
         });
 
         $scope.openDatePicker = function ($event, variable) {
