@@ -77,7 +77,7 @@ SEPServices.factory('Turn', ['$resource', 'config', function ($resource, config)
         },
         work: {
             method: 'POST',
-            params: {action: 'atender'}
+            params: {action: 'atencion'}
         },
         acknowledge: {
             method: 'POST',

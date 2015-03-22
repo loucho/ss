@@ -651,15 +651,14 @@ turnosControllers.controller('atenderDialogController', ['$scope', '$modalInstan
             return false;
         }
         var work = {
-            year: data.anio,
-            seq: data.id,
             observaciones: $scope.nota,
             tema: $scope.tema,
             archivo: $scope.file,
             folio: $scope.folio,
             fechaAtencion: $scope.fechaAtencion
         };
-        var response = Turn.work(work);
+        console.log(work);
+        var response = Turn.work({year: data.anio, seq: data.id}, work);
         response.$promise.then(function (message) {
             $modalInstance.close(message);
         });
