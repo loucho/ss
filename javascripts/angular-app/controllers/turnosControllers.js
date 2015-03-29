@@ -428,6 +428,19 @@ turnosControllers.controller('BuscaTurnoController', ['$scope', '$filter', '$htt
             });
         };
 
+        $scope.editWork = function (turno) {
+            var dlg = dialogs.create('partials/dialogs/editar-atencion.html', 'editarAtencionDialogController', turno, {
+                size: 'lg',
+                backdrop: 'static',
+                windowClass: 'loginModal'
+            });
+            dlg.result.then(function (message) {
+                ngToast.create({content: message.mensaje, 'class': (message.codigo == 200) ? 'success' : 'danger'});
+            }, function () {
+                ngToast.create({content: 'Cancelar Edicion de Atención', 'class': 'danger'});
+            });
+        };
+
         $scope.view = function (turno) {
             dialogs.create('partials/dialogs/ver.html', 'verDialogController', turno, {
                 size: 'lg',
@@ -659,6 +672,72 @@ turnosControllers.controller('atenderDialogController', ['$scope', '$modalInstan
         };
         console.log(work);
         var response = Turn.work({year: data.anio, seq: data.id}, work);
+        response.$promise.then(function (message) {
+            $modalInstance.close(message);
+        });
+    };
+
+    $scope.cancel = function () {
+        $modalInstance.dismiss('Canceled');
+    };
+}]);
+
+turnosControllers.controller('editarAtencionDialogController', ['$scope', '$modalInstance', 'data', 'Turn', 'ngToast', 'config', '$upload', 'FileType', function ($scope, $modalInstance, data, Turn, ngToast, config, $upload, FileType) {
+    $scope.turn = data;
+    $scope.fileMask = config.fileMask;
+    $scope.turn.comments = Turn.comments({year: data.anio, seq: data.id});
+    $scope.atencion = Turn.getWork({year: data.anio, seq: data.id});
+    $scope.fileTypes = FileType.query({tipo: 2});
+
+    $scope.openDate = function ($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.dateOpen = true;
+    };
+
+    $scope.deleteFile = function () {
+        $scope.atencion.archivo = false;
+    };
+
+    $scope.$watch('files', function () {
+        if ($scope.files) {
+            var file = $scope.files[0];
+            if (file.size > config.maxFileSize) {
+                ngToast.create({
+                    content: '<span class="glyphicon glyphicon-warning-sign"></span> Archivo demasiado grande: ' + file.name + " (" + file.size + " Kb)",
+                    'class': 'warning'
+                });
+                return false;
+            }
+            $scope.upload = $upload.upload({
+                url: config.apiUrl + "/archivo/upload",
+                method: 'POST',
+                file: file
+            }).success(function (data, status, headers, config) {
+                $scope.error = null;
+                $scope.atencion.archivo = {
+                    nombre: config.file.name,
+                    nombreTemporal: data.nombreArchivoTemporal,
+                    tipo: config.file.type,
+                    size: config.file.size
+                }
+            }).error(function (error) {
+                $scope.error = error;
+            });
+        }
+    });
+
+    $scope.ok = function (form) {
+        $scope.submitted = true;
+        if (!form.$valid || !$scope.atencion.archivo) {
+            ngToast.create({
+                content: '<span class="glyphicon glyphicon-exclamation-sign"></span> Es necesario ingresar todos los datos requeridos',
+                'class': 'danger'
+            });
+            return false;
+        }
+        console.log($scope.atencion);
+        var response = Turn.updateWork({year: data.anio, seq: data.id}, $scope.atencion);
         response.$promise.then(function (message) {
             $modalInstance.close(message);
         });
