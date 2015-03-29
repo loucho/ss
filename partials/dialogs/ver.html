@@ -74,6 +74,16 @@
             <div class="well">{{turn.asunto}}</div>
         </div>
     </div>
+    <div class="row" ng-show="turn.atencion">
+        <div class="col-xs-12"><h2>Atención:</h2></div>
+    </div>
+    <div class="row" ng-show="turn.atencion">
+        <div class="col-xs-4"><strong>Fecha de atención:</strong> {{turn.atencion.fechaAtencion | date:"dd-MM-yyyy"}}</div>
+        <div class="col-xs-4"><strong>Folio de atención:</strong> {{turn.atencion.folio}}</div>
+    </div>
+    <div class="row" ng-show="turn.atencion">
+        <div class="col-xs-12"><strong>Tema:</strong> {{turn.atencion.tema}}</div>
+    </div>
     <div class="row" ng-show="turn.observaciones.length > 0">
         <div class="col-xs-12"><h2>Observaciones:</h2></div>
     </div>
