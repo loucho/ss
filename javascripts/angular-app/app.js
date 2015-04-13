@@ -1,6 +1,6 @@
 var app = angular.module('app', ['ngRoute', 'ngAnimate', 'turnosControllers', 'SEPServices', 'ui.bootstrap',
     'angular-loading-bar', 'dialogs.main', 'config', 'loginController', 'angularFileUpload', 'AuthenticationService',
-    'applicationController', 'ngCookies', 'http-auth-interceptor', 'ngToast']);
+    'applicationController', 'ngCookies', 'http-auth-interceptor', 'ngToast', 'homeControllers']);
 
 app.config(['$routeProvider', 'cfpLoadingBarProvider', function ($routeProvider, cfpLoadingBarProvider) {
     cfpLoadingBarProvider.includeSpinner = true;
@@ -28,8 +28,14 @@ app.config(['$routeProvider', 'cfpLoadingBarProvider', function ($routeProvider,
         access: {
             isPublic: true
         }
+    }).when('/', {
+        templateUrl: 'partials/home/dashboard.html',
+        controller: 'HomeController',
+        access: {
+            isPublic: false
+        }
     }).otherwise({
-        redirectTo: '/turnos/captura'
+        redirectTo: '/'
     });
 }]);
 

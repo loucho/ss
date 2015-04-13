@@ -192,36 +192,38 @@
             <td>{{item.estatus}}</td>
             <td>{{item.fechaAlta | date:"dd-MM-yyyy"}}</td>
             <td>
-                <a href="#/turnos/correccion/{{item.anio}}/{{item.id}}" class="btn btn-sm btn-primary" popover="Editar"
-                   popover-trigger="mouseenter" ng-disabled="false" ng-click="">
+                <a href="#/turnos/correccion/{{item.anio}}/{{item.id}}" class="btn btn-sm btn-primary"
+                   popover="Editar" popover-trigger="mouseenter" ng-disabled="false"
+                   ng-show="item.acciones.editar">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
                 <button class="btn btn-sm btn-primary" popover="Asignar" popover-trigger="mouseenter"
-                        ng-disabled="false" ng-click="assign(item)">
+                        ng-disabled="false" ng-click="assign(item)" ng-show="item.acciones.asignar">
                     <span class="glyphicon glyphicon-user"></span>
                 </button>
                 <button class="btn btn-sm btn-success" popover="Atención" popover-trigger="mouseenter"
-                        ng-disabled="false" ng-click="work(item)">
+                        ng-disabled="false" ng-click="work(item)" ng-show="item.acciones.atender">
                     <span class="glyphicon glyphicon-ok"></span>
                 </button>
-                <button class="btn btn-sm btn-success" popover="Editar Atención" popover-trigger="mouseenter"
+                <button class="btn btn-sm btn-success" popover="Editar Atención"
+                        popover-trigger="mouseenter" ng-show="item.acciones.editarAtencion"
                         ng-disabled="false" ng-click="editWork(item)">
                     <span class="glyphicon glyphicon-ok-sign"></span>
                 </button>
-                <button class="btn btn-sm btn-success" popover="Cierre" popover-trigger="mouseenter" ng-disabled="false"
-                        ng-click="close(item)">
+                <button class="btn btn-sm btn-success" popover="Cierre" popover-trigger="mouseenter"
+                        ng-disabled="false" ng-show="item.acciones.cerrar" ng-click="close(item)">
                     <span class="glyphicon glyphicon-book"></span>
                 </button>
-                <button class="btn btn-sm btn-info" popover="Ver" popover-trigger="mouseenter" ng-disabled="false"
-                        ng-click="view(item)">
+                <button class="btn btn-sm btn-info" popover="Ver" popover-trigger="mouseenter"
+                        ng-disabled="false" ng-click="view(item)">
                     <span class="glyphicon glyphicon-search"></span>
                 </button>
-                <button class="btn btn-sm btn-info" popover="Archivos" popover-trigger="mouseenter" ng-disabled="false"
-                        ng-click="files(item)">
+                <button class="btn btn-sm btn-info" popover="Archivos" popover-trigger="mouseenter"
+                        ng-disabled="false" ng-click="files(item)">
                     <span class="glyphicon glyphicon-file"></span>
                 </button>
                 <button class="btn btn-sm btn-danger" popover="Rechazar" popover-trigger="mouseenter"
-                        ng-disabled="false" ng-click="reject(item)">
+                        ng-disabled="false" ng-click="reject(item)" ng-show="item.acciones.rechazar">
                     <span class="glyphicon glyphicon-remove"></span>
                 </button>
             </td>

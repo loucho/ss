@@ -354,7 +354,7 @@ turnosControllers.controller('BuscaTurnoController', ['$scope', '$filter', '$htt
                     anio: query.anio ? query.anio : undefined,
                     id: query.id ? query.id : undefined,
                     idAreaAsignada: query.idAreaAsignada ? query.idAreaAsignada : undefined,
-                    estatus: query.estatus ? query.estatus : undefined,
+                    estatus: query.estatus ? [query.estatus] : undefined,
                     dgesu: query.dgesu ? query.dgesu : undefined,
                     idEmpleado: query.idEmpleado ? query.idEmpleado : undefined,
                     tipoRemitente: query.tipoRemitente ? query.tipoRemitente : undefined,
@@ -375,88 +375,8 @@ turnosControllers.controller('BuscaTurnoController', ['$scope', '$filter', '$htt
             $event.stopPropagation();
             $scope[variable] = true;
         };
-
-        $scope.reject = function (turno) {
-            var dlg = dialogs.create('partials/dialogs/rechazar.html', 'rechazarDialogController', turno, {
-                size: 'lg',
-                backdrop: 'static',
-                windowClass: 'loginModal'
-            });
-            dlg.result.then(function (message) {
-                ngToast.create({content: message.mensaje, 'class': (message.codigo == 200) ? 'success' : 'danger'});
-            }, function () {
-                ngToast.create({content: 'Cancelar Rechazo', 'class': 'danger'});
-            });
-        };
-
-        $scope.close = function (turno) {
-            var dlg = dialogs.create('partials/dialogs/cerrar.html', 'cerrarDialogController', turno, {
-                size: 'lg',
-                backdrop: 'static',
-                windowClass: 'loginModal'
-            });
-            dlg.result.then(function (message) {
-                ngToast.create({content: message.mensaje, 'class': (message.codigo == 200) ? 'success' : 'danger'});
-            }, function () {
-                ngToast.create({content: 'Cancelar Cierre', 'class': 'danger'});
-            });
-        };
-
-        $scope.assign = function (turno) {
-            var dlg = dialogs.create('partials/dialogs/asignar.html', 'asignarDialogController', turno, {
-                size: 'lg',
-                backdrop: 'static',
-                windowClass: 'loginModal'
-            });
-            dlg.result.then(function (message) {
-                ngToast.create({content: message.mensaje, 'class': (message.codigo == 200) ? 'success' : 'danger'});
-            }, function () {
-                ngToast.create({content: 'Cancelar Asignación', 'class': 'danger'});
-            });
-        };
-
-        $scope.work = function (turno) {
-            var dlg = dialogs.create('partials/dialogs/atender.html', 'atenderDialogController', turno, {
-                size: 'lg',
-                backdrop: 'static',
-                windowClass: 'loginModal'
-            });
-            dlg.result.then(function (message) {
-                ngToast.create({content: message.mensaje, 'class': (message.codigo == 200) ? 'success' : 'danger'});
-            }, function () {
-                ngToast.create({content: 'Cancelar Atención', 'class': 'danger'});
-            });
-        };
-
-        $scope.editWork = function (turno) {
-            var dlg = dialogs.create('partials/dialogs/editar-atencion.html', 'editarAtencionDialogController', turno, {
-                size: 'lg',
-                backdrop: 'static',
-                windowClass: 'loginModal'
-            });
-            dlg.result.then(function (message) {
-                ngToast.create({content: message.mensaje, 'class': (message.codigo == 200) ? 'success' : 'danger'});
-            }, function () {
-                ngToast.create({content: 'Cancelar Edicion de Atención', 'class': 'danger'});
-            });
-        };
-
-        $scope.view = function (turno) {
-            dialogs.create('partials/dialogs/ver.html', 'verDialogController', turno, {
-                size: 'lg',
-                backdrop: 'static',
-                windowClass: 'loginModal'
-            });
-        };
-
-        $scope.files = function (turno) {
-            dialogs.create('partials/dialogs/archivos.html', 'archivosDialogController', turno, {
-                size: 'lg',
-                backdrop: 'static',
-                windowClass: 'loginModal'
-            });
-        };
-    }]);
+    }
+]);
 
 turnosControllers.controller('rechazarDialogController', ['$scope', '$modalInstance', 'data', 'Turn', function ($scope, $modalInstance, data, Turn) {
     $scope.turn = data;
