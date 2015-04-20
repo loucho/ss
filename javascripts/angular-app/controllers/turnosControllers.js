@@ -305,7 +305,7 @@ turnosControllers.controller('CorrigeTurnoController', ['$scope', '$http', 'dial
     }]);
 
 turnosControllers.controller('BuscaTurnoController', ['$scope', '$filter', '$http', 'dialogs', 'Organization', 'SenderType', 'Area', 'Institution', 'Position', 'Employee', 'Turn', 'Status', 'ngToast',
-    function ($scope, $filter, $http, dialogs, Organization, SenderType, Area, Institution, Position, Employee, Turn, Status, ngToast) {
+    function ($scope, $filter, $http, dialogs, Organization, SenderType, Area, Institution, Position, Employee, Turn, Status) {
         $scope.senderTypes = SenderType.query();
         $scope.organizations = Organization.query();
         $scope.institutions = Institution.query();
@@ -324,7 +324,6 @@ turnosControllers.controller('BuscaTurnoController', ['$scope', '$filter', '$htt
         };
 
         $scope.$on('event:status-changed', function () {
-            console.log('update required');
             $scope.pageChanged();
         });
 
