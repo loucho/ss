@@ -1,6 +1,6 @@
 var appControllers = angular.module('applicationController', []);
 
-appControllers.controller('ApplicationController', function ($scope, AuthenticationService, $rootScope, authService, dialogs, datepickerPopupConfig, paginationConfig, ngToast) {
+appControllers.controller('ApplicationController', function ($scope, AuthenticationService, $rootScope, authService, dialogs, datepickerPopupConfig, paginationConfig, ngToast, Turn) {
     $scope.currentUser = ($rootScope.globals && $rootScope.globals.currentUser) ? $rootScope.globals.currentUser : null;
     $scope.isAuthorized = AuthenticationService.isAuthorized;
 
@@ -79,6 +79,23 @@ appControllers.controller('ApplicationController', function ($scope, Authenticat
         });
     };
 
+    $scope.acknowledge = function (turno) {
+        var text = '¿Desea marcar el turno ' + turno.anio + '-' + turno.id + ' como "Enterado"?';
+        var dlg = dialogs.confirm('Marcar el turno como "Enterado"', text, {
+            size: 'lg',
+            backdrop: 'static',
+            windowClass: 'loginModal'
+        });
+        dlg.result.then(function () {
+            var response = Turn.acknowledge({year: turno.anio, seq: turno.id}, {});
+            response.$promise.then(function (message) {
+                ngToast.create({content: '', 'class': (message.codigo == 200) ? 'success' : 'danger'});
+            });
+        }, function () {
+            ngToast.create({content: 'Cancelar Edicion de Atención', 'class': 'danger'});
+        });
+    };
+
     $scope.view = function (turno) {
         dialogs.create('partials/dialogs/ver.html', 'verDialogController', turno, {
             size: 'lg',
@@ -102,6 +119,24 @@ appControllers.controller('ApplicationController', function ($scope, Authenticat
     $scope.logout = function () {
         $scope.currentUser = null;
         AuthenticationService.ClearCredentials();
+    };
+
+    $scope.getCumplimiento = function (turno) {
+        if (turno.fechaLimite) {
+            var date = new Date();
+            if (turno.fechaCierre)
+                date = new Date(turno.fechaCierre);
+            var limite = new Date(turno.fechaLimite);
+            if (limite < date) {
+                return "Vencido";
+            }
+            date.setDate(date.getDate() + 3);
+            if (limite < date) {
+                return "Proximo a vencer";
+            }
+            return "En tiempo";
+        }
+        return "N/A";
     };
 
     $scope.$on('event:auth-loginRequired', function () {

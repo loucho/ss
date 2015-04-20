@@ -29,7 +29,7 @@
                         <td>{{item.turnoDGESU}}</td>
                         <td>{{getStatus(item.idEstatus)}}</td>
                         <td>{{item.asunto}}</td>
-                        <td>{{item.estatus}}</td>
+                        <td>{{getCumplimiento(item)}}</td>
                         <td>{{item.fechaAlta | date:"dd-MM-yyyy"}}</td>
                         <td>
                             <a href="#/turnos/correccion/{{item.anio}}/{{item.id}}" class="btn btn-sm btn-primary"
@@ -97,7 +97,7 @@
                     <tr ng-repeat="item in assignedTurns">
                         <td>{{item.anio}}-{{item.id}}</td>
                         <td>{{getStatus(item.idEstatus)}}</td>
-                        <td>{{item.estatus}}</td>
+                        <td>{{getCumplimiento(item)}}</td>
                         <td>
                             <a href="#/turnos/correccion/{{item.anio}}/{{item.id}}" class="btn btn-sm btn-primary"
                                popover="Editar" popover-trigger="mouseenter" ng-disabled="false"
@@ -162,7 +162,7 @@
                     <tr ng-repeat="item in notClosedTurns">
                         <td>{{item.anio}}-{{item.id}}</td>
                         <td>{{getStatus(item.idEstatus)}}</td>
-                        <td>{{item.estatus}}</td>
+                        <td>{{getCumplimiento(item)}}</td>
                         <td>
                             <a href="#/turnos/correccion/{{item.anio}}/{{item.id}}" class="btn btn-sm btn-primary"
                                popover="Editar" popover-trigger="mouseenter" ng-disabled="false"
@@ -202,6 +202,18 @@
                     </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Turnos por estatus</h3>
+                </div>
+                <div class="panel-body">
+                    <highchart id="chart1" config="chartConfig"></highchart>
+                </div>
             </div>
         </div>
     </div>

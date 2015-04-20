@@ -65,7 +65,6 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
                 });
                 return false;
             }
-            console.log(JSON.stringify($scope.turno));
             Turn.save({}, $scope.turno, function (data) {
                 ngToast.create({
                     content: '<span class="glyphicon glyphicon-ok"></span> Turno guardado correctamente',
@@ -254,7 +253,6 @@ turnosControllers.controller('CorrigeTurnoController', ['$scope', '$http', 'dial
                 });
                 return false;
             }
-            console.log(JSON.stringify($scope.turno));
             Turn.update({year: $scope.turno.anio, seq: $scope.turno.id}, $scope.turno, function (data) {
                 ngToast.create({
                     content: '<span class="glyphicon glyphicon-ok"></span> Turno actualizado correctamente',
@@ -325,6 +323,13 @@ turnosControllers.controller('BuscaTurnoController', ['$scope', '$filter', '$htt
             refreshContent(null, $scope.currentPage);
         };
 
+        $scope.getElement = function (id) {
+            if (id == 1)
+                return 'Para trámite correspondiente';
+            else
+                return 'Para conocimiento y conservación';
+        };
+
         $scope.getStatus = function (id) {
             var area = _.findWhere($scope.stati, {
                 id: id
@@ -382,7 +387,7 @@ turnosControllers.controller('rechazarDialogController', ['$scope', '$modalInsta
     $scope.turn = data;
 
     $scope.ok = function () {
-        var response = Turn.close({
+        var response = Turn.reject({
             anio: data.anio,
             idTurno: data.id,
             observaciones: $scope.nota
@@ -443,7 +448,7 @@ turnosControllers.controller('cerrarDialogController', ['$scope', '$modalInstanc
             });
             return false;
         }
-        var response = Turn.reject({
+        var response = Turn.close({
             anio: data.anio,
             idTurno: data.id,
             observaciones: $scope.nota
@@ -478,7 +483,6 @@ turnosControllers.controller('verDialogController', ['$scope', '$modalInstance',
     $scope.turn = Turn.get({year: data.anio, seq: data.id});
 
     $scope.turn.$promise.then(function (data) {
-        console.log(data.remitente);
         if (data.remitente.idTipoRemitente == 1) {
             $scope.person = IESPerson.get({id: data.remitente.idPersona});
             $scope.institution = Institution.get({id: data.remitente.idInstitucion});
@@ -590,7 +594,6 @@ turnosControllers.controller('atenderDialogController', ['$scope', '$modalInstan
             folio: $scope.folio,
             fechaAtencion: $scope.fechaAtencion
         };
-        console.log(work);
         var response = Turn.work({year: data.anio, seq: data.id}, work);
         response.$promise.then(function (message) {
             $modalInstance.close(message);
@@ -656,7 +659,6 @@ turnosControllers.controller('editarAtencionDialogController', ['$scope', '$moda
             });
             return false;
         }
-        console.log($scope.atencion);
         var response = Turn.updateWork({year: data.anio, seq: data.id}, $scope.atencion);
         response.$promise.then(function (message) {
             $modalInstance.close(message);

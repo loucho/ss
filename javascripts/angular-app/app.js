@@ -1,6 +1,6 @@
 var app = angular.module('app', ['ngRoute', 'ngAnimate', 'turnosControllers', 'SEPServices', 'ui.bootstrap',
     'angular-loading-bar', 'dialogs.main', 'config', 'loginController', 'angularFileUpload', 'AuthenticationService',
-    'applicationController', 'ngCookies', 'http-auth-interceptor', 'ngToast', 'homeControllers']);
+    'applicationController', 'ngCookies', 'http-auth-interceptor', 'ngToast', 'homeControllers', 'highcharts-ng']);
 
 app.config(['$routeProvider', 'cfpLoadingBarProvider', function ($routeProvider, cfpLoadingBarProvider) {
     cfpLoadingBarProvider.includeSpinner = true;

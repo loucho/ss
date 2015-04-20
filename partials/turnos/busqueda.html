@@ -21,7 +21,7 @@
         <div class="col-xs-2">
             <label for="board">Estatus:</label>
             <select id="board" ng-model="query.estatus" class="form-control"
-                    ng-options="status.id as status.descripcion for status in stati">
+                    ng-options="status.id as status.descripcion group by getElement(status.idElemento) for status in stati">
                 <option value="">Todos</option>
             </select>
         </div>
@@ -189,41 +189,43 @@
             </td>
             <td>{{getStatus(item.idEstatus)}}</td>
             <td>{{item.asunto}}</td>
-            <td>{{item.estatus}}</td>
+            <td>{{getCumplimiento(item)}}</td>
             <td>{{item.fechaAlta | date:"dd-MM-yyyy"}}</td>
             <td>
-                <a href="#/turnos/correccion/{{item.anio}}/{{item.id}}" class="btn btn-sm btn-primary"
-                   popover="Editar" popover-trigger="mouseenter" ng-disabled="false"
-                   ng-show="item.acciones.editar">
+                <a href="#/turnos/correccion/{{item.anio}}/{{item.id}}" class="btn btn-sm btn-primary" popover="Editar"
+                   popover-trigger="mouseenter" ng-disabled="false" ng-show="item.acciones.editar">
                     <span class="glyphicon glyphicon-pencil"></span>
                 </a>
                 <button class="btn btn-sm btn-primary" popover="Asignar" popover-trigger="mouseenter"
-                        ng-disabled="false" ng-click="assign(item)" ng-show="item.acciones.asignar">
+                        ng-click="assign(item)" ng-show="item.acciones.asignar">
                     <span class="glyphicon glyphicon-user"></span>
                 </button>
-                <button class="btn btn-sm btn-success" popover="Atención" popover-trigger="mouseenter"
-                        ng-disabled="false" ng-click="work(item)" ng-show="item.acciones.atender">
+                <button class="btn btn-sm btn-success" popover="Marcar como enterado" popover-trigger="mouseenter"
+                        ng-click="acknowledge(item)" ng-show="item.acciones.enterar">
                     <span class="glyphicon glyphicon-ok"></span>
                 </button>
-                <button class="btn btn-sm btn-success" popover="Editar Atención"
-                        popover-trigger="mouseenter" ng-show="item.acciones.editarAtencion"
-                        ng-disabled="false" ng-click="editWork(item)">
+                <button class="btn btn-sm btn-success" popover="Atención" popover-trigger="mouseenter"
+                        ng-click="work(item)" ng-show="item.acciones.atender">
+                    <span class="glyphicon glyphicon-ok"></span>
+                </button>
+                <button class="btn btn-sm btn-success" popover="Editar Atención" popover-trigger="mouseenter"
+                        ng-show="item.acciones.editarAtencion"
+                        ng-click="editWork(item)">
                     <span class="glyphicon glyphicon-ok-sign"></span>
                 </button>
                 <button class="btn btn-sm btn-success" popover="Cierre" popover-trigger="mouseenter"
-                        ng-disabled="false" ng-show="item.acciones.cerrar" ng-click="close(item)">
+                        ng-show="item.acciones.cerrar" ng-click="close(item)">
                     <span class="glyphicon glyphicon-book"></span>
                 </button>
-                <button class="btn btn-sm btn-info" popover="Ver" popover-trigger="mouseenter"
-                        ng-disabled="false" ng-click="view(item)">
+                <button class="btn btn-sm btn-info" popover="Ver" popover-trigger="mouseenter" ng-click="view(item)">
                     <span class="glyphicon glyphicon-search"></span>
                 </button>
                 <button class="btn btn-sm btn-info" popover="Archivos" popover-trigger="mouseenter"
-                        ng-disabled="false" ng-click="files(item)">
+                        ng-click="files(item)">
                     <span class="glyphicon glyphicon-file"></span>
                 </button>
                 <button class="btn btn-sm btn-danger" popover="Rechazar" popover-trigger="mouseenter"
-                        ng-disabled="false" ng-click="reject(item)" ng-show="item.acciones.rechazar">
+                        ng-click="reject(item)" ng-show="item.acciones.rechazar">
                     <span class="glyphicon glyphicon-remove"></span>
                 </button>
             </td>
