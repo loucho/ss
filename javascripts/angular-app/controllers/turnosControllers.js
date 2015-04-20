@@ -323,6 +323,11 @@ turnosControllers.controller('BuscaTurnoController', ['$scope', '$filter', '$htt
             refreshContent(null, $scope.currentPage);
         };
 
+        $scope.$on('event:status-changed', function () {
+            console.log('update required');
+            $scope.pageChanged();
+        });
+
         $scope.getElement = function (id) {
             if (id == 1)
                 return 'Para trámite correspondiente';
@@ -344,10 +349,12 @@ turnosControllers.controller('BuscaTurnoController', ['$scope', '$filter', '$htt
             $scope.query.recepcionHasta = $filter('date')($scope.recepcionHasta, 'yyyy-MM-dd');
             $scope.query.cierreDesde = $filter('date')($scope.cierreDesde, 'yyyy-MM-dd');
             $scope.query.cierreHasta = $filter('date')($scope.cierreHasta, 'yyyy-MM-dd');
+            $scope.currentPage = 1;
             refreshContent($scope.query, 1);
         };
 
         function refreshContent(query, page) {
+            $scope.loading = true;
             if (query) {
                 options = {
                     capturaDesde: query.capturaDesde ? query.capturaDesde : undefined,
@@ -371,6 +378,7 @@ turnosControllers.controller('BuscaTurnoController', ['$scope', '$filter', '$htt
             options.limit = $scope.itemsPerPage;
             options.offset = (page - 1) * $scope.itemsPerPage;
             $scope.turns = Turn.query(options, function (data, headers) {
+                $scope.loading = false;
                 $scope.totalItems = headers('Total');
             });
         }

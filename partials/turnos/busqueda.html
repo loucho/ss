@@ -164,7 +164,8 @@
         </div>
     </div>
 </div>
-<div class="table-responsive">
+<div class="loader" ng-show="loading">Loading...</div>
+<div class="table-responsive" ng-show="!loading && turns.length > 0">
     <table class="table table-condensed table-striped table-hover">
         <thead>
         <tr>
@@ -235,4 +236,4 @@
 </div>
 <pagination max-size="maxSize" ng-model="currentPage" total-items="totalItems" items-per-page="itemsPerPage"
             rotate="false" boundary-links="true" ng-change="pageChanged()"
-            ng-show="totalItems > itemsPerPage"></pagination>
+            ng-show="totalItems > itemsPerPage && !loading && turns.length > 0"></pagination>

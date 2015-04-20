@@ -22,6 +22,7 @@ appControllers.controller('ApplicationController', function ($scope, Authenticat
         });
         dlg.result.then(function (message) {
             ngToast.create({content: message.mensaje, 'class': (message.codigo == 200) ? 'success' : 'danger'});
+            $rootScope.$broadcast('event:status-changed', turno);
         }, function () {
             ngToast.create({content: 'Cancelar Rechazo', 'class': 'danger'});
         });
@@ -35,6 +36,7 @@ appControllers.controller('ApplicationController', function ($scope, Authenticat
         });
         dlg.result.then(function (message) {
             ngToast.create({content: message.mensaje, 'class': (message.codigo == 200) ? 'success' : 'danger'});
+            $rootScope.$broadcast('event:status-changed', turno);
         }, function () {
             ngToast.create({content: 'Cancelar Cierre', 'class': 'danger'});
         });
@@ -48,6 +50,7 @@ appControllers.controller('ApplicationController', function ($scope, Authenticat
         });
         dlg.result.then(function (message) {
             ngToast.create({content: message.mensaje, 'class': (message.codigo == 200) ? 'success' : 'danger'});
+            $rootScope.$broadcast('event:status-changed', turno);
         }, function () {
             ngToast.create({content: 'Cancelar Asignación', 'class': 'danger'});
         });
@@ -61,6 +64,7 @@ appControllers.controller('ApplicationController', function ($scope, Authenticat
         });
         dlg.result.then(function (message) {
             ngToast.create({content: message.mensaje, 'class': (message.codigo == 200) ? 'success' : 'danger'});
+            $rootScope.$broadcast('event:status-changed', turno);
         }, function () {
             ngToast.create({content: 'Cancelar Atención', 'class': 'danger'});
         });
@@ -90,6 +94,7 @@ appControllers.controller('ApplicationController', function ($scope, Authenticat
             var response = Turn.acknowledge({year: turno.anio, seq: turno.id}, {});
             response.$promise.then(function (message) {
                 ngToast.create({content: '', 'class': (message.codigo == 200) ? 'success' : 'danger'});
+                $rootScope.$broadcast('event:status-changed', turno);
             });
         }, function () {
             ngToast.create({content: 'Cancelar Edicion de Atención', 'class': 'danger'});
