@@ -15,36 +15,37 @@ homeControllers.controller('HomeController', ['$scope', 'Turn', 'Status', functi
         return area.descripcion;
     };
 
-    var turns = Turn.query({estatus: [4, 11, 3, 10, 1, 9], idAreaAsignada: $scope.currentUser.idArea}, function () {
+    function filterWaiting(turns) {
         $scope.waitingTurns = _.filter(turns, function (item) {
-            if (!item.asignacion.empleado)
+            if (_.indexOf([4, 11, 3, 10, 1, 9], item.idEstatus) != -1 && !item.asignacion.empleado)
                 return true;
         });
         $scope.loading.waiting = false;
-    });
+    }
 
-    $scope.notClosedTurns = Turn.query(
-        {
-            estatus: [6],
-            idAreaAsignada: $scope.currentUser.idArea,
-            idEmpleado: $scope.currentUser.idEmpleado
-        }, function () {
-            $scope.loading.notClosed = false;
+    function filterNotClosed(turns) {
+        $scope.notClosedTurns = _.filter(turns, function (item) {
+            if (item.idEstatus == 6 && item.asignacion && item.asignacion.empleado && item.asignacion.empleado.id == $scope.currentUser.idEmpleado)
+                return true;
         });
+        $scope.loading.notClosed = false;
+    }
 
-    $scope.assignedTurns = Turn.query(
-        {
-            estatus: [3, 10],
-            idAreaAsignada: $scope.currentUser.idArea,
-            idEmpleado: $scope.currentUser.idEmpleado
-        }, function () {
-            $scope.loading.assigned = false;
+    function filterAssigned(turns) {
+        $scope.assignedTurns = _.filter(turns, function (item) {
+            if (_.indexOf([3, 10], item.idEstatus) != -1 && item.asignacion && item.asignacion.empleado && item.asignacion.empleado.id == $scope.currentUser.idEmpleado)
+                return true;
         });
+        $scope.loading.assigned = false;
+    }
 
     var chartTurns = Turn.query({
         estatus: [1, 3, 4, 6, 9, 10, 11],
         idAreaAsignada: $scope.currentUser.idArea
     }, function () {
+        filterAssigned(chartTurns);
+        filterNotClosed(chartTurns);
+        filterWaiting(chartTurns);
         var count = _.countBy(chartTurns, function (item) {
             return item.idEstatus;
         });
