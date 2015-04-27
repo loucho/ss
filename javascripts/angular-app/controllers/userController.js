@@ -13,7 +13,6 @@ userController.controller('ChangePasswordController', ['$rootScope', '$scope', '
             var user = $rootScope.globals.currentUser;
             user.username = $scope.user.username;
             AuthenticationService.SetCredentials(user, user.token);
-            $scope.setCurrentUser(user);
             $modalInstance.close(data);
         }, function (response) {
             $scope.dataLoading = false;
