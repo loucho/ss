@@ -48,6 +48,14 @@ SEPServices.factory('Status', ['$resource', 'config', function ($resource, confi
     return $resource(config.apiUrl + '/estatus/:id', {}, {});
 }]);
 
+SEPServices.factory('User', ['$resource', 'config', function ($resource, config) {
+    return $resource(config.apiUrl + '/usuario/:id', {}, {
+        update: {
+            method: 'PUT'
+        }
+    });
+}]);
+
 SEPServices.factory('Turn', ['$resource', 'config', function ($resource, config) {
     return $resource(config.apiUrl + '/turno/:year/:seq/:action', {}, {
         close: {

@@ -79,7 +79,7 @@
         <label class="col-xs-2">Tipo de Remitente:</label>
         <label class="radio-inline" ng-repeat="senderType in senderTypes">
             <input type="radio" name="remitente" ng-model="turno.tipoRemitente" id="remitente{{senderType.id}}"
-                   value="{{senderType.id}}" required>
+                   value="{{senderType.id}}" required ng-change="limpiaRemitente()">
             {{senderType.nombre}}
         </label>
 
@@ -110,16 +110,21 @@
             <label class="col-xs-1">Remitente</label>
             <label for="cargo-institucion" class="col-xs-1">Cargo:</label>
 
-            <div class="col-xs-2">
-                <p id="cargo-institucion" class="form-control-static" ng-if="turno.remitente.idPersona">
-                    {{position}}</p>
+            <div class="col-xs-4" ng-class="{'has-error': turnoForm.selectedPosition.$invalid && submitted}">
+                <select id="cargo-institucion" ng-model="selectedPosition" class="form-control" name="selectedPosition"
+                        ng-change="setPosition()" ng-required="turno.tipoRemitente == 1"
+                        ng-options="position as position.nombre for position in positions">
+                    <option value="">Seleccione uno</option>
+                </select>
+
+                <p ng-show="turnoForm.selectedPosition.$invalid && submitted" class="help-block"> Campo requerido </p>
             </div>
             <label for="nombre-institucion" class="col-xs-1">Nombre:</label>
 
-            <div class="col-xs-7" ng-class="{'has-error': turnoForm.selectedPerson.$invalid && submitted}">
-                <select id="nombre-institucion" ng-model="selectedPerson" class="form-control" ng-change="setPerson()"
+            <div class="col-xs-5" ng-class="{'has-error': turnoForm.selectedPerson.$invalid && submitted}">
+                <select id="nombre-institucion" ng-model="turno.remitente.idPersona" class="form-control"
                         ng-required="turno.tipoRemitente == 1" name="selectedPerson"
-                        ng-options="person as (person.tituloAcademico + ' ' + person.nombre + ' ' + person.paterno + ' ' + person.materno) for person in IESpeople">
+                        ng-options="person.id as (person.tituloAcademico + ' ' + person.nombre + ' ' + person.paterno + ' ' + person.materno) for person in IESpeople">
                     <option value="">Seleccione uno</option>
                 </select>
 
@@ -182,9 +187,9 @@
             <label for="nombre-area" class="col-xs-1">Nombre:</label>
 
             <div class="col-xs-10" ng-class="{'has-error': turnoForm.selectedEmployee.$invalid && submitted}">
-                <select id="nombre-area" ng-model="selectedPerson" class="form-control" ng-change="setPerson()"
+                <select id="nombre-area" ng-model="turno.remitente.idPersona" class="form-control"
                         ng-required="turno.tipoRemitente == 3" name="selectedEmployee"
-                        ng-options="employee as (employee.tituloAcademico + ' ' + employee.nombre + ' ' + employee.paterno + ' ' + employee.materno) for employee in employees">
+                        ng-options="employee.id as (employee.tituloAcademico + ' ' + employee.nombre + ' ' + employee.paterno + ' ' + employee.materno) for employee in employees">
                     <option value="">Seleccione uno</option>
                 </select>
 
@@ -254,7 +259,8 @@
         <button ng-file-select ng-model="files" multiple="true" accept="{{fileMask}}" class="btn btn-success">
             Adjuntar Archivos
         </button>
-        <p ng-show="turno.archivos.length == 0 && submitted" class="help-block"> Debe agregar por lo menos un archivo </p>
+        <p ng-show="turno.archivos.length == 0 && submitted" class="help-block"> Debe agregar por lo menos un
+            archivo </p>
     </div>
     <div class="row">
         <ul class="list-group col-xs-12">

@@ -117,6 +117,18 @@ appControllers.controller('ApplicationController', function ($scope, Authenticat
         });
     };
 
+    $scope.changePassword = function ($event) {
+        $event.preventDefault();
+        var dlg = dialogs.create('partials/dialogs/cambio-usuario.html', 'ChangePasswordController', $scope.currentUser, {
+            size: 'lg',
+            backdrop: 'static',
+            windowClass: 'loginModal'
+        });
+        dlg.result.then(function (message) {
+            ngToast.create({content: message.mensaje, 'class': (message.codigo == 200) ? 'success' : 'danger'});
+        });
+    };
+
     $scope.setCurrentUser = function (user) {
         $scope.currentUser = user;
     };
