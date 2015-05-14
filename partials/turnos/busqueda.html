@@ -130,21 +130,21 @@
                 <option value="">Todos</option>
             </select>
         </div>
-        <div class="col-xs-5" ng-if="query.tipoRemitente && query.tipoRemitente == 1">
+        <div class="col-xs-4" ng-if="query.tipoRemitente && query.tipoRemitente == 1">
             <label for="institucion">Institución:</label>
             <select id="institucion" ng-model="query.idInstitucion" class="form-control"
                     ng-options="institution.id as institution.nombre for institution in institutions">
                 <option value="">Todas</option>
             </select>
         </div>
-        <div class="col-xs-5" ng-if="query.tipoRemitente && query.tipoRemitente == 3">
+        <div class="col-xs-4" ng-if="query.tipoRemitente && query.tipoRemitente == 3">
             <label for="area-interna">Area Interna:</label>
             <select id="area-interna" ng-model="query.idArea" class="form-control"
                     ng-options="area.id as area.nombre for area in areas">
                 <option value="">Todas</option>
             </select>
         </div>
-        <div class="col-xs-5" ng-if="query.tipoRemitente && query.tipoRemitente == 2">
+        <div class="col-xs-4" ng-if="query.tipoRemitente && query.tipoRemitente == 2">
             <label for="organizacion">Organismo:</label>
             <select id="organizacion" ng-model="query.idOrganismo" class="form-control"
                     ng-options="organization.id as organization.nombre for organization in organizations">
@@ -156,6 +156,14 @@
             <button class="btn btn-primary" id="submit" ng-click="search()">Buscar
                 <span class="glyphicon glyphicon-search"></span>
             </button>
+        </div>
+        <div class="col-xs-1">
+            <label for="submit"> </label>
+            <a ng-href="{{baseUrl}}/reporte/excel?{{getQuery()}}" target="_blank">
+                <button class="btn btn-success">
+                    Exportar <span class="glyphicon glyphicon-file"></span>
+                </button>
+            </a>
         </div>
     </div>
     <div class="row">

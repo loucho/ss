@@ -322,8 +322,8 @@ turnosControllers.controller('CorrigeTurnoController', ['$scope', '$http', 'dial
         });
     }]);
 
-turnosControllers.controller('BuscaTurnoController', ['$scope', '$filter', '$http', 'dialogs', 'Organization', 'SenderType', 'Area', 'Institution', 'Position', 'Employee', 'Turn', 'Status', 'ngToast',
-    function ($scope, $filter, $http, dialogs, Organization, SenderType, Area, Institution, Position, Employee, Turn, Status) {
+turnosControllers.controller('BuscaTurnoController', ['$scope', '$filter', '$http', 'dialogs', 'Organization', 'SenderType', 'Area', 'Institution', 'Position', 'Employee', 'Turn', 'Status', 'config',
+    function ($scope, $filter, $http, dialogs, Organization, SenderType, Area, Institution, Position, Employee, Turn, Status, config) {
         $scope.senderTypes = SenderType.query();
         $scope.organizations = Organization.query();
         $scope.institutions = Institution.query();
@@ -331,6 +331,7 @@ turnosControllers.controller('BuscaTurnoController', ['$scope', '$filter', '$htt
         $scope.stati = Status.query();
         $scope.areas = Area.query();
         $scope.today = new Date();
+        $scope.baseUrl = config.apiUrl;
         $scope.query = {};
         $scope.maxSize = 5;
         $scope.itemsPerPage = 10;
@@ -352,6 +353,20 @@ turnosControllers.controller('BuscaTurnoController', ['$scope', '$filter', '$htt
                 return 'Para conocimiento y conservación';
         };
 
+        $scope.getQuery = function () {
+            return qs(getOptions());
+        };
+
+        function qs(obj) {
+            var str = [];
+            for (var p in obj) {
+                var v = obj[p];
+                if (v != undefined)
+                    str.push((p) + "=" + encodeURIComponent(v));
+            }
+            return str.join("&");
+        }
+
         $scope.getStatus = function (id) {
             var area = _.findWhere($scope.stati, {
                 id: id
@@ -360,37 +375,42 @@ turnosControllers.controller('BuscaTurnoController', ['$scope', '$filter', '$htt
         };
 
         $scope.search = function () {
+
+            $scope.currentPage = 1;
+            refreshContent(getOptions(), 1);
+        };
+
+        function getOptions() {
             $scope.query.capturaDesde = $filter('date')($scope.capturaDesde, 'yyyy-MM-dd');
             $scope.query.capturaHasta = $filter('date')($scope.capturaHasta, 'yyyy-MM-dd');
             $scope.query.recepcionDesde = $filter('date')($scope.recepcionDesde, 'yyyy-MM-dd');
             $scope.query.recepcionHasta = $filter('date')($scope.recepcionHasta, 'yyyy-MM-dd');
             $scope.query.cierreDesde = $filter('date')($scope.cierreDesde, 'yyyy-MM-dd');
             $scope.query.cierreHasta = $filter('date')($scope.cierreHasta, 'yyyy-MM-dd');
-            $scope.currentPage = 1;
-            refreshContent($scope.query, 1);
-        };
+            return {
+                capturaDesde: $scope.query.capturaDesde ? $scope.query.capturaDesde : undefined,
+                capturaHasta: $scope.query.capturaHasta ? $scope.query.capturaHasta : undefined,
+                recepcionDesde: $scope.query.recepcionDesde ? $scope.query.recepcionDesde : undefined,
+                recepcionHasta: $scope.query.recepcionHasta ? $scope.query.recepcionHasta : undefined,
+                cierreDesde: $scope.query.cierreDesde ? $scope.query.cierreDesde : undefined,
+                cierreHasta: $scope.query.cierreHasta ? $scope.query.cierreHasta : undefined,
+                anio: $scope.query.anio ? $scope.query.anio : undefined,
+                id: $scope.query.id ? $scope.query.id : undefined,
+                idAreaAsignada: $scope.query.idAreaAsignada ? $scope.query.idAreaAsignada : undefined,
+                estatus: $scope.query.estatus ? [$scope.query.estatus] : undefined,
+                dgesu: $scope.query.dgesu ? $scope.query.dgesu : undefined,
+                idEmpleado: $scope.query.idEmpleado ? $scope.query.idEmpleado : undefined,
+                tipoRemitente: $scope.query.tipoRemitente ? $scope.query.tipoRemitente : undefined,
+                idInstitucion: $scope.query.idInstitucion ? $scope.query.idInstitucion : undefined,
+                idArea: $scope.query.idArea ? $scope.query.idArea : undefined,
+                idOrganismo: $scope.query.idOrganismo ? $scope.query.idOrganismo : undefined
+            };
+        }
 
         function refreshContent(query, page) {
             $scope.loading = true;
             if (query) {
-                options = {
-                    capturaDesde: query.capturaDesde ? query.capturaDesde : undefined,
-                    capturaHasta: query.capturaHasta ? query.capturaHasta : undefined,
-                    recepcionDesde: query.recepcionDesde ? query.recepcionDesde : undefined,
-                    recepcionHasta: query.recepcionHasta ? query.recepcionHasta : undefined,
-                    cierreDesde: query.cierreDesde ? query.cierreDesde : undefined,
-                    cierreHasta: query.cierreHasta ? query.cierreHasta : undefined,
-                    anio: query.anio ? query.anio : undefined,
-                    id: query.id ? query.id : undefined,
-                    idAreaAsignada: query.idAreaAsignada ? query.idAreaAsignada : undefined,
-                    estatus: query.estatus ? [query.estatus] : undefined,
-                    dgesu: query.dgesu ? query.dgesu : undefined,
-                    idEmpleado: query.idEmpleado ? query.idEmpleado : undefined,
-                    tipoRemitente: query.tipoRemitente ? query.tipoRemitente : undefined,
-                    idInstitucion: query.idInstitucion ? query.idInstitucion : undefined,
-                    idArea: query.idArea ? query.idArea : undefined,
-                    idOrganismo: query.idOrganismo ? query.idOrganismo : undefined
-                };
+                options = query;
             }
             options.limit = $scope.itemsPerPage;
             options.offset = (page - 1) * $scope.itemsPerPage;
