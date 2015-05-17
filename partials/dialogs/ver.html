@@ -1,6 +1,7 @@
 <div class="modal-header dialog-header-notify">
     <h4 class="modal-title"><span class="glyphicon glyphicon-search"></span> Ver Turno {{turn.anio}}-{{turn.id}}
-    </h4></div>
+    </h4>
+</div>
 <div class="modal-body container-fluid">
     <div class="row">
         <div class="col-xs-12"><h2>Datos de Captura:</h2></div>
@@ -135,4 +136,9 @@
 </div>
 <div class="modal-footer">
     <button class="btn btn-danger" type="button" ng-click="ok()">Cerrar</button>
+    <a ng-href="{{baseUrl}}/reporte/turno/pdf/{{turn.anio}}/{{turn.id}}" id="export" target="_blank">
+        <button class="btn btn-success">
+            Exportar <span class="glyphicon glyphicon-file"></span>
+        </button>
+    </a>
 </div>

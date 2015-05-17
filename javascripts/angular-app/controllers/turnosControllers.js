@@ -524,8 +524,9 @@ turnosControllers.controller('archivosDialogController', ['$scope', '$modalInsta
     };
 }]);
 
-turnosControllers.controller('verDialogController', ['$scope', '$modalInstance', 'data', 'Area', 'Institution', 'IESPerson', 'Organization', 'Turn', 'Employee', function ($scope, $modalInstance, data, Area, Institution, IESPerson, Organization, Turn, Employee) {
+turnosControllers.controller('verDialogController', ['$scope', '$modalInstance', 'data', 'Area', 'Institution', 'IESPerson', 'Organization', 'Turn', 'Employee', 'config', function ($scope, $modalInstance, data, Area, Institution, IESPerson, Organization, Turn, Employee, config) {
     $scope.turn = Turn.get({year: data.anio, seq: data.id});
+    $scope.baseUrl = config.apiUrl;
 
     $scope.turn.$promise.then(function (data) {
         if (data.remitente.idTipoRemitente == 1) {
