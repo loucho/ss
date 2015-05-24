@@ -226,11 +226,12 @@
                         ng-show="item.acciones.cerrar" ng-click="close(item)">
                     <span class="glyphicon glyphicon-book"></span>
                 </button>
-                <button class="btn btn-sm btn-info" popover="Ver" popover-trigger="mouseenter" ng-click="view(item)">
+                <button class="btn btn-sm btn-info" popover="Ver" popover-trigger="mouseenter" ng-click="view(item)"
+                        ng-show="item.acciones.consultar">
                     <span class="glyphicon glyphicon-search"></span>
                 </button>
                 <button class="btn btn-sm btn-info" popover="Archivos" popover-trigger="mouseenter"
-                        ng-click="files(item)">
+                        ng-click="files(item)" ng-show="item.acciones.consultar">
                     <span class="glyphicon glyphicon-file"></span>
                 </button>
                 <button class="btn btn-sm btn-danger" popover="Rechazar" popover-trigger="mouseenter"
