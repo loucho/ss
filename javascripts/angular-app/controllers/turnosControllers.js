@@ -1,7 +1,7 @@
 var turnosControllers = angular.module('turnosControllers', []);
 
-turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType', 'SenderType', 'Area', 'Institution', 'IESPerson', 'Organization', 'Turn', 'Employee', 'FileType', '$upload', 'config', 'ngToast', 'Position',
-    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, IESPerson, Organization, Turn, Employee, FileType, $upload, config, ngToast, Position) {
+turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType', 'SenderType', 'Area', 'Institution', 'IESPerson', 'Organization', 'Turn', 'Employee', 'FileType', '$upload', 'config', 'ngToast', 'Position', 'ResponseTime',
+    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, IESPerson, Organization, Turn, Employee, FileType, $upload, config, ngToast, Position, ResponseTime) {
         $scope.priorities = Priority.query();
         $scope.processTypes = ProcessType.query();
         $scope.today = new Date();
@@ -14,6 +14,7 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
         $scope.files = [];
         $scope.turno = {remitente: {}, archivos: []};
         $scope.fileTypes = FileType.query({tipo: 1});
+        $scope.responseTimes = ResponseTime.query();
 
         $scope.openDatePicker = function ($event, variable) {
             $event.preventDefault();
@@ -158,6 +159,7 @@ turnosControllers.controller('CorrigeTurnoController', ['$scope', '$http', 'dial
                     id: original.id,
                     fechaAlta: original.fechaAlta,
                     fechaRecepcion: original.fechaRecepcion,
+                    fechaRecepcionDGESU: original.fechaRecepcionDGESU,
                     prioridad: original.prioridad.id,
                     archivos: original.archivos ? original.archivos : [],
                     tipoTramite: original.tipoTramite.id,
