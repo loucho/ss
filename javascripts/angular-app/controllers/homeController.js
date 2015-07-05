@@ -5,9 +5,7 @@ homeControllers.controller('HomeController', ['$scope', 'Turn', 'Status', 'Area'
     $scope.areas = Area.query({}, function () {
         getDependantAreas($scope.currentUser.idArea);
         function getDependantAreas(area) {
-            console.log('entrando para ver el area ' + area);
             _.forEach($scope.areas, function (item) {
-                console.log('viendo el area ' + item.id + ' tiene dependencia: '+ item.dependencia);
                 if (item.dependencia == area) {
                     areas.push(item.id);
                     getDependantAreas(item.id);
@@ -106,6 +104,14 @@ homeControllers.controller('HomeController', ['$scope', 'Turn', 'Status', 'Area'
         $scope.loading.notClosed = false;
     }
 
+    function filterDependantNotClosed(turns) {
+        $scope.dependantNotClosedTurns = _.filter(turns, function (item) {
+            if (item.idEstatus == 6)
+                return true;
+        });
+        $scope.loading.dependantNotClosed = false;
+    }
+
     function filterAssigned(turns) {
         $scope.assignedTurns = _.filter(turns, function (item) {
             if (_.indexOf([3, 10], item.idEstatus) != -1 && item.asignacion && item.asignacion.empleado && item.asignacion.empleado.id == $scope.currentUser.idEmpleado)
@@ -176,10 +182,12 @@ homeControllers.controller('HomeController', ['$scope', 'Turn', 'Status', 'Area'
         $scope.dependantChartConfig.xAxis.categories = undefined;
         $scope.dependantChartConfig.loading = true;
         $scope.loading.dependants = true;
+        $scope.loading.dependantNotClosed = true;
         var chartTurns = Turn.query({
             estatus: [1, 3, 4, 6, 9, 10, 11],
             idAreaAsignada: areas
         }, function () {
+            filterDependantNotClosed(chartTurns);
             $scope.dependantTurns = chartTurns;
             var count = _.countBy(chartTurns, function (item) {
                 return item.idEstatus;

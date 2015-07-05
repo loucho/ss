@@ -251,6 +251,85 @@
     </div>
     <div class="row">
         <div class="col-xs-12">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Turnos por cerrar de Áreas dependientes</h3>
+                </div>
+                <div class="panel-body" ng-if="dependantNotClosedTurns.length == 0 && !loading.dependantNotClosed">
+                    <span>No hay turnos por cerrar</span>
+                </div>
+                <div class="loader" ng-show="loading.dependantNotClosed">Loading...</div>
+                <table class="table table-condensed table-striped table-hover"
+                       ng-if="dependantNotClosedTurns.length > 0 && !loading.dependantNotClosed">
+                    <thead>
+                    <tr>
+                        <th class="col-xs-1">Turno DFI</th>
+                        <th class="col-xs-1">Turno DGESU</th>
+                        <th class="col-xs-1">Área</th>
+                        <th class="col-xs-1">Asignado</th>
+                        <th class="col-xs-1">Estatus</th>
+                        <th class="col-xs-2">Asunto</th>
+                        <th class="col-xs-1">Fecha Límite</th>
+                        <th class="col-xs-1">Cumplimiento</th>
+                        <th class="col-xs-3">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in dependantNotClosedTurns">
+                        <td>{{item.anio}}-{{item.id}}</td>
+                        <td>{{item.turnoDGESU}}</td>
+                        <td>{{item.asignacion.areaOperativa.abreviatura}}</td>
+                        <td>{{item.asignacion.empleado.tituloAcademico}} {{item.asignacion.empleado.nombre}}
+                            {{item.asignacion.empleado.paterno}} {{item.asignacion.empleado.materno}}
+                        </td>
+                        <td>{{getStatus(item.idEstatus)}}</td>
+                        <td>{{item.asunto.descripcion}}</td>
+                        <td>{{item.fechaLimite | date:"dd-MM-yyyy"}}</td>
+                        <td>{{getCumplimiento(item)}}</td>
+                        <td>
+                            <a href="#/turnos/correccion/{{item.anio}}/{{item.id}}" class="btn btn-sm btn-primary"
+                               popover="Editar" popover-trigger="mouseenter" ng-disabled="false"
+                               ng-show="item.acciones.editar">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                            <button class="btn btn-sm btn-primary" popover="Asignar" popover-trigger="mouseenter"
+                                    ng-disabled="false" ng-click="assign(item)" ng-show="item.acciones.asignar">
+                                <span class="glyphicon glyphicon-user"></span>
+                            </button>
+                            <button class="btn btn-sm btn-success" popover="Atención" popover-trigger="mouseenter"
+                                    ng-disabled="false" ng-click="work(item)" ng-show="item.acciones.atender">
+                                <span class="glyphicon glyphicon-ok"></span>
+                            </button>
+                            <button class="btn btn-sm btn-success" popover="Editar Atención"
+                                    popover-trigger="mouseenter" ng-show="item.acciones.editarAtencion"
+                                    ng-disabled="false" ng-click="editWork(item)">
+                                <span class="glyphicon glyphicon-ok-sign"></span>
+                            </button>
+                            <button class="btn btn-sm btn-success" popover="Cierre" popover-trigger="mouseenter"
+                                    ng-disabled="false" ng-show="item.acciones.cerrar" ng-click="close(item)">
+                                <span class="glyphicon glyphicon-book"></span>
+                            </button>
+                            <button class="btn btn-sm btn-info" popover="Ver" popover-trigger="mouseenter"
+                                    ng-disabled="false" ng-click="view(item)">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                            <button class="btn btn-sm btn-info" popover="Archivos" popover-trigger="mouseenter"
+                                    ng-disabled="false" ng-click="files(item)">
+                                <span class="glyphicon glyphicon-file"></span>
+                            </button>
+                            <button class="btn btn-sm btn-danger" popover="Rechazar" popover-trigger="mouseenter"
+                                    ng-disabled="false" ng-click="reject(item)" ng-show="item.acciones.rechazar">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Turnos de Áreas dependientes</h3>
