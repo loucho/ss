@@ -102,6 +102,10 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
                     content: '<span class="glyphicon glyphicon-ok"></span> Turno guardado correctamente',
                     'class': 'success'
                 });
+                $scope.turno = {remitente: {}, archivos: []};
+                $scope.limpiaRemitente();
+                $scope.submitted = false;
+                $scope.view(data);
             }, function (error) {
                 ngToast.create({
                     content: '<span class="glyphicon glyphicon-exclamation-sign"></span> Ocurrio un error al guardar los datos =(',

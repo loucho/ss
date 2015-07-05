@@ -32,9 +32,9 @@
 
             <p ng-show="form.empleado.$invalid && submitted" class="help-block"> Campo requerido </p>
         </div>
-        <div class="form-group" ng-show="type == 2" ng-class="{'has-error': form.tiempo.$invalid && submitted}">
+        <div class="form-group" ng-show="type" ng-class="{'has-error': form.tiempo.$invalid && submitted}">
             <label class="control-label" for="tiempo">Tiempo de Respuesta:</label>
-            <select id="tiempo" ng-model="idTiempo" class="form-control" ng-required="type == 2" name="tiempo"
+            <select id="tiempo" ng-model="idTiempo" class="form-control" required name="tiempo"
                     ng-options="responseTime.id as responseTime.descripcion for responseTime in responseTimes">
                 <option value="">Seleccione uno</option>
             </select>
