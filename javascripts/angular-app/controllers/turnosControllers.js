@@ -615,7 +615,7 @@ turnosControllers.controller('verDialogController', ['$scope', '$modalInstance',
             $scope.person = Employee.get({id: data.remitente.idPersona});
             $scope.area = Area.get({id: data.remitente.idArea});
         }
-        if (data.remitente.idTipoRemitente = 5) {
+        if (data.remitente.idTipoRemitente == 5) {
             $scope.person = Responsible.get({id: data.remitente.idPersona});
             $scope.instance = Instance.get({id: data.remitente.idInstancia});
             $scope.dependency = Dependency.get({id: data.remitente.idArea});
