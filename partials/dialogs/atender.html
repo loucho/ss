@@ -14,7 +14,7 @@
                     {{turn.asignacion.empleado.nombre}} {{turn.asignacion.empleado.paterno}}
                     {{turn.asignacion.empleado.materno}}</p>
             </div>
-            <label class="col-xs-3 control-label" for="fecha-atencion">Fecha de Atención:</label>
+            <label class="col-xs-3 control-label" for="fecha-atencion">Fecha de Respuesta:</label>
 
             <div ng-class="{'has-error': form.fechaAtencion.$invalid && submitted}" class="col-xs-4">
                 <div class="input-group">
@@ -30,19 +30,17 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-xs-2 control-label" for="asunto">Asunto:</label>
+            <label class="col-xs-2 control-label" for="asuntoCat">Asunto:</label>
 
             <div class="col-xs-10">
-                <p class="form-control-static" id="asunto">{{turn.asunto}}</p>
+                <p class="form-control-static" id="asuntoCat">{{turn.asunto.descripcion}}</p>
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-xs-2" for="tema">Tema:</label>
+            <label class="col-xs-2 control-label" for="asunto">Descripción detallada del asunto:</label>
 
-            <div class="col-xs-10" ng-class="{'has-error': form.tema.$invalid && submitted}">
-                <textarea class="form-control" name="tema" id="tema" ng-model="tema" rows="5" required></textarea>
-
-                <p ng-show="form.tema.$invalid && submitted" class="help-block"> Campo requerido </p>
+            <div class="col-xs-10">
+                <p class="form-control-static" id="asunto">{{turn.descripcionAsunto}}</p>
             </div>
         </div>
         <div class="form-group" ng-show="turn.comments.length > 0">
@@ -73,7 +71,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-xs-2" for="folio">Folio de atención:</label>
+            <label class="control-label col-xs-2" for="folio">Folio de respuesta:</label>
 
             <div class="col-xs-2" ng-class="{'has-error': form.folio.$invalid && submitted}">
                 <input type="text" class="form-control" id="folio" ng-model="folio" name="folio" required/>

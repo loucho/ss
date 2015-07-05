@@ -1,20 +1,22 @@
 var turnosControllers = angular.module('turnosControllers', []);
 
-turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType', 'SenderType', 'Area', 'Institution', 'IESPerson', 'Organization', 'Turn', 'Employee', 'FileType', '$upload', 'config', 'ngToast', 'Position', 'ResponseTime',
-    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, IESPerson, Organization, Turn, Employee, FileType, $upload, config, ngToast, Position, ResponseTime) {
+turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType', 'SenderType', 'Area', 'Institution', 'IESPerson', 'Organization', 'Turn', 'Employee', 'FileType', '$upload', 'config', 'ngToast', 'Position', 'Subject', 'Responsible', 'Instance', 'Dependency', 'ResponseTime',
+    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, IESPerson, Organization, Turn, Employee, FileType, $upload, config, ngToast, Position, Subject, Responsible, Instance, Dependency, ResponseTime) {
         $scope.priorities = Priority.query();
         $scope.processTypes = ProcessType.query();
         $scope.today = new Date();
         $scope.fileMask = config.fileMask;
+        $scope.responseTimes = ResponseTime.query();
         $scope.senderTypes = SenderType.query();
         $scope.institutions = Institution.query();
         $scope.organizations = Organization.query();
+        $scope.instances = Instance.query();
         $scope.areas = Area.query({idDependencia: [0, 1]});
         $scope.internalAreas = Area.query();
         $scope.files = [];
+        $scope.subjects = Subject.query();
         $scope.turno = {remitente: {}, archivos: []};
         $scope.fileTypes = FileType.query({tipo: 1});
-        $scope.responseTimes = ResponseTime.query();
 
         $scope.openDatePicker = function ($event, variable) {
             $event.preventDefault();
@@ -28,6 +30,8 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
             $scope.selectedInstitution = null;
             $scope.selectedOrganization = null;
             $scope.selectedPosition = null;
+            $scope.selectedInstance = null;
+            $scope.selectedDependency = null;
         };
 
         $scope.updateInstitution = function () {
@@ -42,6 +46,22 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
             $scope.IESpeople = $scope.selectedPosition ? IESPerson.query({
                 idIES: $scope.turno.remitente.idInstitucion,
                 idCargo: $scope.selectedPosition.id
+            }) : [];
+            $scope.clearPerson();
+        };
+
+        $scope.updateInstance = function () {
+            $scope.turno.remitente.idInstancia = $scope.selectedInstance ? $scope.selectedInstance.id : null;
+            $scope.dependencies = $scope.selectedInstance ? Dependency.query({idInstancia: $scope.turno.remitente.idInstancia}) : [];
+            $scope.selectedDependency = null;
+            $scope.clearPerson();
+            $scope.responsibles = [];
+        };
+
+        $scope.setDependency = function () {
+            $scope.turno.remitente.idArea = $scope.selectedDependency ? $scope.selectedDependency.id : null;
+            $scope.responsibles = $scope.selectedDependency ? Responsible.query({
+                idDependencia: $scope.selectedDependency.id
             }) : [];
             $scope.clearPerson();
         };
@@ -128,13 +148,16 @@ turnosControllers.controller('CapturaTurnoController', ['$scope', '$http', 'dial
         });
     }]);
 
-turnosControllers.controller('CorrigeTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType', 'SenderType', 'Area', 'Institution', 'IESPerson', 'Organization', 'Turn', 'Employee', 'FileType', '$upload', 'config', 'ngToast', '$routeParams', '$q', 'Position',
-    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, IESPerson, Organization, Turn, Employee, FileType, $upload, config, ngToast, $routeParams, $q, Position) {
+turnosControllers.controller('CorrigeTurnoController', ['$scope', '$http', 'dialogs', 'Priority', 'ProcessType', 'SenderType', 'Area', 'Institution', 'IESPerson', 'Organization', 'Turn', 'Employee', 'FileType', '$upload', 'config', 'ngToast', '$routeParams', '$q', 'Position', 'Subject', 'Instance', 'Dependency', 'Responsible',
+    function ($scope, $http, dialogs, Priority, ProcessType, SenderType, Area, Institution, IESPerson, Organization, Turn, Employee, FileType, $upload, config, ngToast, $routeParams, $q, Position, Subject, Instance, Dependency, Responsible) {
         $scope.priorities = Priority.query();
         $scope.processTypes = ProcessType.query();
+        $scope.subjects = Subject.query();
+        $scope.today = new Date();
         $scope.fileMask = config.fileMask;
         $scope.senderTypes = SenderType.query();
         $scope.institutions = Institution.query();
+        $scope.instances = Instance.query();
         $scope.organizations = Organization.query();
         $scope.areas = Area.query({idDependencia: [0, 1]});
         $scope.internalAreas = Area.query();
@@ -167,10 +190,12 @@ turnosControllers.controller('CorrigeTurnoController', ['$scope', '$http', 'dial
                     numeroOficio: original.numeroOficio,
                     fechaOficio: original.fechaOficio,
                     tipoRemitente: original.remitente.idTipoRemitente,
-                    asunto: original.asunto,
+                    asunto: original.descripcionAsunto,
+                    idAsunto: original.asunto.id,
                     remitente: {
                         idInstitucion: original.remitente.idInstitucion ? original.remitente.idInstitucion : undefined,
                         idPersona: original.remitente.idPersona ? original.remitente.idPersona : undefined,
+                        idInstancia: original.remitente.idInstancia ? original.remitente.idInstancia : undefined,
                         idOrganismo: original.remitente.idOrganismo ? original.remitente.idOrganismo : undefined,
                         cargo: original.remitente.cargo ? original.remitente.cargo : undefined,
                         nombre: original.remitente.nombre ? original.remitente.nombre : undefined,
@@ -188,6 +213,12 @@ turnosControllers.controller('CorrigeTurnoController', ['$scope', '$http', 'dial
                         return item.id == original.remitente.idInstitucion;
                     });
                     $scope.updateInstitution();
+                }
+                if (original.remitente.idInstancia) {
+                    $scope.selectedInstance = _.find($scope.instances, function (item) {
+                        return item.id == original.remitente.idInstancia;
+                    });
+                    $scope.updateInstance();
                 }
                 if (original.remitente.idArea) {
                     $scope.selectedArea = _.find($scope.internalAreas, function (item) {
@@ -210,6 +241,8 @@ turnosControllers.controller('CorrigeTurnoController', ['$scope', '$http', 'dial
             $scope.selectedInstitution = null;
             $scope.selectedOrganization = null;
             $scope.selectedPosition = null;
+            $scope.selectedInstance = null;
+            $scope.selectedDependency = null;
         };
 
         $scope.updateInstitution = function (clear) {
@@ -229,6 +262,37 @@ turnosControllers.controller('CorrigeTurnoController', ['$scope', '$http', 'dial
                         $scope.setPosition();
                     });
                 });
+            }
+        };
+
+        $scope.updateInstance = function (clear) {
+            $scope.turno.remitente.idInstancia = $scope.selectedInstance ? $scope.selectedInstance.id : null;
+            $scope.dependencies = $scope.selectedInstance ? Dependency.query({idInstancia: $scope.turno.remitente.idInstancia}) : [];
+            $scope.selectedDependency = null;
+            if (clear) {
+                $scope.clearPerson();
+                $scope.responsibles = [];
+            }
+            else {
+                $scope.dependencies.$promise.then(function () {
+                    $scope.selectedDependency = _.find($scope.dependencies, function (item) {
+                        return item.id == $scope.turno.remitente.idArea;
+                    });
+                    $scope.setDependency(false);
+                });
+            }
+        };
+
+        $scope.setDependency = function (clear) {
+            $scope.turno.remitente.idArea = $scope.selectedDependency ? $scope.selectedDependency.id : null;
+            $scope.responsibles = $scope.selectedDependency ? Responsible.query({
+                idDependencia: $scope.selectedDependency.id
+            }) : [];
+            if (clear) {
+                $scope.clearPerson();
+            }
+            else {
+
             }
         };
 
@@ -514,19 +578,28 @@ turnosControllers.controller('archivosDialogController', ['$scope', '$modalInsta
     $scope.files = Turn.files({year: data.anio, seq: data.id});
     $scope.turn = data;
     var fileTypes = FileType.query();
+
     $scope.getFileType = function (id) {
         var fileType = _.find(fileTypes, function (item) {
             return item.id == id;
         });
         return fileType.descripcion;
     };
+
+    $scope.getFileTypeType = function (id) {
+        var fileType = _.find(fileTypes, function (item) {
+            return item.id == id;
+        });
+        return fileType.tipo == 1 ? 'ENTRADA' : 'SALIDA';
+    };
+
     $scope.baseUrl = config.apiUrl;
     $scope.ok = function () {
         $modalInstance.dismiss('Closed');
     };
 }]);
 
-turnosControllers.controller('verDialogController', ['$scope', '$modalInstance', 'data', 'Area', 'Institution', 'IESPerson', 'Organization', 'Turn', 'Employee', 'config', function ($scope, $modalInstance, data, Area, Institution, IESPerson, Organization, Turn, Employee, config) {
+turnosControllers.controller('verDialogController', ['$scope', '$modalInstance', 'data', 'Area', 'Institution', 'IESPerson', 'Organization', 'Turn', 'Employee', 'config', 'Responsible', 'Dependency', 'Instance', function ($scope, $modalInstance, data, Area, Institution, IESPerson, Organization, Turn, Employee, config, Responsible, Dependency, Instance) {
     $scope.turn = Turn.get({year: data.anio, seq: data.id});
     $scope.baseUrl = config.apiUrl;
 
@@ -541,6 +614,11 @@ turnosControllers.controller('verDialogController', ['$scope', '$modalInstance',
         if (data.remitente.idTipoRemitente == 3) {
             $scope.person = Employee.get({id: data.remitente.idPersona});
             $scope.area = Area.get({id: data.remitente.idArea});
+        }
+        if (data.remitente.idTipoRemitente = 5) {
+            $scope.person = Responsible.get({id: data.remitente.idPersona});
+            $scope.instance = Instance.get({id: data.remitente.idInstancia});
+            $scope.dependency = Dependency.get({id: data.remitente.idArea});
         }
     });
 
@@ -637,7 +715,6 @@ turnosControllers.controller('atenderDialogController', ['$scope', '$modalInstan
         }
         var work = {
             observaciones: $scope.nota,
-            tema: $scope.tema,
             archivo: $scope.file,
             folio: $scope.folio,
             fechaAtencion: $scope.fechaAtencion

@@ -12,8 +12,7 @@
     </div>
     <div class="row">
         <div class="col-xs-6"><strong>Usuario última modificación:</strong> {{turn.usuarioModificacion.nombre}}</div>
-        <div class="col-xs-6"><strong>Fecha de última modificación:</strong> {{turn.fechaModificacion |
-            date:"dd-MM-yyyy HH:mm"}}
+        <div class="col-xs-6"><strong>Fecha de última modificación:</strong> {{turn.fechaModificacion | date:"dd-MM-yyyy HH:mm"}}
         </div>
     </div>
     <div class="row">
@@ -25,6 +24,8 @@
         <div class="col-xs-4"><strong>Fecha de Oficio:</strong> {{turn.fechaOficio | date:"dd-MM-yyyy"}}</div>
     </div>
     <div class="row">
+        <div class="col-xs-4"><strong>Fecha de Recepción DGESU:</strong> {{turn.fechaRecepcionDGESU | date:"dd-MM-yyyy"}}
+        </div>
         <div class="col-xs-4"><strong>Fecha de Recepción:</strong> {{turn.fechaRecepcion | date:"dd-MM-yyyy"}}</div>
         <div class="col-xs-4"><strong>Fecha límite:</strong> {{turn.fechaLimite | date:"dd-MM-yyyy"}}</div>
     </div>
@@ -67,23 +68,35 @@
         <div class="col-xs-4"><strong>Cargo:</strong> {{turn.remitente.cargo}}</div>
         <div class="col-xs-8"><strong>Nombre:</strong> {{turn.remitente.nombre}}</div>
     </div>
+    <div class="row" ng-show="turn.remitente.idTipoRemitente == 5">
+        <div class="col-xs-12"><strong>Instancia SEP:</strong> {{instance.nombre}}</div>
+    </div>
+    <div class="row" ng-show="turn.remitente.idTipoRemitente == 5">
+        <div class="col-xs-12"><strong>Dependencia:</strong> {{dependency.nombre}}</div>
+    </div>
+    <div class="row" ng-show="turn.remitente.idTipoRemitente == 5">
+        <div class="col-xs-12"><strong>Titular:</strong> {{person.tituloAcademico}} {{person.nombre}} {{person.paterno}}
+            {{person.materno}}
+        </div>
+    </div>
     <div class="row">
         <div class="col-xs-12"><h3>Asunto</h3></div>
     </div>
     <div class="row">
+        <div class="col-xs-12"><strong>Asunto:</strong> {{turn.asunto.descripcion}}</div>
+    </div>
+    <div class="row">
         <div class="col-xs-12">
-            <div class="well">{{turn.asunto}}</div>
+            <div class="well"><strong>Descripción detallada: </strong>{{turn.descripcionAsunto}}</div>
         </div>
     </div>
     <div class="row" ng-show="turn.atencion">
         <div class="col-xs-12"><h2>Atención:</h2></div>
     </div>
     <div class="row" ng-show="turn.atencion">
-        <div class="col-xs-4"><strong>Fecha de atención:</strong> {{turn.atencion.fechaAtencion | date:"dd-MM-yyyy"}}</div>
-        <div class="col-xs-4"><strong>Folio de atención:</strong> {{turn.atencion.folio}}</div>
-    </div>
-    <div class="row" ng-show="turn.atencion">
-        <div class="col-xs-12"><strong>Tema:</strong> {{turn.atencion.tema}}</div>
+        <div class="col-xs-4"><strong>Fecha de respuesta:</strong> {{turn.atencion.fechaAtencion | date:"dd-MM-yyyy"}}
+        </div>
+        <div class="col-xs-4"><strong>Folio de respuesta:</strong> {{turn.atencion.folio}}</div>
     </div>
     <div class="row" ng-show="turn.observaciones.length > 0">
         <div class="col-xs-12"><h2>Observaciones:</h2></div>

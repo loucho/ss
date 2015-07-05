@@ -47,9 +47,10 @@ app.run(['$rootScope', '$location', '$cookieStore', '$http', function ($rootScop
         $http.defaults.headers.common['Authorization'] = $rootScope.globals.currentUser.token;
     }
     $rootScope.$on('$routeChangeStart', function (event, next, current) {
-        // redirect to login page if not logged in
-        if ((next.access && !next.access.isPublic) && (!$rootScope.globals || !$rootScope.globals.currentUser)) {
-            $location.path('/login');
+        if (!$rootScope.globals || !$rootScope.globals.currentUser) {
+            if ((!next.access || !next.access.isPublic)) {
+                $location.path('/login');
+            }
         }
     });
 }]);

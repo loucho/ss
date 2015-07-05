@@ -57,9 +57,8 @@
         <div class="col-xs-2" ng-class="{'has-error': turnoForm.fechaRecepcionDGESU.$invalid && submitted}">
             <div class="input-group">
                 <input id="fecha-recepcion-dgesu" name="fechaRecepcionDGESU" type="text" class="form-control"
-                       datepicker-popup
-                       required readonly ng-model="turno.fechaRecepcionDGESU" is-open="DGESUreceptionDateOpen"
-                       max-date="today"/>
+                       datepicker-popup required readonly ng-model="turno.fechaRecepcionDGESU"
+                       is-open="DGESUreceptionDateOpen" max-date="today"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default"
                         ng-click="openDatePicker($event, 'DGESUreceptionDateOpen')">
@@ -252,11 +251,24 @@
             <div class="col-xs-10" ng-class="{'has-error': turnoForm.selectedInstance.$invalid && submitted}">
                 <select id="instancia" ng-model="selectedInstance" class="form-control" ng-change="updateInstance()"
                         ng-required="turno.tipoRemitente == 5" name="selectedInstance"
-                        ng-options="instance as (instance.nombre + ' (' + instance.abreviatura + ')') for instance in instances">
+                        ng-options="instance as (instance.ur + ' ' + instance.nombre) for instance in instances">
                     <option value="">Seleccione uno</option>
                 </select>
 
                 <p ng-show="turnoForm.selectedInstance.$invalid && submitted" class="help-block"> Campo requerido </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="dependency" class="col-xs-2">Dependencia:</label>
+
+            <div class="col-xs-10" ng-class="{'has-error': turnoForm.selectedDependency.$invalid && submitted}">
+                <select id="dependency" ng-model="selectedDependency" class="form-control" ng-change="setDependency()"
+                        ng-required="turno.tipoRemitente == 5" name="selectedDependency"
+                        ng-options="dependency as dependency.nombre for dependency in dependencies">
+                    <option value="">Seleccione uno</option>
+                </select>
+
+                <p ng-show="turnoForm.selectedDependency.$invalid && submitted" class="help-block"> Campo requerido </p>
             </div>
         </div>
         <div class="form-group">
@@ -266,7 +278,7 @@
             <div class="col-xs-10" ng-class="{'has-error': turnoForm.selectedTitular.$invalid && submitted}">
                 <select id="nombre-instancia" ng-model="turno.remitente.idPersona" class="form-control"
                         ng-required="turno.tipoRemitente == 5" name="selectedTitular"
-                        ng-options="employee.id as (employee.tituloAcademico + ' ' + employee.nombre + ' ' + employee.paterno + ' ' + employee.materno) for employee in employees">
+                        ng-options="responsible.id as (responsible.tituloAcademico + ' ' + responsible.nombre + ' ' + responsible.paterno + ' ' + responsible.materno) for responsible in responsibles">
                     <option value="">Seleccione uno</option>
                 </select>
 
@@ -275,15 +287,15 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="asuntoCat" class="col-xs-2">Asunto:</label>
+        <label for="idAsunto" class="col-xs-2">Asunto:</label>
 
-        <div class="col-xs-5" ng-class="{'has-error': turnoForm.asuntoCat.$invalid && submitted}">
-            <select id="asuntoCat" ng-model="turno.asuntoCat" class="form-control" required name="asuntoCat"
-                    ng-options="subject.id as subject.nombre for subject in subjects">
+        <div class="col-xs-5" ng-class="{'has-error': turnoForm.idAsunto.$invalid && submitted}">
+            <select id="idAsunto" ng-model="turno.idAsunto" class="form-control" required name="idAsunto"
+                    ng-options="subject.id as subject.descripcion for subject in subjects">
                 <option value="">Seleccione uno</option>
             </select>
 
-            <p ng-show="turnoForm.asuntoCat.$invalid && submitted" class="help-block"> Campo requerido </p>
+            <p ng-show="turnoForm.idAsunto.$invalid && submitted" class="help-block"> Campo requerido </p>
         </div>
 
     </div>
@@ -302,7 +314,7 @@
         <label class="col-xs-2">Tiempo de respuesta:</label>
 
         <div class="col-xs-4" ng-class="{'has-error': turnoForm.tiempo.$invalid && submitted}">
-            <select id="tiempo" ng-model="turno.tiempoRespuesta" class="form-control" required name="tiempo"
+            <select id="tiempo" ng-model="turno.idTiempoRespuesta" class="form-control" required name="tiempo"
                     ng-options="responseTime.id as responseTime.descripcion for responseTime in responseTimes">
                 <option value="">Seleccione uno</option>
             </select>

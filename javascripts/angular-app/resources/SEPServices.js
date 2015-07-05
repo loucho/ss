@@ -40,6 +40,22 @@ SEPServices.factory('Employee', ['$resource', 'config', function ($resource, con
     return $resource(config.apiUrl + '/empleado/:id', {}, {});
 }]);
 
+SEPServices.factory('Responsible', ['$resource', 'config', function ($resource, config) {
+    return $resource(config.apiUrl + '/responsable/:id', {}, {});
+}]);
+
+SEPServices.factory('Subject', ['$resource', 'config', function ($resource, config) {
+    return $resource(config.apiUrl + '/asunto/:id', {}, {});
+}]);
+
+SEPServices.factory('Instance', ['$resource', 'config', function ($resource, config) {
+    return $resource(config.apiUrl + '/instancia/:id', {}, {});
+}]);
+
+SEPServices.factory('Dependency', ['$resource', 'config', function ($resource, config) {
+    return $resource(config.apiUrl + '/dependencia/:id', {}, {});
+}]);
+
 SEPServices.factory('Area', ['$resource', 'config', function ($resource, config) {
     return $resource(config.apiUrl + '/area-interna/:id', {}, {});
 }]);

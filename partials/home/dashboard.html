@@ -16,10 +16,12 @@
                     <tr>
                         <th class="col-xs-1">Turno DFI</th>
                         <th class="col-xs-1">Turno DGESU</th>
-                        <th class="col-xs-2">Estatus</th>
-                        <th class="col-xs-3">Asunto</th>
+                        <th class="col-xs-1">Área</th>
+                        <th class="col-xs-1">Asignado</th>
+                        <th class="col-xs-1">Estatus</th>
+                        <th class="col-xs-2">Asunto</th>
+                        <th class="col-xs-1">Fecha Límite</th>
                         <th class="col-xs-1">Cumplimiento</th>
-                        <th class="col-xs-1">Fecha Apertura</th>
                         <th class="col-xs-3">Acciones</th>
                     </tr>
                     </thead>
@@ -27,10 +29,14 @@
                     <tr ng-repeat="item in waitingTurns">
                         <td>{{item.anio}}-{{item.id}}</td>
                         <td>{{item.turnoDGESU}}</td>
+                        <td>{{item.asignacion.areaOperativa.abreviatura}}</td>
+                        <td>{{item.asignacion.empleado.tituloAcademico}} {{item.asignacion.empleado.nombre}}
+                            {{item.asignacion.empleado.paterno}} {{item.asignacion.empleado.materno}}
+                        </td>
                         <td>{{getStatus(item.idEstatus)}}</td>
-                        <td>{{item.asunto}}</td>
+                        <td>{{item.asunto.descripcion}}</td>
+                        <td>{{item.fechaLimite | date:"dd-MM-yyyy"}}</td>
                         <td>{{getCumplimiento(item)}}</td>
-                        <td>{{item.fechaAlta | date:"dd-MM-yyyy"}}</td>
                         <td>
                             <a href="#/turnos/correccion/{{item.anio}}/{{item.id}}" class="btn btn-sm btn-primary"
                                popover="Editar" popover-trigger="mouseenter" ng-disabled="false"
@@ -74,7 +80,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-7">
+        <div class="col-xs-12">
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <h3 class="panel-title">Turnos asignados a mi</h3>
@@ -87,16 +93,28 @@
                        ng-if="assignedTurns.length > 0 && !loading.assigned">
                     <thead>
                     <tr>
-                        <th class="col-xs-2">Turno DFI</th>
-                        <th class="col-xs-2">Estatus</th>
-                        <th class="col-xs-3">Cumplimiento</th>
-                        <th class="col-xs-5">Acciones</th>
+                        <th class="col-xs-1">Turno DFI</th>
+                        <th class="col-xs-1">Turno DGESU</th>
+                        <th class="col-xs-1">Área</th>
+                        <th class="col-xs-1">Asignado</th>
+                        <th class="col-xs-1">Estatus</th>
+                        <th class="col-xs-2">Asunto</th>
+                        <th class="col-xs-1">Fecha Límite</th>
+                        <th class="col-xs-1">Cumplimiento</th>
+                        <th class="col-xs-3">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="item in assignedTurns">
                         <td>{{item.anio}}-{{item.id}}</td>
+                        <td>{{item.turnoDGESU}}</td>
+                        <td>{{item.asignacion.areaOperativa.abreviatura}}</td>
+                        <td>{{item.asignacion.empleado.tituloAcademico}} {{item.asignacion.empleado.nombre}}
+                            {{item.asignacion.empleado.paterno}} {{item.asignacion.empleado.materno}}
+                        </td>
                         <td>{{getStatus(item.idEstatus)}}</td>
+                        <td>{{item.asunto.descripcion}}</td>
+                        <td>{{item.fechaLimite | date:"dd-MM-yyyy"}}</td>
                         <td>{{getCumplimiento(item)}}</td>
                         <td>
                             <a href="#/turnos/correccion/{{item.anio}}/{{item.id}}" class="btn btn-sm btn-primary"
@@ -139,7 +157,9 @@
                 </table>
             </div>
         </div>
-        <div class="col-xs-5">
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
             <div class="panel panel-danger">
                 <div class="panel-heading">
                     <h3 class="panel-title">Turnos por cerrar de esta Área</h3>
@@ -152,16 +172,28 @@
                        ng-if="notClosedTurns.length > 0 && !loading.notClosed">
                     <thead>
                     <tr>
-                        <th class="col-xs-2">Turno DFI</th>
-                        <th class="col-xs-2">Estatus</th>
-                        <th class="col-xs-3">Cumplimiento</th>
-                        <th class="col-xs-5">Acciones</th>
+                        <th class="col-xs-1">Turno DFI</th>
+                        <th class="col-xs-1">Turno DGESU</th>
+                        <th class="col-xs-1">Área</th>
+                        <th class="col-xs-1">Asignado</th>
+                        <th class="col-xs-1">Estatus</th>
+                        <th class="col-xs-2">Asunto</th>
+                        <th class="col-xs-1">Fecha Límite</th>
+                        <th class="col-xs-1">Cumplimiento</th>
+                        <th class="col-xs-3">Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="item in notClosedTurns">
                         <td>{{item.anio}}-{{item.id}}</td>
+                        <td>{{item.turnoDGESU}}</td>
+                        <td>{{item.asignacion.areaOperativa.abreviatura}}</td>
+                        <td>{{item.asignacion.empleado.tituloAcademico}} {{item.asignacion.empleado.nombre}}
+                            {{item.asignacion.empleado.paterno}} {{item.asignacion.empleado.materno}}
+                        </td>
                         <td>{{getStatus(item.idEstatus)}}</td>
+                        <td>{{item.asunto.descripcion}}</td>
+                        <td>{{item.fechaLimite | date:"dd-MM-yyyy"}}</td>
                         <td>{{getCumplimiento(item)}}</td>
                         <td>
                             <a href="#/turnos/correccion/{{item.anio}}/{{item.id}}" class="btn btn-sm btn-primary"
@@ -233,10 +265,12 @@
                     <tr>
                         <th class="col-xs-1">Turno DFI</th>
                         <th class="col-xs-1">Turno DGESU</th>
-                        <th class="col-xs-2">Estatus</th>
-                        <th class="col-xs-3">Asunto</th>
+                        <th class="col-xs-1">Área</th>
+                        <th class="col-xs-1">Asignado</th>
+                        <th class="col-xs-1">Estatus</th>
+                        <th class="col-xs-2">Asunto</th>
+                        <th class="col-xs-1">Fecha Límite</th>
                         <th class="col-xs-1">Cumplimiento</th>
-                        <th class="col-xs-1">Fecha Apertura</th>
                         <th class="col-xs-3">Acciones</th>
                     </tr>
                     </thead>
@@ -244,10 +278,14 @@
                     <tr ng-repeat="item in dependantTurns">
                         <td>{{item.anio}}-{{item.id}}</td>
                         <td>{{item.turnoDGESU}}</td>
+                        <td>{{item.asignacion.areaOperativa.abreviatura}}</td>
+                        <td>{{item.asignacion.empleado.tituloAcademico}} {{item.asignacion.empleado.nombre}}
+                            {{item.asignacion.empleado.paterno}} {{item.asignacion.empleado.materno}}
+                        </td>
                         <td>{{getStatus(item.idEstatus)}}</td>
-                        <td>{{item.asunto}}</td>
+                        <td>{{item.asunto.descripcion}}</td>
+                        <td>{{item.fechaLimite | date:"dd-MM-yyyy"}}</td>
                         <td>{{getCumplimiento(item)}}</td>
-                        <td>{{item.fechaAlta | date:"dd-MM-yyyy"}}</td>
                         <td>
                             <a href="#/turnos/correccion/{{item.anio}}/{{item.id}}" class="btn btn-sm btn-primary"
                                popover="Editar" popover-trigger="mouseenter" ng-disabled="false"

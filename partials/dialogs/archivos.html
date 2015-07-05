@@ -8,6 +8,7 @@
             <tr>
                 <th>Nombre de Archivo</th>
                 <th>Tipo</th>
+                <th></th>
                 <th>Descargar</th>
             </tr>
             </thead>
@@ -15,6 +16,7 @@
             <tr ng-repeat="file in files">
                 <td>{{file.nombre}}</td>
                 <td>{{getFileType(file.idTipoArchivo)}}</td>
+                <td><strong>({{getFileTypeType(file.idTipoArchivo)}})</strong></td>
                 <td>
                     <a ng-href="{{baseUrl}}/archivo/{{file.id}}" target="_blank">
                         <button class="btn btn-success">

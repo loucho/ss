@@ -183,8 +183,8 @@
             <th class="col-xs-1">Asignado</th>
             <th class="col-xs-1">Estatus</th>
             <th class="col-xs-2">Asunto</th>
+            <th class="col-xs-1">Fecha Límite</th>
             <th class="col-xs-1">Cumplimiento</th>
-            <th class="col-xs-1">Fecha Apertura</th>
             <th class="col-xs-4">Acciones</th>
         </tr>
         </thead>
@@ -197,9 +197,9 @@
                 {{item.asignacion.empleado.paterno}} {{item.asignacion.empleado.materno}}
             </td>
             <td>{{getStatus(item.idEstatus)}}</td>
-            <td>{{item.asunto}}</td>
+            <td>{{item.asunto.descripcion}}</td>
+            <td>{{item.fechaLimite | date:"dd-MM-yyyy"}}</td>
             <td>{{getCumplimiento(item)}}</td>
-            <td>{{item.fechaAlta | date:"dd-MM-yyyy"}}</td>
             <td>
                 <a href="#/turnos/correccion/{{item.anio}}/{{item.id}}" class="btn btn-sm btn-primary" popover="Editar"
                    popover-trigger="mouseenter" ng-disabled="false" ng-show="item.acciones.editar">
