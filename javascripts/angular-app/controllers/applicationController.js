@@ -14,6 +14,15 @@ appControllers.controller('ApplicationController', function ($scope, Authenticat
     paginationConfig.lastText = "Último";
     paginationConfig.firstText = "Primero";
 
+    $scope.getDGESUFormat = function(string){
+        if (string) {
+            return string.substring(0, 2) + "-" + string.substring(2);
+        }
+        else {
+            return "";
+        }
+    };
+
     $scope.reject = function (turno) {
         var dlg = dialogs.create('partials/dialogs/rechazar.html', 'rechazarDialogController', turno, {
             size: 'lg',

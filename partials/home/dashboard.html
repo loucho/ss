@@ -1,6 +1,6 @@
 <hr/>
 <div class="container-fluid">
-    <div class="row">
+    <div class="row" ng-show="currentUser.rol.idRol != 6">
         <div class="col-xs-12">
             <div class="panel panel-success">
                 <div class="panel-heading">
@@ -28,7 +28,7 @@
                     <tbody>
                     <tr ng-repeat="item in waitingTurns">
                         <td>{{item.anio}}-{{item.id}}</td>
-                        <td>{{item.turnoDGESU}}</td>
+                        <td>{{getDGESUFormat(item.turnoDGESU)}}</td>
                         <td>{{item.asignacion.areaOperativa.abreviatura}}</td>
                         <td>{{item.asignacion.empleado.tituloAcademico}} {{item.asignacion.empleado.nombre}}
                             {{item.asignacion.empleado.paterno}} {{item.asignacion.empleado.materno}}
@@ -107,7 +107,7 @@
                     <tbody>
                     <tr ng-repeat="item in assignedTurns">
                         <td>{{item.anio}}-{{item.id}}</td>
-                        <td>{{item.turnoDGESU}}</td>
+                        <td>{{getDGESUFormat(item.turnoDGESU)}}</td>
                         <td>{{item.asignacion.areaOperativa.abreviatura}}</td>
                         <td>{{item.asignacion.empleado.tituloAcademico}} {{item.asignacion.empleado.nombre}}
                             {{item.asignacion.empleado.paterno}} {{item.asignacion.empleado.materno}}
@@ -186,7 +186,7 @@
                     <tbody>
                     <tr ng-repeat="item in notClosedTurns">
                         <td>{{item.anio}}-{{item.id}}</td>
-                        <td>{{item.turnoDGESU}}</td>
+                        <td>{{getDGESUFormat(item.turnoDGESU)}}</td>
                         <td>{{item.asignacion.areaOperativa.abreviatura}}</td>
                         <td>{{item.asignacion.empleado.tituloAcademico}} {{item.asignacion.empleado.nombre}}
                             {{item.asignacion.empleado.paterno}} {{item.asignacion.empleado.materno}}
@@ -249,7 +249,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" ng-show="currentUser.rol.idRol != 6">
         <div class="col-xs-12">
             <div class="panel panel-danger">
                 <div class="panel-heading">
@@ -277,7 +277,7 @@
                     <tbody>
                     <tr ng-repeat="item in dependantNotClosedTurns">
                         <td>{{item.anio}}-{{item.id}}</td>
-                        <td>{{item.turnoDGESU}}</td>
+                        <td>{{getDGESUFormat(item.turnoDGESU)}}</td>
                         <td>{{item.asignacion.areaOperativa.abreviatura}}</td>
                         <td>{{item.asignacion.empleado.tituloAcademico}} {{item.asignacion.empleado.nombre}}
                             {{item.asignacion.empleado.paterno}} {{item.asignacion.empleado.materno}}
@@ -328,7 +328,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" ng-show="currentUser.rol.idRol != 6">
         <div class="col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -356,7 +356,7 @@
                     <tbody>
                     <tr ng-repeat="item in dependantTurns">
                         <td>{{item.anio}}-{{item.id}}</td>
-                        <td>{{item.turnoDGESU}}</td>
+                        <td>{{getDGESUFormat(item.turnoDGESU)}}</td>
                         <td>{{item.asignacion.areaOperativa.abreviatura}}</td>
                         <td>{{item.asignacion.empleado.tituloAcademico}} {{item.asignacion.empleado.nombre}}
                             {{item.asignacion.empleado.paterno}} {{item.asignacion.empleado.materno}}
@@ -407,7 +407,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" ng-show="currentUser.rol.idRol != 6">
         <div class="col-xs-12">
             <div class="panel panel-primary">
                 <div class="panel-heading">

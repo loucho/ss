@@ -19,7 +19,7 @@
         <div class="col-xs-12"><h2>Datos de Turno:</h2></div>
     </div>
     <div class="row">
-        <div class="col-xs-4"><strong>Turno DGESU:</strong> {{turn.turnoDGESU}}</div>
+        <div class="col-xs-4"><strong>Turno DGESU:</strong> {{getDGESUFormat(turn.turnoDGESU)}}</div>
         <div class="col-xs-4"><strong>No. Oficio:</strong> {{turn.numeroOficio}}</div>
         <div class="col-xs-4"><strong>Fecha de Oficio:</strong> {{turn.fechaOficio | date:"dd-MM-yyyy"}}</div>
     </div>

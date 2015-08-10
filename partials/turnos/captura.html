@@ -48,7 +48,7 @@
 
         <div class="col-xs-2" ng-class="{'has-error': turnoForm.turnoDGESU.$invalid && submitted}">
             <input id="turno-dgesu" type="text" class="form-control" ng-model="turno.turnoDGESU" required
-                   name="turnoDGESU" ui-mask="99-999999"/>
+                   name="turnoDGESU" ui-mask="99-9?99999"/>
 
             <p ng-show="turnoForm.turnoDGESU.$invalid && submitted" class="help-block"> Campo requerido </p>
         </div>

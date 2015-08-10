@@ -556,9 +556,9 @@ turnosControllers.controller('cerrarDialogController', ['$scope', '$modalInstanc
 
     $scope.ok = function (form) {
         $scope.submitted = true;
-        if (!form.$valid || !$scope.file) {
+        if (!form.$valid) {
             ngToast.create({
-                content: '<span class="glyphicon glyphicon-exclamation-sign"></span> Es necesario agregar un archivo',
+                content: '<span class="glyphicon glyphicon-exclamation-sign"></span> Por favor, revise los datos',
                 'class': 'danger'
             });
             return false;
@@ -566,6 +566,7 @@ turnosControllers.controller('cerrarDialogController', ['$scope', '$modalInstanc
         var response = Turn.close({
             anio: data.anio,
             idTurno: data.id,
+            archivo: $scope.file ? $scope.file : undefined,
             observaciones: $scope.nota
         });
         response.$promise.then(function (message) {
@@ -606,6 +607,15 @@ turnosControllers.controller('archivosDialogController', ['$scope', '$modalInsta
 turnosControllers.controller('verDialogController', ['$scope', '$modalInstance', 'data', 'Area', 'Institution', 'IESPerson', 'Organization', 'Turn', 'Employee', 'config', 'Responsible', 'Dependency', 'Instance', function ($scope, $modalInstance, data, Area, Institution, IESPerson, Organization, Turn, Employee, config, Responsible, Dependency, Instance) {
     $scope.turn = Turn.get({year: data.anio, seq: data.id});
     $scope.baseUrl = config.apiUrl;
+
+    $scope.getDGESUFormat = function (string) {
+        if (string) {
+            return string.substring(0, 2) + "-" + string.substring(2);
+        }
+        else {
+            return "";
+        }
+    };
 
     $scope.turn.$promise.then(function (data) {
         if (data.remitente.idTipoRemitente == 1) {

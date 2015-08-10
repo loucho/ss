@@ -6,7 +6,7 @@
         <div class="form-group" ng-class="{'has-error': form.tipo.$invalid && submitted}">
             <label>Asignar a:</label>
             <label class="radio-inline">
-                <input type="radio" name="tipo" ng-model="type" value="1" required> Área
+                <input type="radio" name="tipo" ng-model="type" value="1" required ng-disabled="areas.length == 0"> Área
             </label>
             <label class="radio-inline">
                 <input type="radio" name="tipo" ng-model="type" value="2" required> Empleado
@@ -14,7 +14,7 @@
 
             <p ng-show="form.tipo.$invalid && submitted" class="help-block"> Seleccione untipo de asignación </p>
         </div>
-        <div class="form-group" ng-show="type == 1" ng-class="{'has-error': form.area.$invalid && submitted}">
+        <div class="form-group" ng-show="type == 1 && areas.length > 0" ng-class="{'has-error': form.area.$invalid && submitted}">
             <label class="control-label" for="area">Área:</label>
             <select id="area" ng-model="idAreaOperativa" class="form-control" ng-required="type == 1" name="area"
                     ng-options="area.id as (area.nombre + ' (' + area.abreviatura + ')') for area in areas">

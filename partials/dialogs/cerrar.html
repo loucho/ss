@@ -6,17 +6,16 @@
         <div class="form-group">
             <label class="control-label col-xs-2">Archivo: </label>
 
-            <div class="col-xs-2" ng-class="{'has-error': !file && submitted}" ng-show="!file">
+            <div class="col-xs-2" ng-show="!file">
                 <button ng-file-select ng-model="files" multiple="false" accept="{{fileMask}}" class="btn btn-success">
                     Subir Guia
                 </button>
-                <p ng-show="!file && submitted" class="help-block"> Debe agregar un archivo </p>
             </div>
             <div class="col-xs-5" ng-if="file">
                 <span>{{file.nombre}}</span>
             </div>
             <div class="col-xs-3" ng-if="file" ng-class="{'has-error': form.file.$invalid && submitted}">
-                <select class="form-control" ng-model="file.idTipoArchivo" required name="file"
+                <select class="form-control" ng-model="file.idTipoArchivo" ng-required="file" name="file"
                         ng-options="fileType.id as fileType.descripcion for fileType in fileTypes">
                     <option value="">Seleccione uno</option>
                 </select>
@@ -33,9 +32,9 @@
             <label class="control-label col-xs-2" for="nota">Observacion:</label>
 
             <div class="col-xs-10" ng-class="{'has-error': form.nota.$invalid && submitted}">
-                <textarea class="form-control" id="nota" ng-model="nota" rows="5" name="nota" required></textarea>
+                <textarea class="form-control" id="nota" ng-model="nota" rows="5" name="nota"></textarea>
 
-                <p ng-show="form.nota.$invalid && submitted" class="help-block"> Campo requerido </p>
+                <p ng-show="form.nota.$invalid && submitted" class="help-block"> Incorrecto </p>
             </div>
         </div>
     </form>

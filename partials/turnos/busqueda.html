@@ -191,7 +191,7 @@
         <tbody>
         <tr ng-repeat="item in turns">
             <td>{{item.anio}}-{{item.id}}</td>
-            <td>{{item.turnoDGESU}}</td>
+            <td>{{getDGESUFormat(item.turnoDGESU)}}</td>
             <td>{{item.asignacion.areaOperativa.abreviatura}}</td>
             <td>{{item.asignacion.empleado.tituloAcademico}} {{item.asignacion.empleado.nombre}}
                 {{item.asignacion.empleado.paterno}} {{item.asignacion.empleado.materno}}
