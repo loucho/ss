@@ -521,35 +521,47 @@ turnosControllers.controller('cerrarDialogController', ['$scope', '$modalInstanc
     $scope.turn = data;
     $scope.fileMask = config.fileMask;
     $scope.fileTypes = FileType.query({tipo: 2});
+    $scope.archivos = [];
+    $scope.files = [];
 
-    $scope.deleteFile = function () {
-        $scope.file = false;
+    $scope.deleteFile = function (file) {
+        var i = $scope.archivos.indexOf(file);
+        $scope.archivos.splice(i, 1);
     };
 
     $scope.$watch('files', function () {
-        if ($scope.files) {
-            var file = $scope.files[0];
+        for (var i = 0; i < $scope.files.length; i++) {
+            var file = $scope.files[i];
             if (file.size > config.maxFileSize) {
                 ngToast.create({
                     content: '<span class="glyphicon glyphicon-warning-sign"></span> Archivo demasiado grande: ' + file.name + " (" + file.size + " Kb)",
                     'class': 'warning'
                 });
-                return false;
+                continue;
+            }
+            if (_.find($scope.archivos, function (item) {
+                    return item.nombre == file.name;
+                })) {
+                ngToast.create({
+                    content: '<span class="glyphicon glyphicon-warning-sign"></span> Archivo ya existe: ' + file.name,
+                    'class': 'warning'
+                });
+                continue;
             }
             $scope.upload = $upload.upload({
                 url: config.apiUrl + "/archivo/upload",
                 method: 'POST',
                 file: file
             }).success(function (data, status, headers, config) {
-                $scope.error = null;
-                $scope.file = {
+                var newFile = {
                     nombre: config.file.name,
                     nombreTemporal: data.nombreArchivoTemporal,
                     tipo: config.file.type,
                     size: config.file.size
-                }
+                };
+                $scope.archivos.push(newFile);
             }).error(function (error) {
-                $scope.error = error;
+                console.log(error);
             });
         }
     });
@@ -566,7 +578,7 @@ turnosControllers.controller('cerrarDialogController', ['$scope', '$modalInstanc
         var response = Turn.close({
             anio: data.anio,
             idTurno: data.id,
-            archivo: $scope.file ? $scope.file : undefined,
+            archivos: $scope.archivos.length ? $scope.archivos : undefined,
             observaciones: $scope.nota
         });
         response.$promise.then(function (message) {
