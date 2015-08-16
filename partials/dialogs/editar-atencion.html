@@ -78,30 +78,42 @@
 
                 <p ng-show="form.folio.$invalid && submitted" class="help-block"> Campo requerido </p>
             </div>
-            <label class="control-label col-xs-1">Archivo: </label>
-
-            <div class="col-xs-2" ng-class="{'has-error': !atencion.archivo && submitted}" ng-show="!atencion.archivo">
-                <button ng-file-select ng-model="files" multiple="false" accept="{{fileMask}}" class="btn btn-success">
-                    Subir Oficio de Atención
-                </button>
-                <p ng-show="!atencion.archivo && submitted" class="help-block"> Debe agregar por lo menos un archivo </p>
-            </div>
-            <div class="col-xs-3" ng-if="atencion.archivo">
-                <span>{{atencion.archivo.nombre}}</span>
-            </div>
-            <div class="col-xs-3" ng-if="atencion.archivo" ng-class="{'has-error': form.file.$invalid && submitted}">
-                <select class="form-control" ng-model="atencion.archivo.idTipoArchivo" required name="file"
-                        ng-options="fileType.id as fileType.descripcion for fileType in fileTypes">
-                    <option value="">Seleccione uno</option>
-                </select>
-
-                <p ng-show="form.file.$invalid && submitted" class="help-block"> Seleccione un tipo </p>
-            </div>
-            <div class="col-xs-1" ng-if="atencion.archivo">
-                <button type="button" class="close" aria-label="Close" ng-click="deleteFile()">
-                    <span aria-hidden="true">&times;</span>
+        </div>
+        <div class="form-group" ng-class="{'has-error': atencion.archivos.length == 0 && submitted}">
+            <div class="col-xs-12">
+                <button ng-file-select ng-model="files" multiple="true" accept="{{fileMask}}" class="btn btn-success">
+                    Subir Archivos de Atención
                 </button>
             </div>
+            <p ng-show="atencion.archivos.length == 0 && submitted" class="help-block"> Debe agregar por lo menos un archivo </p>
+        </div>
+        <div class="row">
+            <ul class="list-group col-xs-11 col-xs-offset-1">
+                <li ng-repeat="file in atencion.archivos" class="list-group-item">
+                    <ng-form name="innerForm">
+                        <div class="row" ng-class="{'has-error': innerForm.file.$invalid && submitted}">
+                            <div class="col-xs-7">
+                                <span>{{file.nombre}}</span>
+                            </div>
+                            <div class="col-xs-4">
+                                <select class="form-control" ng-model="file.idTipoArchivo" required="required"
+                                        name="file"
+                                        ng-options="fileType.id as fileType.descripcion for fileType in fileTypes">
+                                    <option value="">Seleccione uno</option>
+                                </select>
+
+                                <p ng-show="innerForm.file.$invalid && submitted" class="help-block"> Seleccione un
+                                    tipo </p>
+                            </div>
+                            <div class="col-xs-1">
+                                <button type="button" class="close" aria-label="Close" ng-click="deleteFile(file)">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        </div>
+                    </ng-form>
+                </li>
+            </ul>
         </div>
     </form>
 </div>
